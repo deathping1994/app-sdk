@@ -43,24 +43,24 @@ class CheckoutJobs extends JobsHandler<{}> {
   }: ProvideCheckoutJobInput): PromiseCheckoutJobRunResponse => {
     console.log("in provideCheckout") 
 
-    // const checkout = await LocalStorageHandler.getCheckout();
+    const checkout = await LocalStorageHandler.getCheckout();
 
-    // const { data, error } = await this.apolloClientManager.getCheckout(
-    //   isUserSignedIn,
-    //   checkout?.token
-    // );
+    const { data, error } = await this.apolloClientManager.getCheckout(
+      isUserSignedIn,
+      checkout?.token
+    );
 
-    // if (error) {
-    //   return {
-    //     dataError: {
-    //       error,
-    //       type: DataErrorCheckoutTypes.GET_CHECKOUT,
-    //     },
-    //   };
-    // }
-    // await this.localStorageHandler.setCheckout(data || checkout);
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.GET_CHECKOUT,
+        },
+      };
+    }
+    await this.localStorageHandler.setCheckout(data || checkout);
 
-    const data={};
+    // const data={};
     return {
       data,
     };
