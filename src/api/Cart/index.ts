@@ -160,9 +160,9 @@ export class SaleorCartAPI extends ErrorListener {
     //   pending: false,
     // };
   }
-  removeItem = async (variantId: string) => {
+  removeItem = async (variantId:string) => {
     // 1. save in local storage
-    this.localStorageManager.removeItemFromCart(variantId);
+    // this.localStorageManager.removeItemFromCart(variantId);
     // 2. save online if possible (if checkout id available)
     // if (this.saleorState.checkout?.lines) {
     //   const {
@@ -183,7 +183,7 @@ export class SaleorCartAPI extends ErrorListener {
     // }
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
       console.log("in removeItem if")
-      const { data, error } = await this.jobsManager.run("cart", "setCartItem");
+      const { data, error } = await this.jobsManager.run("cart", "removeCartTwo",{variantId});
       console.log("removeItem",data,error)
       if (error) {
         console.log("in error removeItem",error)
