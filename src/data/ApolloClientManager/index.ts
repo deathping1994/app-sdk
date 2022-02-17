@@ -117,7 +117,10 @@ import {
   AddCheckoutLine,
   AddCheckoutLineVariables,
 } from "src/mutations/gqlTypes/AddCheckoutLineMutation";
-import { RemoveCheckoutLine, RemoveCheckoutLineVariables } from "src/mutations/gqlTypes/RemoveCheckoutLine";
+import {
+  RemoveCheckoutLine,
+  RemoveCheckoutLineVariables,
+} from "src/mutations/gqlTypes/RemoveCheckoutLine";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -790,9 +793,7 @@ export class ApolloClientManager {
         }
         if (data?.checkoutLinesAdd?.checkout) {
           return {
-            data: this.constructCheckoutModel(
-              data.checkoutLinesAdd.checkout
-            ),
+            data: this.constructCheckoutModel(data.checkoutLinesAdd.checkout),
           };
         }
       } catch (error) {
@@ -804,16 +805,13 @@ export class ApolloClientManager {
     return {};
   };
 
-  removeCartTwo = async (
-    variantId: string,
-    checkout: ICheckoutModel
-  ) => {
+  removeCartTwo = async (variantId: string, checkout: ICheckoutModel) => {
     const checkoutId = checkout.id;
     const { lines } = checkout;
 
-    const line = lines?.find((line) => line.variant.id === variantId) 
-    const lineId= line?.id
-    
+    const line = lines?.find(line => line.variant.id === variantId);
+    const lineId = line?.id;
+
     if (checkoutId && lineId) {
       try {
         const { data, errors } = await this.client.mutate<
