@@ -167,7 +167,7 @@ export const updateCheckoutShippingMethodMutation = gql`
 export const addCheckoutPromoCode = gql`
   ${checkoutFragment}
   mutation AddCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {
-    checkoutAddPromoCode: checkoutAddPromoCodeShopify(checkoutId: $checkoutId, promoCode: $promoCode) {
+    checkoutAddPromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
       checkout {
         ...Checkout
       }
@@ -182,7 +182,7 @@ export const addCheckoutPromoCode = gql`
 export const removeCheckoutPromoCode = gql`
   ${checkoutFragment}
   mutation RemoveCheckoutPromoCode($checkoutId: ID!) {
-    checkoutRemovePromoCode: checkoutRemovePromoCodeShopify(checkoutId: $checkoutId) {
+    checkoutRemovePromoCode(checkoutId: $checkoutId) {
       checkout {
         ...Checkout
       }
