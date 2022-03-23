@@ -1141,7 +1141,7 @@ export class ApolloClientManager {
         RemoveCheckoutPromoCodeVariables
       >({
         mutation: CheckoutMutations.removeCheckoutPromoCode,
-        variables: { checkoutId },
+        variables: { checkoutId, promoCode },
       });
 
       if (errors?.length) {
