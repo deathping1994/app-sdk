@@ -181,8 +181,8 @@ export const addCheckoutPromoCode = gql`
 
 export const removeCheckoutPromoCode = gql`
   ${checkoutFragment}
-  mutation RemoveCheckoutPromoCode($checkoutId: ID!) {
-    checkoutRemovePromoCode(checkoutId: $checkoutId) {
+  mutation RemoveCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {
+    checkoutRemovePromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
       checkout {
         ...Checkout
       }
