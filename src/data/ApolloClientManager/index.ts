@@ -94,6 +94,8 @@ import {
 import {
   OTPAuthentication,
   OTPAuthenticationVariables,
+  SocialAuthentication,
+  SocialAuthenticationVariables,
 } from "../../mutations/gqlTypes/OTPAuthentication";
 import { Wishlist, WishlistVariables } from "../../queries/gqlTypes/Wishlist";
 import { getWishlist } from "../../queries/wishlist";
@@ -349,6 +351,41 @@ export class ApolloClientManager {
         token: data?.confirmAccountV2?.token,
         refreshToken: data?.confirmAccountV2?.refreshToken,
         user: data?.confirmAccountV2?.user,
+      },
+    };
+  };
+
+  socialLogin = async ( token: string,socialMedia: any, checkoutId: any,) => {
+    const { data,errors } = await this.client.mutate<
+      SocialAuthentication,
+      SocialAuthenticationVariables
+    >({
+      fetchPolicy: "network-only",
+      mutation: AuthMutations.createSocialTokenMutation,
+      variables: {
+        token,
+        socialMedia,
+        checkoutId,
+      },
+    });
+    console.log('data--',data,errors);
+    
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.socialTokenCreate?.otpErrors.length) {
+      return {
+        error: data.socialTokenCreate.otpErrors,
+      };
+    }
+    return {
+      data: {
+        csrfToken: data?.socialTokenCreate?.csrfToken,
+        token: data?.socialTokenCreate?.token,
+        refreshToken: data?.socialTokenCreate?.refreshToken,
+        user: data?.socialTokenCreate?.user,
       },
     };
   };

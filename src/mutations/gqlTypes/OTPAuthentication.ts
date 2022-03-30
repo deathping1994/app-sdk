@@ -86,3 +86,16 @@ export interface OTPAuthenticationVariables {
   otp: string;
   checkoutId?: string | null;
 }
+
+export interface SocialAuthentication {
+  /**
+   * Create JWT token via OTP.
+   */
+   socialTokenCreate: any | null;
+}
+
+export interface SocialAuthenticationVariables {
+  socialMedia: any;
+  token: string;
+  checkoutId?: any;
+}

@@ -101,3 +101,32 @@ export const CONFIRM_ACCOUNT = gql`
     }
   }
 `;
+
+export const createSocialTokenMutation = gql`
+  mutation SocialAuthentication($token: String!, $socialMedia: SocialMedia!, $checkoutId: ID) {
+    socialTokenCreate:createTokenOauth(
+      token: $token
+      socialMedia: $socialMedia
+      checkoutId: $checkoutId
+    ) {
+      token
+      refreshToken
+      csrfToken
+      user {
+        id
+        email
+        firstName
+        lastName
+        metadata {
+          key
+          value
+        }
+      }
+      otpErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;

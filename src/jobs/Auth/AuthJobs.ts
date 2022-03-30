@@ -131,6 +131,39 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  socialLogin= async ({
+    checkoutId,
+    socialMedia,
+    token
+  }: {
+    checkoutId: any;
+    socialMedia: any;
+    token: string;
+  }): PromiseAuthJobRunResponse => {
+    const { data, error } = await this.apolloClientManager.socialLogin(
+      token,
+      socialMedia,
+      checkoutId,
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.SIGN_IN,
+        },
+      };
+    }
+
+    this.localStorageHandler.setSignInToken(data?.token || null);
+    this.localStorageHandler.setCsrfToken(data?.csrfToken || null);
+    this.localStorageHandler.setRefreshToken(data?.refreshToken || null);
+
+    return {
+      data,
+    };
+  };
+
   signInMobile = async ({
     checkoutId,
     otp,
