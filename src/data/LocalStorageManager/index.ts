@@ -1,6 +1,7 @@
 import { SaleorState } from "../../state";
 import { LocalStorageHandler } from "../../helpers/LocalStorageHandler/LocalStorageHandler";
 import { Wishlist_wishlist_items_edges_node_product } from "src/queries/gqlTypes/Wishlist";
+import { IAddItem } from "src/api/Cart/types";
 
 export class LocalStorageManager {
   private readonly handler: LocalStorageHandler;
@@ -48,6 +49,65 @@ export class LocalStorageManager {
           lines: alteredLines,
         };
     await this.handler.setCheckout(alteredCheckout);
+
+    return alteredCheckout;
+  };
+
+  addItemsToCart = (variantArray: IAddItem[]) => {
+    const lines = this.saleorState.checkout?.lines || [];
+    console.log("linesssdsdff", this.saleorState, variantArray);
+    const variantsInCheckoutWithUpdatedQuantity = variantArray.map(lineVariant => {
+      const thisVariantInCheckout = lines.find(
+        variant => variant.variant.id === lineVariant.variantId
+      );
+      console.log(
+        "variantsInCheckoutWithUpdatedQuantity: ",
+        variantsInCheckoutWithUpdatedQuantity
+      );
+      console.log("thisVariantInCheckout: ", thisVariantInCheckout, lineVariant);
+      return {
+        quantity: thisVariantInCheckout?.quantity
+          ? thisVariantInCheckout?.quantity + lineVariant.quantity
+          : lineVariant.quantity,
+        variant: {
+          id: lineVariant?.variantId,
+        },
+      };
+      // return false;
+    })
+
+    // const variantArrayOne = variantArray.map((item: any) => {
+    //   return {
+    //     quantity: item?.quantity,
+    //     variant: {
+    //       id: item?.variantId
+    //     }
+    //   }
+    // })
+
+    const alteredLines = lines.filter(
+      lineVariant =>
+        !variantArray.find(
+          variant => variant.variantId === lineVariant.variant.id
+        )
+    );
+
+    console.log("alteredLines", alteredLines);
+    const updatedCheckoutLines = [
+      ...alteredLines,
+      ...variantsInCheckoutWithUpdatedQuantity,
+    ];
+
+    console.log("updatedCheckoutLines", alteredLines, variantsInCheckoutWithUpdatedQuantity );
+    const alteredCheckout = this.saleorState.checkout
+      ? {
+        ...this.saleorState.checkout,
+        lines: updatedCheckoutLines,
+      }
+      : {
+        lines: updatedCheckoutLines,
+      };
+    this.handler.setCheckout(alteredCheckout);
 
     return alteredCheckout;
   };

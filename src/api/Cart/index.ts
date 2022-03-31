@@ -9,6 +9,7 @@ import { ISaleorStateSummeryPrices, StateItems } from "../../state/types";
 import { ApolloClientManager } from "../../data/ApolloClientManager";
 import { sortCheckoutLines } from "./utils";
 import {
+  IAddItem,
   IDiscount,
   IItems,
   IShippingPrice,
@@ -292,4 +293,31 @@ export class SaleorCartAPI extends ErrorListener {
       this.jobsManager.addToQueue("cart", "setCartItem");
     }
   }
+
+  addMultipleItems = async (variantArray: IAddItem[]) => {
+    console.log('varray', variantArray);
+    
+    // this.localStorageManager.addItemsToCart(variantArray);
+    if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
+      const { data, error } = await  this.jobsManager.run(
+        "cart",
+        "setCartItemsTwo", {variantArray}
+      );
+
+      if (error) {
+        return {
+          error,
+        };
+      }
+
+      return {
+        data,
+        pending: true,
+      };
+    }
+    return {
+      pending: false,
+    };
+  };
+
 }
