@@ -77,6 +77,9 @@ export const checkoutProductVariantFragment = gql`
       id
       name
       slug
+      tags {
+        name
+      }
       thumbnail {
         url
         alt
