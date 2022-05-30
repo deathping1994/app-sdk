@@ -16,6 +16,7 @@ import {
   SetShippingAddressJobInput,
   SetBillingAddressJobInput,
   SetBillingAddressWithEmailJobInput,
+  PaymentMethodUpdateJobInput,
 } from "./types";
 import { JobsHandler } from "../JobsHandler";
 import { AddressTypes } from "src";
@@ -227,6 +228,35 @@ class CheckoutJobs extends JobsHandler<{}> {
       billingAsShipping: false,
       email: data?.email,
       selectedBillingAddressId,
+    });
+    return { data };
+  };
+
+  updateCheckoutPayment = async ({
+    checkoutId,
+    gatewayId,
+  }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = LocalStorageHandler.getCheckout();
+
+    const { data, error } = await this.apolloClientManager.updateCheckoutPayment(
+      checkoutId,
+      gatewayId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.SET_SHIPPING_METHOD,
+        },
+      };
+    }
+
+    await this.localStorageHandler.setCheckout({
+      ...data,
+      promoCodeDiscount: data?.promoCodeDiscount,
+      shippingMethod: data?.shippingMethod,
+      availableShippingMethods: data?.availableShippingMethods
     });
     return { data };
   };

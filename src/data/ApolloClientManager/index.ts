@@ -121,6 +121,7 @@ import {
   RemoveCheckoutLine,
   RemoveCheckoutLineVariables,
 } from "src/mutations/gqlTypes/RemoveCheckoutLine";
+import { UpdateCheckoutPaymentMethod, UpdateCheckoutPaymnetMethodVariables } from "src/mutations/gqlTypes/PaymentMethodUpdate";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1052,6 +1053,47 @@ export class ApolloClientManager {
         return {
           data: this.constructCheckoutModel(
             data.checkoutBillingAddressUpdate.checkout
+          ),
+        };
+      }
+      return {};
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  updateCheckoutPayment = async (checkoutId: string, gatewayId: string) => {
+    try {      
+      const { data, errors } = await this.client.mutate<
+      UpdateCheckoutPaymentMethod,
+      UpdateCheckoutPaymnetMethodVariables
+      >({
+        mutation: CheckoutMutations.updateCheckoutPaymentMethodMutation,
+        variables: {
+          checkoutId,
+          gatewayId,
+        },
+      });
+      console.log('dsfbdsfd', data);
+
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      
+      if (data?.checkoutPaymentMethodUpdate?.errors.length) {
+        return {
+          error: data?.checkoutPaymentMethodUpdate?.errors,
+        };
+      }
+      if (data?.checkoutPaymentMethodUpdate?.checkout) {
+        return {
+          data: this.constructCheckoutModel(
+            data.checkoutPaymentMethodUpdate.checkout
           ),
         };
       }
