@@ -41,6 +41,9 @@ export const checkoutProductVariantFragment = gql`
     id
     name
     sku
+    tags {
+      name
+    }
     quantityAvailable
     isAvailable
     images {
@@ -77,6 +80,9 @@ export const checkoutProductVariantFragment = gql`
       id
       name
       slug
+      tags {
+        name
+      }
       thumbnail {
         url
         alt
