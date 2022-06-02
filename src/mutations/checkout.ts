@@ -164,6 +164,28 @@ export const updateCheckoutShippingMethodMutation = gql`
   }
 `;
 
+export const updateCheckoutPaymentMethodMutation = gql`
+  ${checkoutFragment}
+  ${checkoutErrorFragment}
+  mutation CheckoutPaymentMethodUpdate(
+    $checkoutId: ID!,
+    $gatewayId: String!,
+) {
+   checkoutPaymentMethodUpdate(
+     checkoutId: $checkoutId, 
+     gatewayId: $gatewayId,
+     useCashback: false
+   ) {
+    checkout {
+      ...Checkout
+    }
+    errors: checkoutErrors {
+      ...CheckoutError
+    }
+   }
+ }
+`;
+
 export const addCheckoutPromoCode = gql`
   ${checkoutFragment}
   mutation AddCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {

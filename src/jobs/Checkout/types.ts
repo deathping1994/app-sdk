@@ -35,6 +35,10 @@ export interface SetBillingAddressWithEmailJobInput {
   selectedBillingAddressId?: string;
 }
 
+export interface PaymentMethodUpdateJobInput {
+  checkoutId: string;
+  gatewayId: string;
+}
 export interface SetShippingMethodJobInput {
   checkoutId: string;
   shippingMethodId: string;

@@ -316,6 +316,38 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  updateCheckoutPayment = async (gatewayId: string): CheckoutResponse => {
+    const checkoutId = this.saleorState.checkout?.id;    
+    if (checkoutId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "updateCheckoutPayment",
+        {
+          checkoutId,
+          gatewayId,
+        }
+      );
+      console.log('dsfb', checkoutId, gatewayId, data)
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+
+
+    return {
+      functionError: {
+        error: new Error(
+          "payment not updated"
+        ),
+      },
+      pending: false,
+    };
+
+  }
+
   setShippingMethod = async (shippingMethodId: string): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;
 
