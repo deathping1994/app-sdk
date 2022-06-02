@@ -235,12 +235,14 @@ class CheckoutJobs extends JobsHandler<{}> {
   updateCheckoutPayment = async ({
     checkoutId,
     gatewayId,
+    useCashback
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
     const checkout = LocalStorageHandler.getCheckout();
 
     const { data, error } = await this.apolloClientManager.updateCheckoutPayment(
       checkoutId,
-      gatewayId
+      gatewayId,
+      useCashback
     );
 
     if (error) {

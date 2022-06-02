@@ -38,6 +38,7 @@ export interface SetBillingAddressWithEmailJobInput {
 export interface PaymentMethodUpdateJobInput {
   checkoutId: string;
   gatewayId: string;
+  useCashback: boolean
 }
 export interface SetShippingMethodJobInput {
   checkoutId: string;
