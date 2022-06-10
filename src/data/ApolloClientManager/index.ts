@@ -1446,7 +1446,7 @@ export class ApolloClientManager {
             product: itemVariant?.product,
             quantityAvailable: itemVariant?.quantityAvailable,
             sku: itemVariant?.sku,
-            tags: itemVariant?.tags
+            tags: itemVariant?.tags,
             // @ts-ignore
             images: itemVariant?.images,
           },
