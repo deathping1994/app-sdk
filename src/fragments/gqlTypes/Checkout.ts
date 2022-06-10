@@ -465,6 +465,7 @@ export interface Checkout_lines_variant {
   id: string;
   name: string;
   sku: string;
+  tags:string[];
   /**
    * Quantity of a product available for sale in one checkout.
    */
