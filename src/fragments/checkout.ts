@@ -124,6 +124,27 @@ export const checkoutLineFragment = gql`
   }
 `;
 
+export const atcChecckout = gql`
+  ${checkoutLineFragment}
+  ${checkoutShippingMethodFragment}
+  ${paymentGatewayFragment}
+  fragment Checkout on Checkout {
+    id
+    availableShippingMethods {
+      ...ShippingMethod
+    }
+    shippingMethod {
+      ...ShippingMethod
+    }
+    lines {
+      ...CheckoutLine
+    }
+    availablePaymentGateways {
+      ...PaymentGateway
+    }
+  }
+`;
+
 export const checkoutFragment = gql`
   ${checkoutLineFragment}
   ${checkoutAddressFragment}
