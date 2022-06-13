@@ -9,7 +9,7 @@ import {
 } from "../fragments/errors";
 
 export const updateCheckoutLineMutation = gql`
-  ${checkoutFragment}
+  ${atcChecckoutFragment}
   ${checkoutErrorFragment}
   mutation UpdateCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
     checkoutLinesUpdate(checkoutId: $checkoutId, lines: $lines) {
@@ -282,7 +282,7 @@ export const ADD_CHECKOUT_LINE_MUTATION = gql`
 `;
 
 export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
-  ${checkoutFragment}
+  ${atcChecckoutFragment}
   ${checkoutErrorFragment}
   mutation RemoveCheckoutLine($checkoutId: ID!, $lineId: ID) {
     checkoutLineDelete(checkoutId: $checkoutId, lineId: $lineId) {
