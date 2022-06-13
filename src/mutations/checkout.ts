@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-import { atcChecckout, checkoutFragment } from "../fragments/checkout";
+import { atcChecckoutFragment, checkoutFragment } from "../fragments/checkout";
 import { paymentFragment } from "../fragments/payment";
 import { orderDetailFragment } from "../fragments/order";
 import {
@@ -267,7 +267,7 @@ export const completeCheckoutMutation = gql`
 `;
 
 export const ADD_CHECKOUT_LINE_MUTATION = gql`
-  ${atcChecckout}
+  ${atcChecckoutFragment}
   ${checkoutErrorFragment}
   mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
     checkoutLinesAdd(checkoutId: $checkoutId, lines: $lines) {

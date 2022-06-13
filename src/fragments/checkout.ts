@@ -124,7 +124,7 @@ export const checkoutLineFragment = gql`
   }
 `;
 
-export const atcChecckout = gql`
+export const atcChecckoutFragment = gql`
   ${checkoutLineFragment}
   ${checkoutShippingMethodFragment}
   ${paymentGatewayFragment}
