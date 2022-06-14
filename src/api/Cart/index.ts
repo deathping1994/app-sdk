@@ -269,8 +269,7 @@ export class SaleorCartAPI extends ErrorListener {
       const { data, error } = await this.jobsManager.run("cart", "setCartItem");
       console.log("updateItem",data,error)
       if (error) {
-        this.localStorageManager.updateItemInCart(variantId, quantity - 1);
-
+        // this.localStorageManager.updateItemInCart(variantId, quantity - 1);
         console.log("in error updateItem",error)
         return { 
           error,
