@@ -246,7 +246,7 @@ export class SaleorCartAPI extends ErrorListener {
   };
   updateItem = async (variantId: string, quantity: number) => {
     // 1. save in local storage
-    this.localStorageManager.updateItemInCart(variantId, quantity);
+    // this.localStorageManager.updateItemInCart(variantId, quantity);
     // 2. save online if possible (if checkout id available)
     // if (this.saleorState.checkout?.lines) {
     //   const {
@@ -266,7 +266,7 @@ export class SaleorCartAPI extends ErrorListener {
     // }
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
       console.log("in updateItem if")
-      const { data, error } = await this.jobsManager.run("cart", "setCartItem");
+      const { data, error } = await this.jobsManager.run("cart", "updateCartItem",{variantId,quantity});
       console.log("updateItem",data,error)
       if (error) {
         // this.localStorageManager.updateItemInCart(variantId, quantity - 1);

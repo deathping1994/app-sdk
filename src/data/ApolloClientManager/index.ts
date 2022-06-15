@@ -840,6 +840,55 @@ export class ApolloClientManager {
     return {};
   };
 
+  updateCartItem = async (
+    variantId: string,
+    quantity: number,
+    checkout: ICheckoutModel
+  ) => {
+    const checkoutId = checkout.id;
+    const lines = [
+      {
+        variantId,
+        quantity,
+      },
+    ];
+    if (checkoutId) {
+      try {
+        const { data, errors } = await this.client.mutate<
+        UpdateCheckoutLine,
+        UpdateCheckoutLineVariables
+        >({
+          mutation: CheckoutMutations.updateCheckoutLineMutation,
+          variables: {
+            checkoutId,
+            lines,
+          },
+        });
+
+        if (errors?.length) {
+          return {
+            error: errors,
+          };
+        }
+        if (data?.checkoutLinesUpdate?.errors.length) {
+          return {
+            error: data?.checkoutLinesUpdate?.errors,
+          };
+        }
+        if (data?.checkoutLinesUpdate?.checkout) {
+          return {
+            data: this.constructCheckoutModel(data.checkoutLinesUpdate.checkout),
+          };
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
   setCartItemTwo = async (
     variantId: string,
     quantity: number,
