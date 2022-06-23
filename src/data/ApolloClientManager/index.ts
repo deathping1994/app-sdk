@@ -1485,6 +1485,7 @@ export class ApolloClientManager {
           id: item!.id,
           quantity: item!.quantity,
           totalPrice: item?.totalPrice,
+          data: item?.data,
           variant: {
             attributes: itemVariant?.attributes,
             id: itemVariant!.id,

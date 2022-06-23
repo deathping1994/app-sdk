@@ -252,6 +252,7 @@ export interface CheckoutLine {
    */
   id: string;
   quantity: number;
+  data:any;
   /**
    * The sum of the checkout line price, taxes and discounts.
    */

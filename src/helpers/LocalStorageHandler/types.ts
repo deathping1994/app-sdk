@@ -48,6 +48,7 @@ export interface ICheckoutModelLineVariant {
 export interface ICheckoutModelLine {
   quantity: number;
   id?: string;
+  data:any;
   variant: ICheckoutModelLineVariant;
   totalPrice?: ICheckoutModelLineTotalPrice | null;
 }
