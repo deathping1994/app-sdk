@@ -293,6 +293,30 @@ export class SaleorCartAPI extends ErrorListener {
     }
   }
 
+  refreshCart = async () => {
+    if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
+      console.log("in refreshCart if")
+      const { data, error } = await this.jobsManager.run("cart", "refreshCart");
+      console.log("refreshCartItem",data,error)
+      if (error) {
+        // this.localStorageManager.updateItemInCart(variantId, quantity - 1);
+        console.log("in error refreshCart",error)
+        return { 
+          error,
+        };
+      }
+      console.log("in data refreshCart",data)
+
+      return { 
+        data,
+        pending: true,
+      };
+    }
+    return {
+      pending: false,
+    };
+  };
+
   addMultipleItems = async (variantArray: IAddItem[]) => {
     console.log('varray', variantArray);
     

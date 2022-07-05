@@ -124,6 +124,7 @@ import {
   RemoveCheckoutLineVariables,
 } from "src/mutations/gqlTypes/RemoveCheckoutLine";
 import { UpdateCheckoutPaymentMethod, UpdateCheckoutPaymnetMethodVariables } from "src/mutations/gqlTypes/PaymnetMethodUpdate";
+import { RefreshCheckoutLine, RefreshCheckoutLineVariables } from "src/mutations/gqlTypes/RefreshCart";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -878,6 +879,49 @@ export class ApolloClientManager {
         if (data?.checkoutLinesUpdate?.checkout) {
           return {
             data: this.constructCheckoutModel(data.checkoutLinesUpdate.checkout),
+          };
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
+  refreshCart = async (
+    checkout: ICheckoutModel
+  ) => {
+    const checkoutId = checkout.id;
+    if (checkoutId) {
+      try {
+        const { data, errors } = await this.client.mutate<
+        RefreshCheckoutLine,
+        RefreshCheckoutLineVariables
+        >({
+          mutation: CheckoutMutations.refreshCartMutation,
+          variables: {
+            checkoutId,
+          },
+        });
+
+        console.log('sdfdsf', data);
+        
+
+        if (errors?.length) {
+          return {
+            error: errors,
+          };
+        }
+        if (data?.checkoutRefresh?.errors.length) {
+          return {
+            error: data?.checkoutRefresh?.errors,
+          };
+        }
+        if (data?.checkoutRefresh?.checkout) {
+          return {
+            data: this.constructCheckoutModel(data.checkoutRefresh.checkout),
           };
         }
       } catch (error) {

@@ -23,6 +23,21 @@ export const updateCheckoutLineMutation = gql`
   }
 `;
 
+export const refreshCartMutation = gql`
+  ${atcChecckoutFragment}
+  ${checkoutErrorFragment}
+  mutation RefreshCart($checkoutId: ID!) {
+    checkoutRefresh(checkoutId: $checkoutId) {
+      checkout {
+        ...Checkout
+      }
+      errors: checkoutErrors {
+        ...CheckoutError
+      }
+    }
+  }
+`;
+
 export const updateCheckoutAddressType = gql`
   mutation UpdateCheckoutAddressType($addressId: ID!, $type: AddressTypes!) {
     addressTypeUpdate(addressId: $addressId, type: $type) {
