@@ -60,26 +60,23 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     }
   };
 
-  setCartItemTwo = async ({variantId,quantity}:{variantId:string,quantity:number}) => {
+  setCartItemTwo = async ({ variantId, quantity }: { variantId: string, quantity: number }) => {
     let checkout = await LocalStorageHandler.getCheckout();
-  
+
     if (checkout) {
-    console.log("setCartItem job in if",checkout)
+      console.log("setCartItem job in if", checkout)
 
       const { data, error } = await this.apolloClientManager.setCartItemTwo(
         variantId,
         quantity,
         checkout
       );
-      if (error && this.onErrorListener) {
-    console.log("setCartItem job in error",error)
-
-        
-        this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
+      if (error) {
+        console.log("setCartItem job in error", error)
+        // this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
         return { error };
-
       } else if (data) {
-        console.log("setCartItem job in data",data)
+        console.log("setCartItem job in data", data)
 
         let obj = {
           ...(checkout?._W ? checkout?._W : checkout),
@@ -91,8 +88,8 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         };
 
         await this.localStorageHandler.setCheckout(obj);
-        console.log("setCartItem job in data",data)
-  
+        console.log("setCartItem job in data", data)
+
         return { data };
       }
     }

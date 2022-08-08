@@ -1064,7 +1064,7 @@ export class ApolloClientManager {
     }
   };
 
-  updateCheckoutPayment = async (checkoutId: string, gatewayId: string) => {
+  updateCheckoutPayment = async (checkoutId: string, gatewayId: string, useCashback: boolean) => {
     try {      
       const { data, errors } = await this.client.mutate<
       UpdateCheckoutPaymentMethod,
@@ -1074,6 +1074,7 @@ export class ApolloClientManager {
         variables: {
           checkoutId,
           gatewayId,
+          useCashback
         },
       });
       console.log('dsfbdsfd', data);

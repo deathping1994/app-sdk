@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-import { checkoutFragment } from "../fragments/checkout";
+import { atcChecckoutFragment, checkoutFragment } from "../fragments/checkout";
 import { paymentFragment } from "../fragments/payment";
 import { orderDetailFragment } from "../fragments/order";
 import {
@@ -170,11 +170,12 @@ export const updateCheckoutPaymentMethodMutation = gql`
   mutation CheckoutPaymentMethodUpdate(
     $checkoutId: ID!,
     $gatewayId: String!,
+    $useCashback: Boolean!
 ) {
    checkoutPaymentMethodUpdate(
      checkoutId: $checkoutId, 
      gatewayId: $gatewayId,
-     useCashback: false
+     useCashback: $useCashback
    ) {
     checkout {
       ...Checkout
@@ -267,7 +268,7 @@ export const completeCheckoutMutation = gql`
 `;
 
 export const ADD_CHECKOUT_LINE_MUTATION = gql`
-  ${checkoutFragment}
+  ${atcChecckoutFragment}
   ${checkoutErrorFragment}
   mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
     checkoutLinesAdd(checkoutId: $checkoutId, lines: $lines) {
@@ -282,7 +283,7 @@ export const ADD_CHECKOUT_LINE_MUTATION = gql`
 `;
 
 export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
-  ${checkoutFragment}
+  ${atcChecckoutFragment}
   ${checkoutErrorFragment}
   mutation RemoveCheckoutLine($checkoutId: ID!, $lineId: ID) {
     checkoutLineDelete(checkoutId: $checkoutId, lineId: $lineId) {

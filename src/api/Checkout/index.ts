@@ -314,7 +314,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  updateCheckoutPayment = async (gatewayId: string): CheckoutResponse => {
+  updateCheckoutPayment = async (gatewayId: string, useCashback: boolean): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;    
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
@@ -323,6 +323,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
         {
           checkoutId,
           gatewayId,
+          useCashback
         }
       );
       console.log('dsfb', checkoutId, gatewayId, data)
@@ -332,8 +333,6 @@ export class SaleorCheckoutAPI extends ErrorListener {
         pending: false,
       };
     }
-
-
 
     return {
       functionError: {
