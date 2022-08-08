@@ -235,12 +235,14 @@ class CheckoutJobs extends JobsHandler<{}> {
   updateCheckoutPayment = async ({
     checkoutId,
     gatewayId,
+    useCashback
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
     const checkout = LocalStorageHandler.getCheckout();
 
     const { data, error } = await this.apolloClientManager.updateCheckoutPayment(
       checkoutId,
-      gatewayId
+      gatewayId,
+      useCashback
     );
 
     if (error) {
@@ -256,10 +258,12 @@ class CheckoutJobs extends JobsHandler<{}> {
       ...data,
       promoCodeDiscount: data?.promoCodeDiscount,
       shippingMethod: data?.shippingMethod,
-      availableShippingMethods: data?.availableShippingMethods
+      availableShippingMethods: data?.availableShippingMethods,
+      shippingAddress: data?.shippingAddress
     });
     return { data };
   };
+
 
   setShippingMethod = async ({
     checkoutId,
