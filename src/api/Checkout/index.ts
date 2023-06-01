@@ -114,6 +114,40 @@ export class SaleorCheckoutAPI extends ErrorListener {
       }
     );
   }
+  
+  createCheckoutNew = async (
+    shippingAddress: IAddress,
+    email: string,
+    variantId: string,
+    quantity: number
+  ) : CheckoutResponse => {
+    
+    
+    const alteredLines = [{
+      quantity: quantity,
+      variantId: variantId,
+    }]
+
+    console.log('sdfkjndsf', alteredLines);
+    
+
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "createCheckout",
+      {
+        email,
+        lines: alteredLines ?? [],
+        selectedShippingAddressId: shippingAddress.id,
+        shippingAddress,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
 
   setShippingAddress = async (
     shippingAddress: IAddress,
