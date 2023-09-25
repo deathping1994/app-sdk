@@ -117,6 +117,29 @@ export class SaleorCheckoutAPI extends ErrorListener {
     );
   }
 
+  createCheckoutNew = async (
+    shippingAddress: IAddress,
+    email: string,
+  ) : CheckoutResponse => {
+
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "createCheckout",
+      {
+        email,
+        lines: [],
+        selectedShippingAddressId: shippingAddress.id,
+        shippingAddress,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
   setShippingAddress = async (
     shippingAddress: IAddress,
     email: string
