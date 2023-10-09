@@ -143,6 +143,10 @@ export const atcChecckoutFragment = gql`
     availablePaymentGateways {
       ...PaymentGateway
     }
+    metadata {
+      key
+      value
+    }
   }
 `;
 
@@ -180,6 +184,10 @@ export const checkoutFragment = gql`
     }
     lines {
       ...CheckoutLine
+    }
+    metadata {
+      key
+      value
     }
     isShippingRequired
     discount {
