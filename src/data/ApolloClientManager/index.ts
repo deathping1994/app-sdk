@@ -1511,6 +1511,7 @@ export class ApolloClientManager {
     availableShippingMethods,
     shippingMethod,
     note,
+    metadata
   }: Checkout): ICheckoutModel => ({
     availablePaymentGateways,
     availableShippingMethods: availableShippingMethods
@@ -1554,6 +1555,7 @@ export class ApolloClientManager {
     shippingAddress,
     shippingMethod,
     token,
+    metadata
   });
 
   private constructPaymentModel = ({

@@ -129,6 +129,8 @@ export interface ICheckoutModel {
   availableShippingMethods?: Checkout_availableShippingMethods[];
   availablePaymentGateways?: Checkout_availablePaymentGateways[];
   shippingMethod?: ICheckoutModelShippingMethod | null;
+  note?: string;
+  metadata?: any
 }
 
 export interface IPaymentModel {

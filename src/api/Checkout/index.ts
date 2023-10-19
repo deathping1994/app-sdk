@@ -30,7 +30,7 @@ type CheckoutResponse = PromiseRunResponse<
 export class SaleorCheckoutAPI extends ErrorListener {
   loaded: boolean;
 
-  checkout?: ICheckout;
+  checkout?: any;
 
   promoCodeDiscount?: IPromoCodeDiscount;
 
@@ -74,6 +74,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           availableShippingMethods,
           shippingMethod,
           promoCodeDiscount,
+          metadata
         } = checkout || {};
         this.checkout = {
           billingAddress,
@@ -83,6 +84,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           shippingAddress,
           shippingMethod,
           token,
+          metadata
         };
         this.selectedShippingAddressId = selectedShippingAddressId;
         this.selectedBillingAddressId = selectedBillingAddressId;

@@ -593,4 +593,6 @@ export interface Checkout {
    * List of available payment gateways.
    */
   availablePaymentGateways: Checkout_availablePaymentGateways[];
+  note: string;
+  metadata: any;
 }
