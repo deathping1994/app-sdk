@@ -183,14 +183,18 @@ export const updateCheckoutPaymentMethodMutation = gql`
   ${checkoutFragment}
   ${checkoutErrorFragment}
   mutation CheckoutPaymentMethodUpdate(
-    $checkoutId: ID!,
-    $gatewayId: String!,
+    $checkoutId: ID!
+    $gatewayId: String!
     $useCashback: Boolean!
+    $cashbackType: CashBackMethodType!
+    $isRecalculate: Boolean!
 ) {
    checkoutPaymentMethodUpdate(
-     checkoutId: $checkoutId, 
-     gatewayId: $gatewayId,
-     useCashback: $useCashback
+    checkoutId: $checkoutId
+    gatewayId: $gatewayId
+    useCashback: $useCashback
+    cashbackType: $cashbackType
+    isRecalculate: $isRecalculate
    ) {
     checkout {
       ...Checkout

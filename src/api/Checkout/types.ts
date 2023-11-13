@@ -94,3 +94,8 @@ export interface CompleteCheckoutInput {
   redirectUrl?: string;
   storeSource?: boolean;
 }
+
+export type CashBackMethodType =
+| 'CASHBACK'
+| 'RECHARGE_WALLET'
+| 'CASHBACK_AND_RECHARGE_WALLET'

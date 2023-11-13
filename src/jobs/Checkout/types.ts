@@ -35,10 +35,17 @@ export interface SetBillingAddressWithEmailJobInput {
   selectedBillingAddressId?: string;
 }
 
+export type CashBackMethodType =
+| 'CASHBACK'
+| 'RECHARGE_WALLET'
+| 'CASHBACK_AND_RECHARGE_WALLET';
+
 export interface PaymentMethodUpdateJobInput {
   checkoutId: string;
   gatewayId: string;
-  useCashback: boolean
+  useCashback: boolean;
+  isRecalculate: boolean;
+  cashbackType: CashBackMethodType;
 }
 export interface SetShippingMethodJobInput {
   checkoutId: string;

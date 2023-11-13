@@ -623,7 +623,16 @@ export interface UpdateCheckoutPaymentMethod {
   checkoutPaymentMethodUpdate: UpdateCheckoutPaymentMethod_checkoutPaymentMethodUpdate | null;
 }
 
+export type CashBackMethodType =
+| 'CASHBACK'
+| 'RECHARGE_WALLET'
+| 'CASHBACK_AND_RECHARGE_WALLET';
+
 export interface UpdateCheckoutPaymnetMethodVariables {
   checkoutId: string;
   gatewayId: string;
+  useCashback: boolean;
+  isRecalculate: boolean;
+  cashbackType: CashBackMethodType;
 }
+

@@ -125,6 +125,7 @@ import {
 } from "src/mutations/gqlTypes/RemoveCheckoutLine";
 import { UpdateCheckoutPaymentMethod, UpdateCheckoutPaymnetMethodVariables } from "src/mutations/gqlTypes/PaymnetMethodUpdate";
 import { RefreshCheckoutLine, RefreshCheckoutLineVariables } from "src/mutations/gqlTypes/RefreshCart";
+import { CashBackMethodType } from "src/jobs/Checkout/types";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1240,7 +1241,7 @@ export class ApolloClientManager {
     }
   };
 
-  updateCheckoutPayment = async (checkoutId: string, gatewayId: string, useCashback: boolean) => {
+  updateCheckoutPayment = async (checkoutId: string, gatewayId: string, useCashback: boolean, isRecalculate: boolean, cashbackType: CashBackMethodType) => {
     try {      
       const { data, errors } = await this.client.mutate<
       UpdateCheckoutPaymentMethod,
@@ -1250,7 +1251,9 @@ export class ApolloClientManager {
         variables: {
           checkoutId,
           gatewayId,
-          useCashback
+          useCashback,
+          isRecalculate,
+          cashbackType
         },
       });
       console.log('dsfbdsfd', data);

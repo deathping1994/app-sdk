@@ -20,6 +20,7 @@ import {
   IPromoCodeDiscount,
   CreatePaymentInput,
   CompleteCheckoutInput,
+  CashBackMethodType,
 } from "./types";
 
 type CheckoutResponse = PromiseRunResponse<
@@ -341,16 +342,18 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  updateCheckoutPayment = async (gatewayId: string, useCashback: boolean): CheckoutResponse => {
+  updateCheckoutPayment = async (gatewayId: string, useCashback: boolean, isRecalculate: boolean, cashbackType: CashBackMethodType): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;    
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "updateCheckoutPayment",
         {
-          checkoutId,
-          gatewayId,
-          useCashback
+          checkoutId: checkoutId,
+          gatewayId: gatewayId,
+          useCashback: useCashback,
+          isRecalculate: isRecalculate,
+          cashbackType: cashbackType
         }
       );
       console.log('dsfb', checkoutId, gatewayId, data)
