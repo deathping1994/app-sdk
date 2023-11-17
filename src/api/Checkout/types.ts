@@ -1,8 +1,15 @@
-import { Checkout_availableShippingMethods } from "../../fragments/gqlTypes/Checkout";
+import {
+  Checkout_availablePaymentGateways,
+  Checkout_availableShippingMethods,
+} from "../../fragments/gqlTypes/Checkout";
 import { Payment_total } from "../../fragments/gqlTypes/Payment";
 import {
+  ICheckoutAddress,
+  ICheckoutModelLine,
   ICheckoutModelPrice,
   ICheckoutModelPriceValue,
+  ICheckoutModelPromoCodeDiscount,
+  ICheckoutModelShippingMethod,
   IPaymentCreditCard,
 } from "../../helpers/LocalStorageHandler";
 
@@ -57,11 +64,18 @@ export interface IPayment {
 
 export interface ICheckout {
   id?: string;
-  token: any;
+  token?: any;
   email?: string;
-  shippingAddress?: IAddress | null;
-  shippingMethod?: IShippingMethod | null;
-  billingAddress?: IAddress | null;
+  shippingAddress?: ICheckoutAddress | null;
+  billingAddress?: ICheckoutAddress | null;
+  selectedShippingAddressId?: string;
+  selectedBillingAddressId?: string;
+  billingAsShipping?: boolean;
+  promoCodeDiscount?: ICheckoutModelPromoCodeDiscount;
+  lines?: ICheckoutModelLine[] | null;
+  availableShippingMethods?: Checkout_availableShippingMethods[];
+  availablePaymentGateways?: Checkout_availablePaymentGateways[];
+  shippingMethod?: ICheckoutModelShippingMethod | null;
 }
 
 export enum FunctionErrorCheckoutTypes {
