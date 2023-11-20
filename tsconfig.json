@@ -6,7 +6,7 @@
     "jsx": "react-native",
     "lib": ["es2017", "dom", "esnext"],
     "module": "commonjs",
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "outDir": "lib",
     // Well, path aliasing doesn't work
     // ref https://github.com/microsoft/TypeScript/issues/10866
