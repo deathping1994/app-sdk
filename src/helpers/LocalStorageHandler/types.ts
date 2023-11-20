@@ -17,7 +17,7 @@ export enum LocalStorageItems {
   REFRESH_TOKEN = "refresh_token",
   CHECKOUT = "data_checkout",
   PAYMENT = "data_payment",
-  WISHLIST = "data_wishlist"
+  WISHLIST = "data_wishlist",
 }
 export enum LocalStorageEvents {
   CLEAR = "clear",
@@ -127,6 +127,7 @@ export interface ICheckoutModel {
   availableShippingMethods?: Checkout_availableShippingMethods[];
   availablePaymentGateways?: Checkout_availablePaymentGateways[];
   shippingMethod?: ICheckoutModelShippingMethod | null;
+  _W?: any;
 }
 
 export interface IPaymentModel {
