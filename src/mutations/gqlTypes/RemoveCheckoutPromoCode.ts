@@ -3,8 +3,6 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { CheckoutErrorCode } from "./../../gqlTypes/globalTypes";
-
 // ====================================================
 // GraphQL mutation operation: RemoveCheckoutPromoCode
 // ====================================================
@@ -279,6 +277,40 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_
   net: RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_totalPrice_net;
 }
 
+export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
+export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_images {
+  __typename: "ProductImage";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  sortOrder: number | null;
+  alt: string;
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
+
 export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_pricing_priceUndiscounted_gross {
   __typename: "Money";
   /**
@@ -407,6 +439,14 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_
   values: (RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_attributes_values | null)[];
 }
 
+export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_product_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
 export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_product_thumbnail {
   __typename: "Image";
   /**
@@ -443,6 +483,11 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_
    */
   id: string;
   name: string;
+  slug: string;
+  /**
+   * Tags
+   */
+  tags: (RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_product_tags | null)[] | null;
   /**
    * The main thumbnail for a product.
    */
@@ -463,6 +508,10 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_
   name: string;
   sku: string;
   /**
+   * List of tags associated with the product variant
+   */
+  tags: (RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_tags | null)[] | null;
+  /**
    * Quantity of a product available for sale in one checkout.
    */
   quantityAvailable: number;
@@ -470,6 +519,14 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_
    * Whether the variant is in stock and visible or not.
    */
   isAvailable: boolean | null;
+  /**
+   * List of images for the product variant.
+   */
+  images: (RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_images | null)[] | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout_lines_variant_metadata | null)[];
   /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
@@ -563,6 +620,7 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout {
    * Email of a customer.
    */
   email: string;
+  note: string;
   /**
    * Shipping methods that can be used with this order.
    */
@@ -591,14 +649,9 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout {
 }
 
 export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode_errors {
-  __typename: "CheckoutError";
+  __typename: "Error";
   /**
-   * The error code.
-   */
-  code: CheckoutErrorCode;
-  /**
-   * Name of a field that caused the error. A value of `null` indicates that the
-   * error isn't associated with a particular field.
+   * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
    */
   field: string | null;
   /**
@@ -613,12 +666,15 @@ export interface RemoveCheckoutPromoCode_checkoutRemovePromoCode {
    * The checkout with the removed gift card or voucher.
    */
   checkout: RemoveCheckoutPromoCode_checkoutRemovePromoCode_checkout | null;
+  /**
+   * List of errors that occurred executing the mutation.
+   */
   errors: RemoveCheckoutPromoCode_checkoutRemovePromoCode_errors[];
 }
 
 export interface RemoveCheckoutPromoCode {
   /**
-   * Remove a gift card or a voucher from a checkout.
+   * (Custom Implementation) Remove a gift card or a voucher from a checkout.
    */
   checkoutRemovePromoCode: RemoveCheckoutPromoCode_checkoutRemovePromoCode | null;
 }

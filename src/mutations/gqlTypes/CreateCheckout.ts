@@ -16,8 +16,7 @@ export interface CreateCheckout_checkoutCreate_errors {
    */
   code: CheckoutErrorCode;
   /**
-   * Name of a field that caused the error. A value of `null` indicates that the
-   * error isn't associated with a particular field.
+   * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
    */
   field: string | null;
   /**
@@ -296,6 +295,40 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_totalPrice {
   net: CreateCheckout_checkoutCreate_checkout_lines_totalPrice_net;
 }
 
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_images {
+  __typename: "ProductImage";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  sortOrder: number | null;
+  alt: string;
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
+
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_pricing_priceUndiscounted_gross {
   __typename: "Money";
   /**
@@ -424,6 +457,14 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_attributes
   values: (CreateCheckout_checkoutCreate_checkout_lines_variant_attributes_values | null)[];
 }
 
+export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
 export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product_thumbnail {
   __typename: "Image";
   /**
@@ -460,6 +501,11 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant_product {
    */
   id: string;
   name: string;
+  slug: string;
+  /**
+   * Tags
+   */
+  tags: (CreateCheckout_checkoutCreate_checkout_lines_variant_product_tags | null)[] | null;
   /**
    * The main thumbnail for a product.
    */
@@ -480,6 +526,10 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant {
   name: string;
   sku: string;
   /**
+   * List of tags associated with the product variant
+   */
+  tags: (CreateCheckout_checkoutCreate_checkout_lines_variant_tags | null)[] | null;
+  /**
    * Quantity of a product available for sale in one checkout.
    */
   quantityAvailable: number;
@@ -487,6 +537,14 @@ export interface CreateCheckout_checkoutCreate_checkout_lines_variant {
    * Whether the variant is in stock and visible or not.
    */
   isAvailable: boolean | null;
+  /**
+   * List of images for the product variant.
+   */
+  images: (CreateCheckout_checkoutCreate_checkout_lines_variant_images | null)[] | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (CreateCheckout_checkoutCreate_checkout_lines_variant_metadata | null)[];
   /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
@@ -580,6 +638,7 @@ export interface CreateCheckout_checkoutCreate_checkout {
    * Email of a customer.
    */
   email: string;
+  note: string;
   /**
    * Shipping methods that can be used with this order.
    */

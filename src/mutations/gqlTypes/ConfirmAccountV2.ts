@@ -3,29 +3,11 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AccountErrorCode } from "./../../gqlTypes/globalTypes";
-
 // ====================================================
-// GraphQL mutation operation: SetPassword
+// GraphQL mutation operation: ConfirmAccountV2
 // ====================================================
 
-export interface SetPassword_setPassword_errors {
-  __typename: "AccountError";
-  /**
-   * The error code.
-   */
-  code: AccountErrorCode;
-  /**
-   * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
-   */
-  field: string | null;
-  /**
-   * The error message.
-   */
-  message: string | null;
-}
-
-export interface SetPassword_setPassword_user_avatar {
+export interface ConfirmAccountV2_confirmAccountV2_user_avatar {
   __typename: "Image";
   /**
    * The URL of the image.
@@ -33,7 +15,7 @@ export interface SetPassword_setPassword_user_avatar {
   url: string;
 }
 
-export interface SetPassword_setPassword_user_metadata {
+export interface ConfirmAccountV2_confirmAccountV2_user_metadata {
   __typename: "MetadataItem";
   /**
    * Key of a metadata item.
@@ -45,7 +27,7 @@ export interface SetPassword_setPassword_user_metadata {
   value: string;
 }
 
-export interface SetPassword_setPassword_user_defaultShippingAddress_country {
+export interface ConfirmAccountV2_confirmAccountV2_user_defaultShippingAddress_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -57,7 +39,7 @@ export interface SetPassword_setPassword_user_defaultShippingAddress_country {
   country: string;
 }
 
-export interface SetPassword_setPassword_user_defaultShippingAddress {
+export interface ConfirmAccountV2_confirmAccountV2_user_defaultShippingAddress {
   __typename: "Address";
   /**
    * The ID of the object.
@@ -73,7 +55,7 @@ export interface SetPassword_setPassword_user_defaultShippingAddress {
   /**
    * Shop's default country.
    */
-  country: SetPassword_setPassword_user_defaultShippingAddress_country;
+  country: ConfirmAccountV2_confirmAccountV2_user_defaultShippingAddress_country;
   countryArea: string;
   phone: string | null;
   /**
@@ -86,7 +68,7 @@ export interface SetPassword_setPassword_user_defaultShippingAddress {
   isDefaultShippingAddress: boolean | null;
 }
 
-export interface SetPassword_setPassword_user_defaultBillingAddress_country {
+export interface ConfirmAccountV2_confirmAccountV2_user_defaultBillingAddress_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -98,7 +80,7 @@ export interface SetPassword_setPassword_user_defaultBillingAddress_country {
   country: string;
 }
 
-export interface SetPassword_setPassword_user_defaultBillingAddress {
+export interface ConfirmAccountV2_confirmAccountV2_user_defaultBillingAddress {
   __typename: "Address";
   /**
    * The ID of the object.
@@ -114,7 +96,7 @@ export interface SetPassword_setPassword_user_defaultBillingAddress {
   /**
    * Shop's default country.
    */
-  country: SetPassword_setPassword_user_defaultBillingAddress_country;
+  country: ConfirmAccountV2_confirmAccountV2_user_defaultBillingAddress_country;
   countryArea: string;
   phone: string | null;
   /**
@@ -127,7 +109,7 @@ export interface SetPassword_setPassword_user_defaultBillingAddress {
   isDefaultShippingAddress: boolean | null;
 }
 
-export interface SetPassword_setPassword_user_addresses_country {
+export interface ConfirmAccountV2_confirmAccountV2_user_addresses_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -139,7 +121,7 @@ export interface SetPassword_setPassword_user_addresses_country {
   country: string;
 }
 
-export interface SetPassword_setPassword_user_addresses {
+export interface ConfirmAccountV2_confirmAccountV2_user_addresses {
   __typename: "Address";
   /**
    * The ID of the object.
@@ -155,7 +137,7 @@ export interface SetPassword_setPassword_user_addresses {
   /**
    * Shop's default country.
    */
-  country: SetPassword_setPassword_user_addresses_country;
+  country: ConfirmAccountV2_confirmAccountV2_user_addresses_country;
   countryArea: string;
   phone: string | null;
   /**
@@ -168,7 +150,7 @@ export interface SetPassword_setPassword_user_addresses {
   isDefaultShippingAddress: boolean | null;
 }
 
-export interface SetPassword_setPassword_user {
+export interface ConfirmAccountV2_confirmAccountV2_user {
   __typename: "User";
   /**
    * The ID of the object.
@@ -182,20 +164,20 @@ export interface SetPassword_setPassword_user {
    * The phone number of the user.
    */
   phone: string | null;
-  avatar: SetPassword_setPassword_user_avatar | null;
+  avatar: ConfirmAccountV2_confirmAccountV2_user_avatar | null;
   /**
    * List of public metadata items. Can be accessed without permissions.
    */
-  metadata: (SetPassword_setPassword_user_metadata | null)[];
-  defaultShippingAddress: SetPassword_setPassword_user_defaultShippingAddress | null;
-  defaultBillingAddress: SetPassword_setPassword_user_defaultBillingAddress | null;
+  metadata: (ConfirmAccountV2_confirmAccountV2_user_metadata | null)[];
+  defaultShippingAddress: ConfirmAccountV2_confirmAccountV2_user_defaultShippingAddress | null;
+  defaultBillingAddress: ConfirmAccountV2_confirmAccountV2_user_defaultBillingAddress | null;
   /**
    * List of all user's addresses.
    */
-  addresses: (SetPassword_setPassword_user_addresses | null)[] | null;
+  addresses: (ConfirmAccountV2_confirmAccountV2_user_addresses | null)[] | null;
 }
 
-export interface SetPassword_setPassword_accountErrors {
+export interface ConfirmAccountV2_confirmAccountV2_accountErrors {
   __typename: "AccountError";
   /**
    * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
@@ -205,35 +187,53 @@ export interface SetPassword_setPassword_accountErrors {
    * The error message.
    */
   message: string | null;
-  /**
-   * The error code.
-   */
-  code: AccountErrorCode;
 }
 
-export interface SetPassword_setPassword {
-  __typename: "SetPassword";
-  errors: SetPassword_setPassword_errors[];
+export interface ConfirmAccountV2_confirmAccountV2_errors {
+  __typename: "Error";
+  /**
+   * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
+   */
+  field: string | null;
+  /**
+   * The error message.
+   */
+  message: string | null;
+}
+
+export interface ConfirmAccountV2_confirmAccountV2 {
+  __typename: "ConfirmAccountV2";
   /**
    * JWT token, required to authenticate.
    */
   token: string | null;
   /**
-   * A user instance.
+   * JWT refresh token, required to re-generate access token.
    */
-  user: SetPassword_setPassword_user | null;
-  accountErrors: SetPassword_setPassword_accountErrors[];
-}
-
-export interface SetPassword {
+  refreshToken: string | null;
   /**
-   * Sets the user's password from the token sent by email using the RequestPasswordReset mutation.
+   * CSRF token required to re-generate access token.
    */
-  setPassword: SetPassword_setPassword | null;
+  csrfToken: string | null;
+  /**
+   * An activated user account.
+   */
+  user: ConfirmAccountV2_confirmAccountV2_user | null;
+  accountErrors: ConfirmAccountV2_confirmAccountV2_accountErrors[];
+  /**
+   * List of errors that occurred executing the mutation.
+   */
+  errors: ConfirmAccountV2_confirmAccountV2_errors[];
 }
 
-export interface SetPasswordVariables {
-  token: string;
-  email: string;
-  password: string;
+export interface ConfirmAccountV2 {
+  /**
+   * Confirm user account with otp sent by sms during registration.
+   */
+  confirmAccountV2: ConfirmAccountV2_confirmAccountV2 | null;
+}
+
+export interface ConfirmAccountV2Variables {
+  otp: string;
+  phone: string;
 }

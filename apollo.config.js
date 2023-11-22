@@ -7,7 +7,8 @@ module.exports = {
     ],
     service: {
       name: "saleor",
-      url: "http://localhost:8000/graphql/",
+      url:
+        "https://plixlifefcstagehapi.farziengineer.co/graphql/?source=website",
     },
   },
 };

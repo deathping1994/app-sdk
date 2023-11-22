@@ -40,6 +40,7 @@ export enum AccountErrorCode {
   PASSWORD_TOO_SHORT = "PASSWORD_TOO_SHORT",
   PASSWORD_TOO_SIMILAR = "PASSWORD_TOO_SIMILAR",
   REQUIRED = "REQUIRED",
+  REQUIRE_SUPERUSER_PERMISSION = "REQUIRE_SUPERUSER_PERMISSION",
   UNIQUE = "UNIQUE",
 }
 
@@ -54,9 +55,30 @@ export enum AddressTypeEnum {
 /**
  * An enumeration.
  */
+export enum AddressTypeType {
+  ADDRESSTYPES_HOME = "ADDRESSTYPES_HOME",
+  ADDRESSTYPES_OTHER = "ADDRESSTYPES_OTHER",
+  ADDRESSTYPES_WORK = "ADDRESSTYPES_WORK",
+}
+
+/**
+ * An enumeration.
+ */
+export enum AddressTypes {
+  HOME = "HOME",
+  OTHER = "OTHER",
+  WORK = "WORK",
+}
+
+/**
+ * An enumeration.
+ */
 export enum CheckoutErrorCode {
   BILLING_ADDRESS_NOT_SET = "BILLING_ADDRESS_NOT_SET",
+  CHECKOUTS_TOTAL_UNMATCHED = "CHECKOUTS_TOTAL_UNMATCHED",
   CHECKOUT_NOT_FULLY_PAID = "CHECKOUT_NOT_FULLY_PAID",
+  COD_NOT_APPLICABLE = "COD_NOT_APPLICABLE",
+  COD_NOT_APPLICABLE_FOR_PRODUCT_IN_CART = "COD_NOT_APPLICABLE_FOR_PRODUCT_IN_CART",
   GRAPHQL_ERROR = "GRAPHQL_ERROR",
   INSUFFICIENT_STOCK = "INSUFFICIENT_STOCK",
   INVALID = "INVALID",
@@ -67,6 +89,7 @@ export enum CheckoutErrorCode {
   PRODUCT_UNAVAILABLE_FOR_PURCHASE = "PRODUCT_UNAVAILABLE_FOR_PURCHASE",
   QUANTITY_GREATER_THAN_LIMIT = "QUANTITY_GREATER_THAN_LIMIT",
   REQUIRED = "REQUIRED",
+  RTO_CUSTOMER_FOUND = "RTO_CUSTOMER_FOUND",
   SHIPPING_ADDRESS_NOT_SET = "SHIPPING_ADDRESS_NOT_SET",
   SHIPPING_METHOD_NOT_APPLICABLE = "SHIPPING_METHOD_NOT_APPLICABLE",
   SHIPPING_METHOD_NOT_SET = "SHIPPING_METHOD_NOT_SET",
@@ -87,24 +110,6 @@ export enum CollectionSortField {
   NAME = "NAME",
   PRODUCT_COUNT = "PRODUCT_COUNT",
   PUBLICATION_DATE = "PUBLICATION_DATE",
-}
-
-/**
- * An enumeration.
- */
-export enum AddressTypeType {
-  ADDRESSTYPES_HOME = "ADDRESSTYPES_HOME",
-  ADDRESSTYPES_OTHER = "ADDRESSTYPES_OTHER",
-  ADDRESSTYPES_OFFICE = "ADDRESSTYPES_OFFICE",
-}
-
-/**
- * An enumeration.
- */
-export enum AddressTypes {
-  HOME = "HOME",
-  OTHER = "OTHER",
-  OFFICE = "WORK",
 }
 
 /**
@@ -373,6 +378,16 @@ export enum JobStatusEnum {
   SUCCESS = "SUCCESS",
 }
 
+/**
+ * An enumeration.
+ */
+export enum OTPErrorCodeEnum {
+  INVALID_EMAIL = "INVALID_EMAIL",
+  INVALID_OTP = "INVALID_OTP",
+  INVALID_PHONE = "INVALID_PHONE",
+  MAX_RETRY = "MAX_RETRY",
+}
+
 export enum OrderDirection {
   ASC = "ASC",
   DESC = "DESC",
@@ -383,18 +398,11 @@ export enum OrderDirection {
  */
 export enum OrderStatus {
   CANCELED = "CANCELED",
+  DISCARDED = "DISCARDED",
   DRAFT = "DRAFT",
   FULFILLED = "FULFILLED",
   PARTIALLY_FULFILLED = "PARTIALLY_FULFILLED",
   UNFULFILLED = "UNFULFILLED",
-}
-
-/**
- * An enumeration.
- */
-export enum OTPErrorCodeEnum {
-  INVALID_OTP = "INVALID_OTP",
-  INVALID_PHONE = "INVALID_PHONE",
 }
 
 /**
@@ -430,18 +438,26 @@ export enum PaymentErrorCode {
 }
 
 export enum ProductOrderField {
+  COLLECTION = "COLLECTION",
   DATE = "DATE",
+  DEFAULT_VARIANT_PRICE = "DEFAULT_VARIANT_PRICE",
   MINIMAL_PRICE = "MINIMAL_PRICE",
   NAME = "NAME",
   PRICE = "PRICE",
   PUBLICATION_DATE = "PUBLICATION_DATE",
   PUBLISHED = "PUBLISHED",
+  SEARCH_SOLD_SCORE = "SEARCH_SOLD_SCORE",
   TYPE = "TYPE",
 }
 
 export enum StockAvailability {
   IN_STOCK = "IN_STOCK",
   OUT_OF_STOCK = "OUT_OF_STOCK",
+}
+
+export enum TagFilter {
+  AND = "AND",
+  OR = "OR",
 }
 
 export interface AccountInput {
@@ -476,6 +492,9 @@ export interface CheckoutCreateInput {
   email?: string | null;
   shippingAddress?: AddressInput | null;
   billingAddress?: AddressInput | null;
+  tags?: (string | null)[] | null;
+  checkoutMetadataInput?: MetadataInputV2[] | null;
+  isRecalculate?: boolean | null;
 }
 
 export interface CheckoutLineInput {
@@ -497,6 +516,11 @@ export interface CollectionSortingInput {
 export interface IntRangeInput {
   gte?: number | null;
   lte?: number | null;
+}
+
+export interface MetadataInputV2 {
+  key: string;
+  value: string;
 }
 
 export interface PaymentInput {
@@ -522,9 +546,14 @@ export interface ProductFilterInput {
   productType?: string | null;
   stocks?: ProductStockFilterInput | null;
   search?: string | null;
+  tags?: TagsListInput | null;
   price?: PriceRangeInput | null;
+  defaultVariantPrice?: PriceRangeInput | null;
+  discount?: IntRangeInput | null;
+  rating?: IntRangeInput | null;
   minimalPrice?: PriceRangeInput | null;
   productTypes?: (string | null)[] | null;
+  searchAdmin?: string | null;
   ids?: (string | null)[] | null;
 }
 
@@ -537,6 +566,11 @@ export interface ProductOrder {
 export interface ProductStockFilterInput {
   warehouseIds?: string[] | null;
   quantity?: IntRangeInput | null;
+}
+
+export interface TagsListInput {
+  tagsList?: (string | null)[] | null;
+  filterType: TagFilter;
 }
 
 //==============================================================

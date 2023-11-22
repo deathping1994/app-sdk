@@ -3,13 +3,13 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { CheckoutErrorCode } from "../../gqlTypes/globalTypes";
+import { CheckoutErrorCode } from "./../../gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: RemoveCheckoutLine
 // ====================================================
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice_gross {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_totalPrice_gross {
   __typename: "Money";
   /**
    * Amount of money.
@@ -21,7 +21,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice_gros
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice_net {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_totalPrice_net {
   __typename: "Money";
   /**
    * Amount of money.
@@ -33,19 +33,19 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice_net 
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_totalPrice {
   __typename: "TaxedMoney";
   /**
    * Amount of money including taxes.
    */
-  gross: RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice_gross;
+  gross: RemoveCheckoutLine_checkoutLineDelete_checkout_totalPrice_gross;
   /**
    * Amount of money without taxes.
    */
-  net: RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice_net;
+  net: RemoveCheckoutLine_checkoutLineDelete_checkout_totalPrice_net;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice_gross {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_subtotalPrice_gross {
   __typename: "Money";
   /**
    * Amount of money.
@@ -57,7 +57,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice_g
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice_net {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_subtotalPrice_net {
   __typename: "Money";
   /**
    * Amount of money.
@@ -69,19 +69,19 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice_n
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_subtotalPrice {
   __typename: "TaxedMoney";
   /**
    * Amount of money including taxes.
    */
-  gross: RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice_gross;
+  gross: RemoveCheckoutLine_checkoutLineDelete_checkout_subtotalPrice_gross;
   /**
    * Amount of money without taxes.
    */
-  net: RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice_net;
+  net: RemoveCheckoutLine_checkoutLineDelete_checkout_subtotalPrice_net;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_billingRemoveress_country {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_billingAddress_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -93,8 +93,8 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_billingRemovere
   country: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_billingRemoveress {
-  __typename: "Removeress";
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_billingAddress {
+  __typename: "Address";
   /**
    * The ID of the object.
    */
@@ -102,27 +102,27 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_billingRemovere
   firstName: string;
   lastName: string;
   companyName: string;
-  streetRemoveress1: string;
-  streetRemoveress2: string;
+  streetAddress1: string;
+  streetAddress2: string;
   city: string;
   postalCode: string;
   /**
    * Shop's default country.
    */
-  country: RemoveCheckoutLine_checkoutLinesUpdate_checkout_billingRemoveress_country;
+  country: RemoveCheckoutLine_checkoutLineDelete_checkout_billingAddress_country;
   countryArea: string;
   phone: string | null;
   /**
-   * Removeress is user's default billing Removeress.
+   * Address is user's default billing address.
    */
-  isDefaultBillingRemoveress: boolean | null;
+  isDefaultBillingAddress: boolean | null;
   /**
-   * Removeress is user's default shipping Removeress.
+   * Address is user's default shipping address.
    */
-  isDefaultShippingRemoveress: boolean | null;
+  isDefaultShippingAddress: boolean | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingRemoveress_country {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingAddress_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -134,8 +134,8 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingRemover
   country: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingRemoveress {
-  __typename: "Removeress";
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingAddress {
+  __typename: "Address";
   /**
    * The ID of the object.
    */
@@ -143,27 +143,27 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingRemover
   firstName: string;
   lastName: string;
   companyName: string;
-  streetRemoveress1: string;
-  streetRemoveress2: string;
+  streetAddress1: string;
+  streetAddress2: string;
   city: string;
   postalCode: string;
   /**
    * Shop's default country.
    */
-  country: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingRemoveress_country;
+  country: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingAddress_country;
   countryArea: string;
   phone: string | null;
   /**
-   * Removeress is user's default billing Removeress.
+   * Address is user's default billing address.
    */
-  isDefaultBillingRemoveress: boolean | null;
+  isDefaultBillingAddress: boolean | null;
   /**
-   * Removeress is user's default shipping Removeress.
+   * Address is user's default shipping address.
    */
-  isDefaultShippingRemoveress: boolean | null;
+  isDefaultShippingAddress: boolean | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availableShippingMethods_price {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_availableShippingMethods_price {
   __typename: "Money";
   /**
    * Currency code.
@@ -175,17 +175,17 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availableShippi
   amount: number;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availableShippingMethods {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_availableShippingMethods {
   __typename: "ShippingMethod";
   /**
    * The ID of the object.
    */
   id: string;
   name: string;
-  price: RemoveCheckoutLine_checkoutLinesUpdate_checkout_availableShippingMethods_price | null;
+  price: RemoveCheckoutLine_checkoutLineDelete_checkout_availableShippingMethods_price | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingMethod_price {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingMethod_price {
   __typename: "Money";
   /**
    * Currency code.
@@ -197,17 +197,17 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingMethod_
   amount: number;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingMethod {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingMethod {
   __typename: "ShippingMethod";
   /**
    * The ID of the object.
    */
   id: string;
   name: string;
-  price: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingMethod_price | null;
+  price: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingMethod_price | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice_gross {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingPrice_gross {
   __typename: "Money";
   /**
    * Amount of money.
@@ -219,7 +219,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice_g
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice_net {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingPrice_net {
   __typename: "Money";
   /**
    * Amount of money.
@@ -231,19 +231,19 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice_n
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_shippingPrice {
   __typename: "TaxedMoney";
   /**
    * Amount of money including taxes.
    */
-  gross: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice_gross;
+  gross: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingPrice_gross;
   /**
    * Amount of money without taxes.
    */
-  net: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice_net;
+  net: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingPrice_net;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPrice_gross {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_totalPrice_gross {
   __typename: "Money";
   /**
    * Amount of money.
@@ -255,7 +255,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPric
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPrice_net {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_totalPrice_net {
   __typename: "Money";
   /**
    * Amount of money.
@@ -267,19 +267,53 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPric
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPrice {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_totalPrice {
   __typename: "TaxedMoney";
   /**
    * Amount of money including taxes.
    */
-  gross: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPrice_gross;
+  gross: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_totalPrice_gross;
   /**
    * Amount of money without taxes.
    */
-  net: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPrice_net;
+  net: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_totalPrice_net;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_priceUndiscounted_gross {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_images {
+  __typename: "ProductImage";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  sortOrder: number | null;
+  alt: string;
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
+
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_priceUndiscounted_gross {
   __typename: "Money";
   /**
    * Amount of money.
@@ -291,7 +325,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_priceUndiscounted_net {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_priceUndiscounted_net {
   __typename: "Money";
   /**
    * Amount of money.
@@ -303,19 +337,19 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_priceUndiscounted {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_priceUndiscounted {
   __typename: "TaxedMoney";
   /**
    * Amount of money including taxes.
    */
-  gross: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_priceUndiscounted_gross;
+  gross: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_priceUndiscounted_gross;
   /**
    * Amount of money without taxes.
    */
-  net: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_priceUndiscounted_net;
+  net: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_priceUndiscounted_net;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_price_gross {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_price_gross {
   __typename: "Money";
   /**
    * Amount of money.
@@ -327,7 +361,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_price_net {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_price_net {
   __typename: "Money";
   /**
    * Amount of money.
@@ -339,19 +373,19 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   currency: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_price {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_price {
   __typename: "TaxedMoney";
   /**
    * Amount of money including taxes.
    */
-  gross: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_price_gross;
+  gross: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_price_gross;
   /**
    * Amount of money without taxes.
    */
-  net: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_price_net;
+  net: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_price_net;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing {
   __typename: "VariantPricingInfo";
   /**
    * Whether it is in sale or not.
@@ -360,14 +394,14 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   /**
    * The price without any discount.
    */
-  priceUndiscounted: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_priceUndiscounted | null;
+  priceUndiscounted: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_priceUndiscounted | null;
   /**
    * The price, with any discount subtracted.
    */
-  price: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing_price | null;
+  price: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing_price | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_attributes_attribute {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_attributes_attribute {
   __typename: "Attribute";
   /**
    * The ID of the object.
@@ -379,7 +413,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_a
   name: string | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_attributes_values {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_attributes_values {
   __typename: "AttributeValue";
   /**
    * The ID of the object.
@@ -395,19 +429,27 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_a
   value: string | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_attributes {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_attributes {
   __typename: "SelectedAttribute";
   /**
    * Name of an attribute displayed in the interface.
    */
-  attribute: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_attributes_attribute;
+  attribute: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_attributes_attribute;
   /**
    * Values of an attribute.
    */
-  values: (RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_attributes_values | null)[];
+  values: (RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_attributes_values | null)[];
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product_thumbnail {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_thumbnail {
   __typename: "Image";
   /**
    * The URL of the image.
@@ -419,7 +461,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   alt: string | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product_thumbnail2x {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_thumbnail2x {
   __typename: "Image";
   /**
    * The URL of the image.
@@ -427,7 +469,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   url: string;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product_productType {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_productType {
   __typename: "ProductType";
   /**
    * The ID of the object.
@@ -436,25 +478,30 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_p
   isShippingRequired: boolean;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product {
   __typename: "Product";
   /**
    * The ID of the object.
    */
   id: string;
   name: string;
+  slug: string;
+  /**
+   * Tags
+   */
+  tags: (RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_tags | null)[] | null;
   /**
    * The main thumbnail for a product.
    */
-  thumbnail: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product_thumbnail | null;
+  thumbnail: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_thumbnail | null;
   /**
    * The main thumbnail for a product.
    */
-  thumbnail2x: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product_thumbnail2x | null;
-  productType: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product_productType;
+  thumbnail2x: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_thumbnail2x | null;
+  productType: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product_productType;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant {
   __typename: "ProductVariant";
   /**
    * The ID of the object.
@@ -462,6 +509,10 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant {
   id: string;
   name: string;
   sku: string;
+  /**
+   * List of tags associated with the product variant
+   */
+  tags: (RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_tags | null)[] | null;
   /**
    * Quantity of a product available for sale in one checkout.
    */
@@ -471,17 +522,25 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant {
    */
   isAvailable: boolean | null;
   /**
+   * List of images for the product variant.
+   */
+  images: (RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_images | null)[] | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_metadata | null)[];
+  /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
-  pricing: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_pricing | null;
+  pricing: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_pricing | null;
   /**
    * List of attributes assigned to this variant.
    */
-  attributes: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_attributes[];
-  product: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_product;
+  attributes: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_attributes[];
+  product: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant_product;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_lines {
   __typename: "CheckoutLine";
   /**
    * The ID of the object.
@@ -491,11 +550,11 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines {
   /**
    * The sum of the checkout line price, taxes and discounts.
    */
-  totalPrice: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_totalPrice | null;
-  variant: RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines_variant;
+  totalPrice: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_totalPrice | null;
+  variant: RemoveCheckoutLine_checkoutLineDelete_checkout_lines_variant;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_discount {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_discount {
   __typename: "Money";
   /**
    * Currency code.
@@ -507,7 +566,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_discount {
   amount: number;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availablePaymentGateways_config {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_availablePaymentGateways_config {
   __typename: "GatewayConfigLine";
   /**
    * Gateway config key.
@@ -519,7 +578,7 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availablePaymen
   value: string | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availablePaymentGateways {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout_availablePaymentGateways {
   __typename: "PaymentGateway";
   /**
    * Payment gateway ID.
@@ -532,14 +591,14 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout_availablePaymen
   /**
    * Payment gateway client configuration.
    */
-  config: RemoveCheckoutLine_checkoutLinesUpdate_checkout_availablePaymentGateways_config[];
+  config: RemoveCheckoutLine_checkoutLineDelete_checkout_availablePaymentGateways_config[];
   /**
    * Payment gateway supported currencies.
    */
   currencies: (string | null)[];
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout {
+export interface RemoveCheckoutLine_checkoutLineDelete_checkout {
   __typename: "Checkout";
   /**
    * The checkout's token.
@@ -552,13 +611,13 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout {
   /**
    * The sum of the the checkout line prices, with all the taxes,shipping costs, and discounts included.
    */
-  totalPrice: RemoveCheckoutLine_checkoutLinesUpdate_checkout_totalPrice | null;
+  totalPrice: RemoveCheckoutLine_checkoutLineDelete_checkout_totalPrice | null;
   /**
    * The price of the checkout before shipping, with taxes included.
    */
-  subtotalPrice: RemoveCheckoutLine_checkoutLinesUpdate_checkout_subtotalPrice | null;
-  billingRemoveress: RemoveCheckoutLine_checkoutLinesUpdate_checkout_billingRemoveress | null;
-  shippingRemoveress: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingRemoveress | null;
+  subtotalPrice: RemoveCheckoutLine_checkoutLineDelete_checkout_subtotalPrice | null;
+  billingAddress: RemoveCheckoutLine_checkoutLineDelete_checkout_billingAddress | null;
+  shippingAddress: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingAddress | null;
   /**
    * Email of a customer.
    */
@@ -567,39 +626,38 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_checkout {
   /**
    * Shipping methods that can be used with this order.
    */
-  availableShippingMethods: (RemoveCheckoutLine_checkoutLinesUpdate_checkout_availableShippingMethods | null)[];
-  shippingMethod: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingMethod | null;
+  availableShippingMethods: (RemoveCheckoutLine_checkoutLineDelete_checkout_availableShippingMethods | null)[];
+  shippingMethod: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingMethod | null;
   /**
    * The price of the shipping, with all the taxes included.
    */
-  shippingPrice: RemoveCheckoutLine_checkoutLinesUpdate_checkout_shippingPrice | null;
+  shippingPrice: RemoveCheckoutLine_checkoutLineDelete_checkout_shippingPrice | null;
   /**
    * A list of checkout lines, each containing information about an item in the checkout.
    */
-  lines: (RemoveCheckoutLine_checkoutLinesUpdate_checkout_lines | null)[] | null;
+  lines: (RemoveCheckoutLine_checkoutLineDelete_checkout_lines | null)[] | null;
   /**
    * Returns True, if checkout requires shipping.
    */
   isShippingRequired: boolean;
-  discount: RemoveCheckoutLine_checkoutLinesUpdate_checkout_discount | null;
+  discount: RemoveCheckoutLine_checkoutLineDelete_checkout_discount | null;
   discountName: string | null;
   translatedDiscountName: string | null;
   voucherCode: string | null;
   /**
    * List of available payment gateways.
    */
-  availablePaymentGateways: RemoveCheckoutLine_checkoutLinesUpdate_checkout_availablePaymentGateways[];
+  availablePaymentGateways: RemoveCheckoutLine_checkoutLineDelete_checkout_availablePaymentGateways[];
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate_errors {
+export interface RemoveCheckoutLine_checkoutLineDelete_errors {
   __typename: "CheckoutError";
   /**
    * The error code.
    */
   code: CheckoutErrorCode;
   /**
-   * Name of a field that caused the error. A value of `null` indicates that the
-   * error isn't associated with a particular field.
+   * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
    */
   field: string | null;
   /**
@@ -608,23 +666,23 @@ export interface RemoveCheckoutLine_checkoutLinesUpdate_errors {
   message: string | null;
 }
 
-export interface RemoveCheckoutLine_checkoutLinesUpdate {
-  __typename: "CheckoutLinesUpdate";
+export interface RemoveCheckoutLine_checkoutLineDelete {
+  __typename: "CheckoutLineDelete";
   /**
    * An updated checkout.
    */
-  checkout: RemoveCheckoutLine_checkoutLinesUpdate_checkout | null;
-  errors: RemoveCheckoutLine_checkoutLinesUpdate_errors[];
+  checkout: RemoveCheckoutLine_checkoutLineDelete_checkout | null;
+  errors: RemoveCheckoutLine_checkoutLineDelete_errors[];
 }
 
 export interface RemoveCheckoutLine {
   /**
-   * Updates checkout line in the existing checkout.
+   * (Custom implementation) Deletes a CheckoutLine.
    */
-   checkoutLineDelete : RemoveCheckoutLine_checkoutLinesUpdate | null;
+  checkoutLineDelete: RemoveCheckoutLine_checkoutLineDelete | null;
 }
 
 export interface RemoveCheckoutLineVariables {
-    checkoutId: string
-    lineId: string
+  checkoutId: string;
+  lineId?: string | null;
 }

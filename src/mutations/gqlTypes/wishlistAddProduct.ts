@@ -40,6 +40,34 @@ export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_e
   url: string;
 }
 
+export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_attributes_attribute {
+  __typename: "Attribute";
+  /**
+   * Name of an attribute displayed in the interface.
+   */
+  name: string | null;
+}
+
+export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_attributes_values {
+  __typename: "AttributeValue";
+  /**
+   * Name of a value displayed in the interface.
+   */
+  name: string | null;
+}
+
+export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_attributes {
+  __typename: "SelectedAttribute";
+  /**
+   * Name of an attribute displayed in the interface.
+   */
+  attribute: wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_attributes_attribute;
+  /**
+   * Values of an attribute.
+   */
+  values: (wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_attributes_values | null)[];
+}
+
 export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_images {
   __typename: "ProductImage";
   /**
@@ -150,6 +178,10 @@ export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_e
   sku: string;
   name: string;
   /**
+   * List of attributes assigned to this variant.
+   */
+  attributes: wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_attributes[];
+  /**
    * Quantity of a product available for sale in one checkout.
    */
   quantityAvailable: number;
@@ -161,6 +193,11 @@ export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_e
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
   pricing: wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants_pricing | null;
+}
+
+export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_productType {
+  __typename: "ProductType";
+  name: string;
 }
 
 export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_pricing_priceRangeUndiscounted_start_net {
@@ -351,6 +388,11 @@ export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_e
   id: string;
   name: string;
   /**
+   * Whether the product is published.
+   */
+  isPublished: boolean;
+  slug: string;
+  /**
    * Whether the product is available for purchase.
    */
   isAvailableForPurchase: boolean | null;
@@ -370,6 +412,7 @@ export interface wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_e
    * List of variants for the product.
    */
   variants: (wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_variants | null)[] | null;
+  productType: wishlistAddProduct_WishlistAddProduct_wishlist_wishlist_items_edges_node_product_productType;
   /**
    * Lists the storefront product's pricing, the current price and discounts, only meant for displaying.
    */

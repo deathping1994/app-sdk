@@ -3,12 +3,31 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-
 // ====================================================
-// GraphQL fragment: User
+// GraphQL query operation: UserDetails
 // ====================================================
 
-export interface User_defaultShippingAddress_country {
+export interface UserDetails_me_avatar {
+  __typename: "Image";
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface UserDetails_me_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
+
+export interface UserDetails_me_defaultShippingAddress_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -20,7 +39,7 @@ export interface User_defaultShippingAddress_country {
   country: string;
 }
 
-export interface User_defaultShippingAddress {
+export interface UserDetails_me_defaultShippingAddress {
   __typename: "Address";
   /**
    * The ID of the object.
@@ -36,7 +55,7 @@ export interface User_defaultShippingAddress {
   /**
    * Shop's default country.
    */
-  country: User_defaultShippingAddress_country;
+  country: UserDetails_me_defaultShippingAddress_country;
   countryArea: string;
   phone: string | null;
   /**
@@ -49,7 +68,7 @@ export interface User_defaultShippingAddress {
   isDefaultShippingAddress: boolean | null;
 }
 
-export interface User_defaultBillingAddress_country {
+export interface UserDetails_me_defaultBillingAddress_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -61,7 +80,7 @@ export interface User_defaultBillingAddress_country {
   country: string;
 }
 
-export interface User_defaultBillingAddress {
+export interface UserDetails_me_defaultBillingAddress {
   __typename: "Address";
   /**
    * The ID of the object.
@@ -77,7 +96,7 @@ export interface User_defaultBillingAddress {
   /**
    * Shop's default country.
    */
-  country: User_defaultBillingAddress_country;
+  country: UserDetails_me_defaultBillingAddress_country;
   countryArea: string;
   phone: string | null;
   /**
@@ -90,7 +109,7 @@ export interface User_defaultBillingAddress {
   isDefaultShippingAddress: boolean | null;
 }
 
-export interface User_addresses_country {
+export interface UserDetails_me_addresses_country {
   __typename: "CountryDisplay";
   /**
    * Country code.
@@ -102,7 +121,7 @@ export interface User_addresses_country {
   country: string;
 }
 
-export interface User_addresses {
+export interface UserDetails_me_addresses {
   __typename: "Address";
   /**
    * The ID of the object.
@@ -118,7 +137,7 @@ export interface User_addresses {
   /**
    * Shop's default country.
    */
-  country: User_addresses_country;
+  country: UserDetails_me_addresses_country;
   countryArea: string;
   phone: string | null;
   /**
@@ -131,7 +150,7 @@ export interface User_addresses {
   isDefaultShippingAddress: boolean | null;
 }
 
-export interface User {
+export interface UserDetails_me {
   __typename: "User";
   /**
    * The ID of the object.
@@ -141,16 +160,26 @@ export interface User {
   firstName: string;
   lastName: string;
   isStaff: boolean;
-  metadata: User_metadata[];
-  defaultShippingAddress: User_defaultShippingAddress | null;
-  defaultBillingAddress: User_defaultBillingAddress | null;
+  /**
+   * The phone number of the user.
+   */
+  phone: string | null;
+  avatar: UserDetails_me_avatar | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (UserDetails_me_metadata | null)[];
+  defaultShippingAddress: UserDetails_me_defaultShippingAddress | null;
+  defaultBillingAddress: UserDetails_me_defaultBillingAddress | null;
   /**
    * List of all user's addresses.
    */
-  addresses: (User_addresses | null)[] | null;
+  addresses: (UserDetails_me_addresses | null)[] | null;
 }
 
-export interface User_metadata {
-  key: string;
-  value: string;
+export interface UserDetails {
+  /**
+   * Return the currently authenticated user.
+   */
+  me: UserDetails_me | null;
 }

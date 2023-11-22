@@ -55,6 +55,38 @@ export interface OrdersByUser_me_orders_edges_node_total {
   net: OrdersByUser_me_orders_edges_node_total_net;
 }
 
+export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop_gross {
+  __typename: "Money";
+  /**
+   * Amount of money.
+   */
+  amount: number;
+}
+
+export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop {
+  __typename: "TaxedMoney";
+  /**
+   * Amount of money including taxes.
+   */
+  gross: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop_gross;
+}
+
+export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted {
+  __typename: "TaxedMoneyRange";
+  /**
+   * Upper bound of a price range.
+   */
+  stop: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop | null;
+}
+
+export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing {
+  __typename: "ProductPricingInfo";
+  /**
+   * The undiscounted price range of the product variants.
+   */
+  priceRangeUndiscounted: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted | null;
+}
+
 export interface OrdersByUser_me_orders_edges_node_lines_variant_product {
   __typename: "Product";
   name: string;
@@ -62,23 +94,10 @@ export interface OrdersByUser_me_orders_edges_node_lines_variant_product {
    * The ID of the object.
    */
   id: string;
-  pricing: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing;
-}
-
-export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing {
-  priceRangeUndiscounted: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted;
-}
-
-export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted {
-  stop: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop;
-}
-
-export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop {
-  gross: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop_gross;
-}
-
-export interface OrdersByUser_me_orders_edges_node_lines_variant_product_pricing_priceRangeUndiscounted_stop_gross {
-  amount: number;
+  /**
+   * Lists the storefront product's pricing, the current price and discounts, only meant for displaying.
+   */
+  pricing: OrdersByUser_me_orders_edges_node_lines_variant_product_pricing | null;
 }
 
 export interface OrdersByUser_me_orders_edges_node_lines_variant {

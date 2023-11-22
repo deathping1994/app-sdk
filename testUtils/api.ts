@@ -49,7 +49,9 @@ export function setupRecording() {
 
 export async function setupAPI() {
   const cache = await createSaleorCache({ persistCache: true });
-  const apiUrl = process.env.API_URL || "http://localhost:8000/graphql/";
+  const apiUrl =
+    process.env.API_URL ||
+    "https://plixlifefcstagehapi.farziengineer.co/graphql/?source=website";
   const invalidTokenLink = invalidTokenLinkWithTokenHandler(() => null);
   const links = [
     invalidTokenLink,

@@ -43,6 +43,40 @@ export interface CheckoutLine_totalPrice {
   net: CheckoutLine_totalPrice_net;
 }
 
+export interface CheckoutLine_variant_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
+export interface CheckoutLine_variant_images {
+  __typename: "ProductImage";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  sortOrder: number | null;
+  alt: string;
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface CheckoutLine_variant_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
+
 export interface CheckoutLine_variant_pricing_priceUndiscounted_gross {
   __typename: "Money";
   /**
@@ -171,6 +205,14 @@ export interface CheckoutLine_variant_attributes {
   values: (CheckoutLine_variant_attributes_values | null)[];
 }
 
+export interface CheckoutLine_variant_product_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
 export interface CheckoutLine_variant_product_thumbnail {
   __typename: "Image";
   /**
@@ -207,6 +249,11 @@ export interface CheckoutLine_variant_product {
    */
   id: string;
   name: string;
+  slug: string;
+  /**
+   * Tags
+   */
+  tags: (CheckoutLine_variant_product_tags | null)[] | null;
   /**
    * The main thumbnail for a product.
    */
@@ -227,6 +274,10 @@ export interface CheckoutLine_variant {
   name: string;
   sku: string;
   /**
+   * List of tags associated with the product variant
+   */
+  tags: (CheckoutLine_variant_tags | null)[] | null;
+  /**
    * Quantity of a product available for sale in one checkout.
    */
   quantityAvailable: number;
@@ -234,6 +285,14 @@ export interface CheckoutLine_variant {
    * Whether the variant is in stock and visible or not.
    */
   isAvailable: boolean | null;
+  /**
+   * List of images for the product variant.
+   */
+  images: (CheckoutLine_variant_images | null)[] | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (CheckoutLine_variant_metadata | null)[];
   /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */

@@ -16,14 +16,33 @@ export interface CreateUserAddress_accountAddressCreate_errors {
    */
   code: AccountErrorCode;
   /**
-   * Name of a field that caused the error. A value of `null` indicates that the
-   * error isn't associated with a particular field.
+   * Name of a field that caused the error. A value of `null` indicates that the error isn't associated with a particular field.
    */
   field: string | null;
   /**
    * The error message.
    */
   message: string | null;
+}
+
+export interface CreateUserAddress_accountAddressCreate_user_avatar {
+  __typename: "Image";
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface CreateUserAddress_accountAddressCreate_user_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
 }
 
 export interface CreateUserAddress_accountAddressCreate_user_defaultShippingAddress_country {
@@ -159,6 +178,15 @@ export interface CreateUserAddress_accountAddressCreate_user {
   firstName: string;
   lastName: string;
   isStaff: boolean;
+  /**
+   * The phone number of the user.
+   */
+  phone: string | null;
+  avatar: CreateUserAddress_accountAddressCreate_user_avatar | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (CreateUserAddress_accountAddressCreate_user_metadata | null)[];
   defaultShippingAddress: CreateUserAddress_accountAddressCreate_user_defaultShippingAddress | null;
   defaultBillingAddress: CreateUserAddress_accountAddressCreate_user_defaultBillingAddress | null;
   /**

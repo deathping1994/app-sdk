@@ -9,6 +9,18 @@ import { PaymentChargeStatusEnum, OrderStatus, JobStatusEnum } from "./../../gql
 // GraphQL query operation: UserOrderByToken
 // ====================================================
 
+export interface UserOrderByToken_orderByToken_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
+
 export interface UserOrderByToken_orderByToken_shippingAddress_country {
   __typename: "CountryDisplay";
   /**
@@ -48,6 +60,40 @@ export interface UserOrderByToken_orderByToken_shippingAddress {
    * Address is user's default shipping address.
    */
   isDefaultShippingAddress: boolean | null;
+}
+
+export interface UserOrderByToken_orderByToken_lines_variant_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
+export interface UserOrderByToken_orderByToken_lines_variant_images {
+  __typename: "ProductImage";
+  /**
+   * The ID of the object.
+   */
+  id: string;
+  sortOrder: number | null;
+  alt: string;
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface UserOrderByToken_orderByToken_lines_variant_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
 }
 
 export interface UserOrderByToken_orderByToken_lines_variant_pricing_priceUndiscounted_gross {
@@ -178,6 +224,14 @@ export interface UserOrderByToken_orderByToken_lines_variant_attributes {
   values: (UserOrderByToken_orderByToken_lines_variant_attributes_values | null)[];
 }
 
+export interface UserOrderByToken_orderByToken_lines_variant_product_tags {
+  __typename: "TagType";
+  /**
+   * The name of the tag
+   */
+  name: string;
+}
+
 export interface UserOrderByToken_orderByToken_lines_variant_product_thumbnail {
   __typename: "Image";
   /**
@@ -214,6 +268,11 @@ export interface UserOrderByToken_orderByToken_lines_variant_product {
    */
   id: string;
   name: string;
+  slug: string;
+  /**
+   * Tags
+   */
+  tags: (UserOrderByToken_orderByToken_lines_variant_product_tags | null)[] | null;
   /**
    * The main thumbnail for a product.
    */
@@ -234,6 +293,10 @@ export interface UserOrderByToken_orderByToken_lines_variant {
   name: string;
   sku: string;
   /**
+   * List of tags associated with the product variant
+   */
+  tags: (UserOrderByToken_orderByToken_lines_variant_tags | null)[] | null;
+  /**
    * Quantity of a product available for sale in one checkout.
    */
   quantityAvailable: number;
@@ -241,6 +304,14 @@ export interface UserOrderByToken_orderByToken_lines_variant {
    * Whether the variant is in stock and visible or not.
    */
   isAvailable: boolean | null;
+  /**
+   * List of images for the product variant.
+   */
+  images: (UserOrderByToken_orderByToken_lines_variant_images | null)[] | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (UserOrderByToken_orderByToken_lines_variant_metadata | null)[];
   /**
    * Lists the storefront variant's pricing, the current price and discounts, only meant for displaying.
    */
@@ -507,6 +578,10 @@ export interface UserOrderByToken_orderByToken {
    * User-friendly number of an order.
    */
   number: string | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (UserOrderByToken_orderByToken_metadata | null)[];
   shippingAddress: UserOrderByToken_orderByToken_shippingAddress | null;
   /**
    * List of order lines.

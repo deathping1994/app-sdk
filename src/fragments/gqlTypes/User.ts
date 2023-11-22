@@ -3,10 +3,29 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-
 // ====================================================
 // GraphQL fragment: User
 // ====================================================
+
+export interface User_avatar {
+  __typename: "Image";
+  /**
+   * The URL of the image.
+   */
+  url: string;
+}
+
+export interface User_metadata {
+  __typename: "MetadataItem";
+  /**
+   * Key of a metadata item.
+   */
+  key: string;
+  /**
+   * Value of a metadata item.
+   */
+  value: string;
+}
 
 export interface User_defaultShippingAddress_country {
   __typename: "CountryDisplay";
@@ -141,21 +160,19 @@ export interface User {
   firstName: string;
   lastName: string;
   isStaff: boolean;
-  avatar?: User_avatar | null;
-  metadata: User_metadata[];
+  /**
+   * The phone number of the user.
+   */
+  phone: string | null;
+  avatar: User_avatar | null;
+  /**
+   * List of public metadata items. Can be accessed without permissions.
+   */
+  metadata: (User_metadata | null)[];
   defaultShippingAddress: User_defaultShippingAddress | null;
   defaultBillingAddress: User_defaultBillingAddress | null;
   /**
    * List of all user's addresses.
    */
   addresses: (User_addresses | null)[] | null;
-}
-
-export interface User_avatar {
-  url?: string | null;
-}
-
-export interface User_metadata {
-  key: string;
-  value: string;
 }
