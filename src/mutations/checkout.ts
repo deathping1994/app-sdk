@@ -168,25 +168,24 @@ export const updateCheckoutPaymentMethodMutation = gql`
   ${checkoutFragment}
   ${checkoutErrorFragment}
   mutation CheckoutPaymentMethodUpdate(
-    $checkoutId: ID!,
-    $gatewayId: String!,
+    $checkoutId: ID!
+    $gatewayId: String!
     $useCashback: Boolean!
-) {
-   checkoutPaymentMethodUpdate(
-     checkoutId: $checkoutId, 
-     gatewayId: $gatewayId,
-     useCashback: $useCashback
-   ) {
-    checkout {
-      ...Checkout
+  ) {
+    checkoutPaymentMethodUpdate(
+      checkoutId: $checkoutId
+      gatewayId: $gatewayId
+      useCashback: $useCashback
+    ) {
+      checkout {
+        ...Checkout
+      }
+      errors: checkoutErrors {
+        ...CheckoutError
+      }
     }
-    errors: checkoutErrors {
-      ...CheckoutError
-    }
-   }
- }
+  }
 `;
-
 
 export const addCheckoutPromoCode = gql`
   ${checkoutFragment}

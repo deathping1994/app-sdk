@@ -116,12 +116,20 @@ import {
 import {
   AddCheckoutLine,
   AddCheckoutLineVariables,
+  AddCheckoutLine_checkoutLinesUpdate_checkout,
 } from "src/mutations/gqlTypes/AddCheckoutLineMutation";
 import {
   RemoveCheckoutLine,
   RemoveCheckoutLineVariables,
 } from "src/mutations/gqlTypes/RemoveCheckoutLine";
-import { UpdateCheckoutPaymentMethod, UpdateCheckoutPaymnetMethodVariables } from "src/mutations/gqlTypes/PaymentMethodUpdate";
+import {
+  UpdateCheckoutPaymentMethod,
+  UpdateCheckoutPaymnetMethodVariables,
+} from "src/mutations/gqlTypes/PaymentMethodUpdate";
+import {
+  CheckoutPaymentMethodUpdate,
+  CheckoutPaymentMethodUpdateVariables,
+} from "src/mutations/gqlTypes/CheckoutPaymentMethodUpdate";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1064,28 +1072,31 @@ export class ApolloClientManager {
     }
   };
 
-  updateCheckoutPayment = async (checkoutId: string, gatewayId: string, useCashback: boolean) => {
-    try {      
+  updateCheckoutPayment = async (
+    checkoutId: string,
+    gatewayId: string,
+    useCashback: boolean
+  ) => {
+    try {
       const { data, errors } = await this.client.mutate<
-      UpdateCheckoutPaymentMethod,
-      UpdateCheckoutPaymnetMethodVariables
+        CheckoutPaymentMethodUpdate,
+        CheckoutPaymentMethodUpdateVariables
       >({
         mutation: CheckoutMutations.updateCheckoutPaymentMethodMutation,
         variables: {
           checkoutId,
           gatewayId,
-          useCashback
+          useCashback,
         },
       });
-      console.log('dsfbdsfd', data);
-
+      console.log("dsfbdsfd", data);
 
       if (errors?.length) {
         return {
           error: errors,
         };
       }
-      
+
       if (data?.checkoutPaymentMethodUpdate?.errors.length) {
         return {
           error: data?.checkoutPaymentMethodUpdate?.errors,
@@ -1335,7 +1346,9 @@ export class ApolloClientManager {
     availableShippingMethods,
     shippingMethod,
     note,
-  }: Checkout): ICheckoutModel => ({
+  }:
+    | Checkout
+    | AddCheckoutLine_checkoutLinesUpdate_checkout): ICheckoutModel => ({
     availablePaymentGateways,
     availableShippingMethods: availableShippingMethods
       ? availableShippingMethods.filter(filterNotEmptyArrayItems)

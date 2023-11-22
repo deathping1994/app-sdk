@@ -3,7 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { CheckoutLineInput, CheckoutErrorCode } from "../gqlTypes/globalTypes";
+import { Checkout_lines_variant_product_tags } from "src/fragments/gqlTypes/Checkout";
+import { CheckoutLineInput, CheckoutErrorCode } from "src/gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: AddCheckoutLine
@@ -443,6 +444,11 @@ export interface AddCheckoutLine_checkoutLinesUpdate_checkout_lines_variant_prod
    */
   id: string;
   name: string;
+  slug: string;
+  /**
+   * Tags
+   */
+  tags: (Checkout_lines_variant_product_tags | null)[] | null;
   /**
    * The main thumbnail for a product.
    */
