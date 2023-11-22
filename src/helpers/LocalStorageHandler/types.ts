@@ -117,6 +117,7 @@ export interface ICheckoutModel {
   id?: string;
   token?: any;
   email?: string;
+  note?: string;
   shippingAddress?: ICheckoutAddress | null;
   billingAddress?: ICheckoutAddress | null;
   selectedShippingAddressId?: string;
@@ -128,6 +129,8 @@ export interface ICheckoutModel {
   availablePaymentGateways?: Checkout_availablePaymentGateways[];
   shippingMethod?: ICheckoutModelShippingMethod | null;
   _W?: any;
+  timestamp?: any;
+  item?: any;
 }
 
 export interface IPaymentModel {

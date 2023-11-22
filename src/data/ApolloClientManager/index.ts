@@ -1355,8 +1355,8 @@ export class ApolloClientManager {
       : [],
     billingAddress,
     email,
-    note,
     id,
+    note,
     lines: lines
       ?.filter(item => item?.quantity && item.variant.id)
       .map(item => {

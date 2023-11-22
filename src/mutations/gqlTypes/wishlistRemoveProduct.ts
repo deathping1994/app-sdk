@@ -3,6 +3,8 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
+import { Wishlist_wishlist_items_edges_node_product_variants_metadata } from "src/queries/gqlTypes/Wishlist";
+
 // ====================================================
 // GraphQL mutation operation: wishlistRemoveProduct
 // ====================================================
@@ -185,6 +187,7 @@ export interface wishlistRemoveProduct_WishlistRemoveProduct_wishlist_wishlist_i
    * Quantity of a product available for sale in one checkout.
    */
   quantityAvailable: number;
+  metadata: (Wishlist_wishlist_items_edges_node_product_variants_metadata | null)[];
   /**
    * List of images for the product variant.
    */

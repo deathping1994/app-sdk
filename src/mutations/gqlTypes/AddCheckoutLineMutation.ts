@@ -468,6 +468,7 @@ export interface AddCheckoutLine_checkoutLinesUpdate_checkout_lines_variant {
   id: string;
   name: string;
   sku: string;
+  metadata?:any;
   /**
    * Quantity of a product available for sale in one checkout.
    */
@@ -494,6 +495,7 @@ export interface AddCheckoutLine_checkoutLinesUpdate_checkout_lines {
    */
   id: string;
   quantity: number;
+  metadata?:any;
   /**
    * The sum of the checkout line price, taxes and discounts.
    */

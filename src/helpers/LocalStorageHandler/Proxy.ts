@@ -21,17 +21,17 @@ class LocalStorageHandlerProxy extends NamedObservable<
    */
   protected async saveItem<TItem extends object>(
     name: LocalStorageItems,
-    item: TItem | string | null
+    item: any | TItem | string | null
   ): Promise<void> {
     try {
       const wrappedItem = {
         item,
         timestamp: Date.now(),
       };
-      if(name === LocalStorageItems.CHECKOUT){
-        if(item?._W){
+      if (name === LocalStorageItems.CHECKOUT) {
+        if (item?._W) {
           await AsyncStorage.setItem(name, JSON.stringify(item._W || {}));
-        } else{
+        } else {
           await AsyncStorage.setItem(name, JSON.stringify(item || {}));
         }
       } else {
@@ -60,7 +60,7 @@ class LocalStorageHandlerProxy extends NamedObservable<
         await AsyncStorage.removeItem(name);
         return null;
       }
-      if(name === "data_checkout"){
+      if (name === "data_checkout") {
         return item;
       } else {
         return item.value;

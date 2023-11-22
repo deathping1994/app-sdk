@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface User_avatar {
-  __typename: "Image";
+  __typename?: "Image";
   /**
    * The URL of the image.
    */
