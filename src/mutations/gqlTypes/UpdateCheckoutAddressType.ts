@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AddressTypes, AddressTypeType } from "./../../gqlTypes/globalTypes";
+import { AddressTypes, AddressTypeType } from "./../../../gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: UpdateCheckoutAddressType

@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { PaymentChargeStatusEnum, OrderStatus, JobStatusEnum } from "./../../gqlTypes/globalTypes";
+import { PaymentChargeStatusEnum, OrderStatus, JobStatusEnum } from "./../../../gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL query operation: UserOrderByToken

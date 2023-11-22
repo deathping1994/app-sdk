@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { AccountInput, AccountErrorCode } from "./../../gqlTypes/globalTypes";
+import { AccountInput, AccountErrorCode } from "./../../../gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL mutation operation: AccountUpdate

@@ -1,10 +1,35 @@
 import { ApolloClient } from "@apollo/client";
 
+import { AddressTypes } from "src";
+import {
+  UpdateCheckoutAddressType,
+  UpdateCheckoutAddressTypeVariables,
+} from "src/mutations/gqlTypes/UpdateCheckoutAddressType";
+import {
+  ConfirmAccountV2,
+  ConfirmAccountV2Variables,
+} from "src/mutations/gqlTypes/CreateAccountV2";
+import {
+  AddCheckoutLine,
+  AddCheckoutLineVariables,
+  AddCheckoutLine_checkoutLinesUpdate_checkout,
+} from "src/mutations/gqlTypes/AddCheckoutLineMutation";
+import {
+  RemoveCheckoutLine,
+  RemoveCheckoutLineVariables,
+} from "src/mutations/gqlTypes/RemoveCheckoutLine";
+import {
+  UpdateCheckoutPaymentMethod,
+  UpdateCheckoutPaymnetMethodVariables,
+} from "src/mutations/gqlTypes/PaymentMethodUpdate";
+import {
+  CheckoutPaymentMethodUpdate,
+  CheckoutPaymentMethodUpdateVariables,
+} from "src/mutations/gqlTypes/CheckoutPaymentMethodUpdate";
 import { Checkout } from "../../fragments/gqlTypes/Checkout";
 import { Payment } from "../../fragments/gqlTypes/Payment";
 import { User } from "../../fragments/gqlTypes/User";
 import { CountryCode } from "../../gqlTypes/globalTypes";
-import { AddressTypes } from "src";
 import {
   ICheckoutAddress,
   ICheckoutModel,
@@ -105,31 +130,6 @@ import {
   wishlistRemoveProduct,
   wishlistRemoveProductVariables,
 } from "../../mutations/gqlTypes/wishlistRemoveProduct";
-import {
-  UpdateCheckoutAddressType,
-  UpdateCheckoutAddressTypeVariables,
-} from "src/mutations/gqlTypes/UpdateCheckoutAddressType";
-import {
-  ConfirmAccountV2,
-  ConfirmAccountV2Variables,
-} from "src/mutations/gqlTypes/CreateAccountV2";
-import {
-  AddCheckoutLine,
-  AddCheckoutLineVariables,
-  AddCheckoutLine_checkoutLinesUpdate_checkout,
-} from "src/mutations/gqlTypes/AddCheckoutLineMutation";
-import {
-  RemoveCheckoutLine,
-  RemoveCheckoutLineVariables,
-} from "src/mutations/gqlTypes/RemoveCheckoutLine";
-import {
-  UpdateCheckoutPaymentMethod,
-  UpdateCheckoutPaymnetMethodVariables,
-} from "src/mutations/gqlTypes/PaymentMethodUpdate";
-import {
-  CheckoutPaymentMethodUpdate,
-  CheckoutPaymentMethodUpdateVariables,
-} from "src/mutations/gqlTypes/CheckoutPaymentMethodUpdate";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;

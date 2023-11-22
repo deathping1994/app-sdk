@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { JobStatusEnum } from "./../../gqlTypes/globalTypes";
+import { JobStatusEnum } from "./../../../gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL fragment: InvoiceFragment

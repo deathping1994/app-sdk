@@ -3,7 +3,7 @@
 // @generated
 // This file was automatically generated and should not be edited.
 
-import { ProductOrder, ProductFilterInput } from "./../../gqlTypes/globalTypes";
+import { ProductOrder, ProductFilterInput } from "./../../../gqlTypes/globalTypes";
 
 // ====================================================
 // GraphQL query operation: ProductList
