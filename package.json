@@ -18,6 +18,7 @@
     "build-types": "apollo codegen:generate --target=typescript gqlTypes",
     "clean": "rimraf lib",
     "lint": "eslint \"src/**/*.@(tsx|ts|jsx|js)\" --fix && prettier --check \"src/**/*.@(tsx|ts|jsx|js)\" --write",
+    "prepare": "npm run clean && npm run build",
     "release": "np",
     "start": "tsc --watch",
     "test": "jest"
