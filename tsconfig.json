@@ -13,7 +13,7 @@
     "paths": {},
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": false,
+    "strict": true,
     "target": "es6",
     "types": ["jest", "@types/webappsec-credential-management"]
   },
