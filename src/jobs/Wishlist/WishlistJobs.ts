@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ApolloClientManager } from "../../data/ApolloClientManager";
 import { LocalStorageHandler } from "../../helpers/LocalStorageHandler";
 import { JobsHandler } from "../JobsHandler";

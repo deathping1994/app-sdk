@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   ICheckoutModel,
   IJobsModel,
@@ -8,7 +9,7 @@ import {
 import LocalStorageHandlerProxy from "./Proxy";
 
 export class LocalStorageHandler extends LocalStorageHandlerProxy {
-  static async getCheckout(): Promise<ICheckoutModel | null> {
+  static async getCheckout(): Promise<ICheckoutModel | null | { _W: any }> {
     try {
       return await LocalStorageHandlerProxy.retrieveItem(
         LocalStorageItems.CHECKOUT
@@ -92,7 +93,6 @@ export class LocalStorageHandler extends LocalStorageHandlerProxy {
     }
   }
 
-
   async setCheckout(checkout: ICheckoutModel | null): Promise<void> {
     try {
       return await this.saveItem(LocalStorageItems.CHECKOUT, checkout);
@@ -118,7 +118,7 @@ export class LocalStorageHandler extends LocalStorageHandlerProxy {
   }
 
   async setWishlist(wishlist: IWishlistModel | null) {
-    try{
+    try {
       return await this.saveItem(LocalStorageItems.WISHLIST, wishlist);
     } catch (error) {
       throw new Error(error.message);

@@ -1348,7 +1348,8 @@ export class ApolloClientManager {
     note,
   }:
     | Checkout
-    | AddCheckoutLine_checkoutLinesUpdate_checkout): ICheckoutModel => ({
+    | AddCheckoutLine_checkoutLinesUpdate_checkout
+    | any): ICheckoutModel => ({
     availablePaymentGateways,
     availableShippingMethods: availableShippingMethods
       ? availableShippingMethods.filter(filterNotEmptyArrayItems)

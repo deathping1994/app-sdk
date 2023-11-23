@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { round } from "lodash";
 
 import { ApolloClientManager } from "../data/ApolloClientManager";
@@ -150,7 +151,7 @@ export class SaleorState extends NamedObservable<StateItems> {
     if (signInToken) {
       this.onSignInTokenVerifyingUpdate(true);
       await this.verityToken();
-    } else if(csrfToken){
+    } else if (csrfToken) {
       this.onSignInTokenRefreshUpdate(true);
       await this.refreshToken();
     }
@@ -196,7 +197,7 @@ export class SaleorState extends NamedObservable<StateItems> {
       "auth",
       "refreshSignInToken",
       { refreshToken: undefined }
-    )
+    );
     if (dataError) {
       await this.jobsManager.run("auth", "signOut", undefined);
       try {

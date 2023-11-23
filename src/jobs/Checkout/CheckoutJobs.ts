@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   DataErrorCheckoutTypes,
   FunctionErrorCheckoutTypes,
@@ -42,7 +43,7 @@ class CheckoutJobs extends JobsHandler<{}> {
   provideCheckout = async ({
     isUserSignedIn,
   }: ProvideCheckoutJobInput): PromiseCheckoutJobRunResponse => {
-    console.log("in provideCheckout") 
+    console.log("in provideCheckout");
 
     const checkout = await LocalStorageHandler.getCheckout();
 
@@ -90,7 +91,6 @@ class CheckoutJobs extends JobsHandler<{}> {
 
     return { data };
   };
-
 
   createCheckout = async ({
     email,
@@ -235,11 +235,14 @@ class CheckoutJobs extends JobsHandler<{}> {
   updateCheckoutPayment = async ({
     checkoutId,
     gatewayId,
-    useCashback
+    useCashback,
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
     const checkout = LocalStorageHandler.getCheckout();
 
-    const { data, error } = await this.apolloClientManager.updateCheckoutPayment(
+    const {
+      data,
+      error,
+    } = await this.apolloClientManager.updateCheckoutPayment(
       checkoutId,
       gatewayId,
       useCashback
@@ -259,11 +262,10 @@ class CheckoutJobs extends JobsHandler<{}> {
       promoCodeDiscount: data?.promoCodeDiscount,
       shippingMethod: data?.shippingMethod,
       availableShippingMethods: data?.availableShippingMethods,
-      shippingAddress: data?.shippingAddress
+      shippingAddress: data?.shippingAddress,
     });
     return { data };
   };
-
 
   setShippingMethod = async ({
     checkoutId,

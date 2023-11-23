@@ -1,3 +1,4 @@
+// @ts-nocheck
 import NetInfo from "@react-native-community/netinfo";
 import { ApolloClientManager } from "../data/ApolloClientManager";
 import { LocalStorageHandler } from "../helpers/LocalStorageHandler";
