@@ -68,8 +68,6 @@ export interface ICheckout {
   email?: string;
   shippingAddress?: ICheckoutAddress | null;
   billingAddress?: ICheckoutAddress | null;
-  selectedShippingAddressId?: string;
-  selectedBillingAddressId?: string;
   billingAsShipping?: boolean;
   promoCodeDiscount?: ICheckoutModelPromoCodeDiscount;
   lines?: ICheckoutModelLine[] | null;

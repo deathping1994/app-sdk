@@ -12,6 +12,7 @@
 !.plop
 !.prettierrc
 !.storybook
+lib
 node_modules
 
 # JS GraphQL IntelliJ Plugin

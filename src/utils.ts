@@ -1,4 +1,7 @@
+import axios from "axios";
 import { MapFn, QueryShape, WatchMapFn } from "./types";
+import { REST_API_METHODS_TYPES } from "./consts";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // errors are nested in data as it currently stands in the API
 // this helper extracts all errors present
@@ -60,4 +63,47 @@ export function findValueInEnum<TEnum extends object>(
   }
 
   return (needle as unknown) as TEnum[keyof TEnum];
+}
+
+export async function axiosRequest(
+  url: string,
+  method: string | undefined = REST_API_METHODS_TYPES.GET,
+  data: {} | undefined = {},
+  options: any = {}
+) {
+  let userSpecificHeaders = {};
+  const token = await AsyncStorage.getItem("token");
+  if (token) {
+    userSpecificHeaders = {
+      ...userSpecificHeaders,
+      Authorization: `JWT ${token}`,
+    };
+  }
+
+  let customRequestHeaders = {};
+
+  if (options?.headers) {
+    customRequestHeaders = {
+      ...customRequestHeaders,
+      ...options.headers,
+    };
+  }
+
+  if (url && method) {
+    try {
+      const response = await axios({
+        url,
+        method,
+        data,
+        headers: { ...userSpecificHeaders, ...customRequestHeaders },
+        ...options,
+      });
+
+      return response;
+    } catch (error) {
+      console.log("Error occurred in axiosRequest", error);
+      return;
+    }
+  }
+  return null;
 }

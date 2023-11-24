@@ -20,7 +20,8 @@
     "lint": "eslint \"src/**/*.@(tsx|ts|jsx|js)\" --fix && prettier --check \"src/**/*.@(tsx|ts|jsx|js)\" --write",
     "release": "np",
     "start": "tsc --watch",
-    "test": "jest"
+    "test": "jest",
+    "copy-to-app": "rm -rf ../../Farzicom-app/farzicom-app/node_modules/@crisfcodes/saleor-native-sdk/src && cp -a ./src/ ../../Farzicom-app/farzicom-app/node_modules/@crisfcodes/saleor-native-sdk/src"
   },
   "keywords": [
     "saleor",
@@ -46,6 +47,7 @@
     "@react-native-community/netinfo": "6.0.0",
     "@wry/equality": "^0.4.0",
     "apollo3-cache-persist": "^0.9.1",
+    "axios": "^1.6.2",
     "dayjs": "^1.10.4",
     "extract-files": "^11.0.0",
     "graphql": "^15.5.0",

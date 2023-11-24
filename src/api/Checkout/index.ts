@@ -74,14 +74,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           shippingMethod,
           promoCodeDiscount,
         } = checkout || {};
-        this.checkout = {
-          billingAddress,
-          email,
-          id,
-          shippingAddress,
-          shippingMethod,
-          token,
-        };
+        this.checkout = this.saleorState.checkout;
         this.selectedShippingAddressId = selectedShippingAddressId;
         this.selectedBillingAddressId = selectedBillingAddressId;
         this.availablePaymentGateways = availablePaymentGateways;
@@ -114,22 +107,26 @@ export class SaleorCheckoutAPI extends ErrorListener {
       }
     );
   }
-  
+
+  getCheckout = () => {
+    const { checkout } = this.saleorState;
+    return checkout;
+  };
+
   createCheckoutNew = async (
     shippingAddress: IAddress,
     email: string,
     variantId: string,
     quantity: number
-  ) : CheckoutResponse => {
-    
-    
-    const alteredLines = [{
-      quantity: quantity,
-      variantId: variantId,
-    }]
+  ): CheckoutResponse => {
+    const alteredLines = [
+      {
+        quantity: quantity,
+        variantId: variantId,
+      },
+    ];
 
-    console.log('sdfkjndsf', alteredLines);
-    
+    console.log("sdfkjndsf", alteredLines);
 
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
@@ -149,11 +146,33 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  createCheckoutRest = async (
+    tags?: string[],
+    checkoutMetadataInput?: any
+  ): CheckoutResponse => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "createCheckoutRest",
+      {
+        tags,
+        checkoutMetadataInput,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
   setShippingAddress = async (
     shippingAddress: IAddress,
     email: string
   ): CheckoutResponse => {
-    const co = this.saleorState.checkout?._W ? this.saleorState.checkout?._W : this.saleorState.checkout;
+    const co = this.saleorState.checkout?._W
+      ? this.saleorState.checkout?._W
+      : this.saleorState.checkout;
     const checkoutId = co?.id;
     const alteredLines = co?.lines?.map(item => ({
       quantity: item?.quantity,
@@ -212,7 +231,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
     billingAddress: IAddress,
     email?: string
   ): CheckoutResponse => {
-    const co = this.saleorState.checkout?._W ? this.saleorState.checkout?._W : this.saleorState.checkout;
+    const co = this.saleorState.checkout?._W
+      ? this.saleorState.checkout?._W
+      : this.saleorState.checkout;
     const checkoutId = co?.id;
     const isShippingRequiredForProducts = co?.lines
       ?.filter(line => line.quantity > 0)
@@ -348,8 +369,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  updateCheckoutPayment = async (gatewayId: string, useCashback: boolean): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;    
+  updateCheckoutPayment = async (
+    gatewayId: string,
+    useCashback: boolean
+  ): CheckoutResponse => {
+    const checkoutId = this.saleorState.checkout?.id;
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
@@ -357,10 +381,10 @@ export class SaleorCheckoutAPI extends ErrorListener {
         {
           checkoutId,
           gatewayId,
-          useCashback
+          useCashback,
         }
       );
-      console.log('dsfb', checkoutId, gatewayId, data)
+      console.log("dsfb", checkoutId, gatewayId, data);
       return {
         data,
         dataError,
@@ -370,14 +394,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
     return {
       functionError: {
-        error: new Error(
-          "payment not updated"
-        ),
+        error: new Error("payment not updated"),
       },
       pending: false,
     };
-
-  }
+  };
 
   setShippingMethod = async (shippingMethodId: string): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;
@@ -506,7 +527,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
   completeCheckout = async (
     input?: CompleteCheckoutInput
   ): CheckoutResponse => {
-    const co = this.saleorState.checkout?._W ? this.saleorState.checkout?._W : this.saleorState.checkout;
+    const co = this.saleorState.checkout?._W
+      ? this.saleorState.checkout?._W
+      : this.saleorState.checkout;
     const checkoutId = co?.id;
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(

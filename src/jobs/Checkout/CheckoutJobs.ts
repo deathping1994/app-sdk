@@ -130,6 +130,39 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  createCheckoutRest = async ({
+    tags,
+    checkoutMetadataInput,
+  }): {
+    tags?: string[];
+    checkoutMetadataInput?: any;
+  } => {
+    const { data, error } = await this.apolloClientManager.createCheckoutRest(
+      tags,
+      checkoutMetadataInput
+    );
+
+    if (error) {
+      /**
+       * TODO: Differentiate errors!!! THIS IS A BUG!!!
+       * DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS is just one of every possible - instead of deprecated errors, checkoutErrors should be used.
+       */
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS,
+        },
+      };
+    }
+
+    await this.localStorageHandler.setCheckout({
+      ...data,
+    });
+    return {
+      data,
+    };
+  };
+
   setShippingAddress = async ({
     checkoutId,
     shippingAddress,

@@ -109,7 +109,7 @@ import {
 import { UserCheckoutDetails } from "../../queries/gqlTypes/UserCheckoutDetails";
 import { UserDetails } from "../../queries/gqlTypes/UserDetails";
 import * as UserQueries from "../../queries/user";
-import { filterNotEmptyArrayItems } from "../../utils";
+import { axiosRequest, filterNotEmptyArrayItems } from "../../utils";
 import {
   CreatePaymentInput,
   CompleteCheckoutInput,
@@ -130,6 +130,12 @@ import {
   wishlistRemoveProduct,
   wishlistRemoveProductVariables,
 } from "../../mutations/gqlTypes/wishlistRemoveProduct";
+import {
+  BASE_URL_REST,
+  REST_API_ENDPOINTS,
+  REST_API_METHODS_TYPES,
+  dummyCheckoutFields,
+} from "src/consts";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -707,6 +713,53 @@ export class ApolloClientManager {
       if (data?.checkoutCreate?.checkout) {
         return {
           data: this.constructCheckoutModel(data.checkoutCreate.checkout),
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+    return {};
+  };
+
+  createCheckoutRest = async (tags?: string[], checkoutMetadataInput?: any) => {
+    try {
+      const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.CREATE_CHECKOUT}`;
+      const createCheckoutInput = {
+        checkoutInput: {
+          lines: [],
+          email: "dummy@dummy.com",
+          ...(tags ? { tags: tags } : {}),
+          ...(checkoutMetadataInput
+            ? { checkoutMetadataInput: checkoutMetadataInput }
+            : {}),
+        },
+      };
+      const res = await axiosRequest(
+        fullUrl,
+        REST_API_METHODS_TYPES.POST,
+        createCheckoutInput
+      );
+      const createCheckoutRes = res?.data;
+      const updatedCheckout = {
+        ...dummyCheckoutFields,
+        ...createCheckoutRes,
+      };
+
+      if (res?.data?.errors) {
+        return {
+          error: res?.data?.errors,
+        };
+      }
+      if (res?.data?.errors.length) {
+        return {
+          error: res?.data?.errors,
+        };
+      }
+      if (updatedCheckout) {
+        return {
+          data: this.constructCheckoutModel(updatedCheckout),
         };
       }
     } catch (error) {
