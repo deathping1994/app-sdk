@@ -300,7 +300,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     checkoutId,
     promoCode,
   }: AddPromoCodeJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = LocalStorageHandler.getCheckout();
+    const checkout = await LocalStorageHandler.getCheckout();
 
     const { data, error } = await this.apolloClientManager.addPromoCode(
       promoCode,
@@ -327,7 +327,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     checkoutId,
     promoCode,
   }: RemovePromoCodeJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = LocalStorageHandler.getCheckout();
+    const checkout = await LocalStorageHandler.getCheckout();
 
     const { data, error } = await this.apolloClientManager.removePromoCode(
       promoCode,
