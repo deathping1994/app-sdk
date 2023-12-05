@@ -85,7 +85,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
           shippingAddress,
           shippingMethod,
           token,
-          metadata
+          metadata,
+          availableShippingMethods,
+          availablePaymentGateways,
         };
         this.selectedShippingAddressId = selectedShippingAddressId;
         this.selectedBillingAddressId = selectedBillingAddressId;
