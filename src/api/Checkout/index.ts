@@ -407,7 +407,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   addPromoCode = async (promoCode: string): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
+    const checkoutId = await this.saleorState.checkout?.id;
 
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
@@ -437,7 +437,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   removePromoCode = async (promoCode: string): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
+    const checkoutId = await this.saleorState.checkout?.id;
 
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
