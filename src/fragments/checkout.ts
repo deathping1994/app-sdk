@@ -147,6 +147,12 @@ export const atcChecckoutFragment = gql`
       key
       value
     }
+    discount {
+      currency
+      amount
+    }
+    discountName
+    voucherCode
   }
 `;
 
