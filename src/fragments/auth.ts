@@ -11,6 +11,11 @@ export const userFragment = gql`
     lastName
     isStaff
     phone
+    extraData {
+      id
+      key
+      value
+    }
     avatar {
       url
     }
