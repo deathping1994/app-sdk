@@ -9,7 +9,7 @@ import {
 } from "../fragments/errors";
 
 export const updateCheckoutLineMutation = gql`
-  ${atcChecckoutFragment}
+  ${checkoutFragment}
   ${checkoutErrorFragment}
   mutation UpdateCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
     checkoutLinesUpdate(checkoutId: $checkoutId, lines: $lines) {
@@ -24,7 +24,7 @@ export const updateCheckoutLineMutation = gql`
 `;
 
 export const refreshCartMutation = gql`
-  ${atcChecckoutFragment}
+  ${checkoutFragment}
   ${checkoutErrorFragment}
   mutation RefreshCart($checkoutId: ID!) {
     checkoutRefresh(checkoutId: $checkoutId) {
@@ -286,7 +286,7 @@ export const completeCheckoutMutation = gql`
 `;
 
 export const ADD_CHECKOUT_LINE_MUTATION = gql`
-  ${atcChecckoutFragment}
+  ${checkoutFragment}
   ${checkoutErrorFragment}
   mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
     checkoutLinesAdd(checkoutId: $checkoutId, lines: $lines) {
@@ -301,7 +301,7 @@ export const ADD_CHECKOUT_LINE_MUTATION = gql`
 `;
 
 export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
-  ${atcChecckoutFragment}
+  ${checkoutFragment}
   ${checkoutErrorFragment}
   mutation RemoveCheckoutLine($checkoutId: ID!, $lineId: ID) {
     checkoutLineDelete(checkoutId: $checkoutId, lineId: $lineId) {
