@@ -122,6 +122,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
     );
   }
 
+  getCheckout = () => {
+    const { checkout } = this.saleorState;
+    return checkout;
+  };
+  
   createCheckoutNew = async (
     shippingAddress: IAddress,
     email: string,

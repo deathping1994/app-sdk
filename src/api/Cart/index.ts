@@ -84,6 +84,13 @@ export class SaleorCartAPI extends ErrorListener {
       }
     );
   }
+  getItems = () => {
+    const { checkout } = this.saleorState;
+    if (checkout?.lines) {
+      return checkout?.lines?.filter(line => line.quantity > 0);
+    }
+    return [];
+  };
   addItem = async (variantId: string, quantity: number) => {
     // 1. save in local storage
     // await this.localStorageManager.addItemToCart(variantId, quantity);
