@@ -150,7 +150,10 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       } else if (data) {
         console.log("setCartItem job in data", data)
 
-        let obj = typeof data=="object" && data.token ? data : checkout;
+        let obj = typeof data=="object" && data.token ? {
+          ...(checkout?._W ? checkout?._W : checkout),
+          ...data
+        } : checkout;
 
         await this.localStorageHandler.setCheckout(obj);
         console.log("setCartItem job in data", data)
