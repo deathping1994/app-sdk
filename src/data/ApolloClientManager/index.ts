@@ -854,6 +854,7 @@ export class ApolloClientManager {
         quantity,
       },
     ];
+    // console.log('Hiiiiii in updatecheckout')
     if (checkoutId) {
       try {
         const { data, errors } = await this.client.mutate<
