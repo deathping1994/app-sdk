@@ -19,6 +19,7 @@ export interface SetShippingAddressJobInput {
   shippingAddress: ICheckoutAddress;
   email: string;
   selectedShippingAddressId?: string;
+  isRecalculate?:boolean;
 }
 
 export interface SetBillingAddressJobInput {

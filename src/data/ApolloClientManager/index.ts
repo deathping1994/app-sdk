@@ -1033,12 +1033,14 @@ export class ApolloClientManager {
   setShippingAddress = async (
     shippingAddress: ICheckoutAddress,
     email: string,
-    checkoutId: string
+    checkoutId: string,
+    isRecalculate: boolean
   ) => {
     try {
       const variables = {
         checkoutId,
         email,
+        isRecalculate,
         shippingAddress: {
           city: shippingAddress.city,
           companyName: shippingAddress.companyName,
@@ -1068,11 +1070,11 @@ export class ApolloClientManager {
           error: errors,
         };
       }
-      if (data?.checkoutEmailUpdate?.errors.length) {
-        return {
-          error: data?.checkoutEmailUpdate?.errors,
-        };
-      }
+      // if (data?.checkoutEmailUpdate?.errors.length) {
+      //   return {
+      //     error: data?.checkoutEmailUpdate?.errors,
+      //   };
+      // }
       if (data?.checkoutShippingAddressUpdate?.errors.length) {
         return {
           error: data?.checkoutShippingAddressUpdate?.errors,

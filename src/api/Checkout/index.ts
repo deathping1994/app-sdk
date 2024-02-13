@@ -152,7 +152,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   setShippingAddress = async (
     shippingAddress: IAddress,
-    email: string
+    email: string,
+    isRecalculate = true,
   ): CheckoutResponse => {
     const co = this.saleorState.checkout?._W ? this.saleorState.checkout?._W : this.saleorState.checkout;
     const checkoutId = co?.id;
@@ -169,6 +170,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           email,
           selectedShippingAddressId: shippingAddress.id,
           shippingAddress,
+          isRecalculate,
         }
       );
 
@@ -208,6 +210,21 @@ export class SaleorCheckoutAPI extends ErrorListener {
       dataError,
     };
   };
+
+  fetchLatestCheckout = async (isUserSignedIn:boolean) => {
+    const { data, dataError } = await this.jobsManager.run("checkout", "provideCheckout", {
+      isUserSignedIn,
+    });
+
+    if(dataError) {
+      return {
+        error: dataError
+      }
+    }
+    return {
+      data: data,
+    }
+  }
 
   setBillingAddress = async (
     billingAddress: IAddress,
