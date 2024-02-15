@@ -309,3 +309,19 @@ export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
     }
   }
 `;
+
+export const reOrder = gql`
+  ${checkoutFragment}
+  mutation ReOrder($orderId: ID, $skipLines: Boolean, $warehouseId: String) {
+    reOrder(orderId: $orderId, skipLines: $skipLines, warehouseId:$warehouseId) {
+      reorderErrors {
+        field
+        message
+        code
+      }
+      checkout {
+        ...Checkout
+      }
+    }
+  }
+`;

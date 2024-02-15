@@ -80,6 +80,7 @@ export enum DataErrorCheckoutTypes {
   "COMPLETE_CHECKOUT",
   "GET_CHECKOUT",
   "GET_PAYMENT_GATEWAYS",
+  "REORDER"
 }
 
 export interface CreatePaymentInput {

@@ -150,6 +150,29 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  reOrder = async (
+    orderId:String,
+    skipLines: boolean,
+    warehouseId: String,
+  ) : CheckoutResponse => {
+
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "reOrder",
+      {
+        orderId,
+        skipLines,
+        warehouseId,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
   setShippingAddress = async (
     shippingAddress: IAddress,
     email: string,
@@ -211,7 +234,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  fetchLatestCheckout = async (isUserSignedIn:boolean) => {
+  fetchLatestCheckout = async (isUserSignedIn = false) => {
     const { data, dataError } = await this.jobsManager.run("checkout", "provideCheckout", {
       isUserSignedIn,
     });

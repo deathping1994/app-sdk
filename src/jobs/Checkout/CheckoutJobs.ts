@@ -17,6 +17,7 @@ import {
   SetBillingAddressJobInput,
   SetBillingAddressWithEmailJobInput,
   PaymentMethodUpdateJobInput,
+  ReOrderJobInput,
 } from "./types";
 import { JobsHandler } from "../JobsHandler";
 import { AddressTypes } from "src";
@@ -89,6 +90,40 @@ class CheckoutJobs extends JobsHandler<{}> {
     }
 
     return { data };
+  };
+
+  reOrder = async ({
+    orderId,
+    skipLines,
+    warehouseId,
+  }: ReOrderJobInput): any => {
+
+    const checkout = await LocalStorageHandler.getCheckout();
+
+    const { data, error } = await this.apolloClientManager.reOrder(
+      orderId,
+      skipLines,
+      warehouseId,
+      checkout
+    );
+
+
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.REORDER,
+        },
+      };
+    }
+
+    await this.localStorageHandler.setCheckout({
+      ...data,
+    });
+    return {
+      data,
+    };
   };
 
 

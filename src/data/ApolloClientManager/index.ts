@@ -796,6 +796,54 @@ export class ApolloClientManager {
     return {};
   };
 
+  reOrder = async (orderId: String,
+    skipLines: boolean,
+    warehouseId: String,
+    checkout: any,
+    ) => {
+    const checkoutId = checkout?.id;
+
+    if (checkoutId) {
+
+      try {
+        const { data, errors } = await this.client.mutate<
+          UpdateCheckoutLine,
+          UpdateCheckoutLineVariables
+        >({
+          mutation: CheckoutMutations.reOrder,
+          variables: {
+            orderId,
+            skipLines,
+            warehouseId,
+          },
+        });
+
+        if (errors?.length) {
+          return {
+            error: errors,
+          };
+        }
+        if (data?.reOrder?.reorderErrors.length) {
+          return {
+            error: data?.checkoutLinesUpdate?.reorderErrors,
+          };
+        }
+        if (data?.reOrder?.checkout) {
+          return {
+            data: this.constructCheckoutModel(
+              data?.reOrder?.checkout
+            ),
+          };
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
   setCartItemsTwo = async (
     variantArray: any,
     checkout: ICheckoutModel
