@@ -14,6 +14,12 @@ export interface CreateCheckoutJobInput {
   selectedBillingAddressId?: string;
 }
 
+export interface ReOrderJobInput {
+  orderId: String,
+  skipLines: boolean,
+  warehouseId: String,
+}
+
 export interface SetShippingAddressJobInput {
   checkoutId: string;
   shippingAddress: ICheckoutAddress;
