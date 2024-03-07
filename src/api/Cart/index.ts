@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/lines-between-class-members */
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LocalStorageManager } from "../../data";
 import { ErrorListener } from "../../helpers";
@@ -39,25 +40,38 @@ export class SaleorCartAPI extends ErrorListener {
     this.jobsManager = jobsManager;
     this.loaded = false;
     this.jobsManager.attachErrorListener("cart", this.fireError);
+
+    this.items = saleorState?.checkout?.lines?.filter(
+      line => line.quantity > 0
+    );
+    this.totalPrice = saleorState?.checkout?.totalPrice;
+    this.subtotalPrice = saleorState?.checkout?.subtotalPrice;
+    this.shippingPrice = saleorState?.checkout?.shippingPrice;
+    this.discount = saleorState?.checkout?.discount;
+
     this.saleorState.subscribeToChange(
       StateItems.CHECKOUT,
       (checkout: ICheckoutModel) => {
-        console.log("flick stc", checkout?.lines);
+        console.log(
+          "flick stc",
+          checkout?.lines,
+          checkout,
+          checkout?._W,
+          this?.items
+        );
         const checkUndefined = (lines: any) => {
           return lines?.find((line: any) => line.id === undefined);
         };
         if (checkout?._W) {
-          if (this.items?.length !== checkout?._W?.lines.length || checkUndefined(this.items)) {
-            this.items = checkout?._W?.lines
-              ?.filter(line => line.quantity > 0);
+          if (checkout?._W?.lines) {
+            this.items = checkout?._W?.lines?.filter(line => line.quantity > 0);
           } else {
             this.items = this.items?.filter(line => line.quantity > 0);
           }
           // .sort(sortCheckoutLines);
         } else {
-          if (this.items?.length !== checkout?.lines?.length || checkUndefined(this.items)) {
-            this.items = checkout?.lines
-              ?.filter(line => line.quantity > 0);
+          if (checkout?.lines) {
+            this.items = checkout?.lines?.filter(line => line.quantity > 0);
           } else {
             this.items = this.items?.filter(line => line.quantity > 0);
           }
@@ -83,6 +97,14 @@ export class SaleorCartAPI extends ErrorListener {
       }
     );
   }
+  getItems = () => {
+    const { checkout } = this.saleorState;
+    if (checkout?.lines) {
+      return checkout?.lines?.filter(line => line.quantity > 0);
+    }
+    return [];
+  };
+
   addItem = async (variantId: string, quantity: number) => {
     // 1. save in local storage
     // await this.localStorageManager.addItemToCart(variantId, quantity);
@@ -114,21 +136,25 @@ export class SaleorCartAPI extends ErrorListener {
     //     });
     //   }
     // }
-    console.log("in additem")
+    console.log("in additem");
 
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
-      console.log("in additem if")
-      const { data, error } = await this.jobsManager.run("cart", "setCartItemTwo",{variantId,quantity});
-      console.log("addItem",data,error)
+      console.log("in additem if");
+      const { data, error } = await this.jobsManager.run(
+        "cart",
+        "setCartItemTwo",
+        { variantId, quantity }
+      );
+      console.log("addItem", data, error);
       if (error) {
-        console.log("in error addItem",error)
-        return { 
+        console.log("in error addItem", error);
+        return {
           error,
         };
       }
-      console.log("in data addItem",data)
+      console.log("in data addItem", data);
 
-      return { 
+      return {
         data,
         pending: true,
       };
@@ -137,21 +163,229 @@ export class SaleorCartAPI extends ErrorListener {
       pending: false,
     };
   };
-  setCartItem = async () => {
-    console.log("in empty setCartItem")
 
-    return {}
+  refreshCheckoutPayment = async () => {
+    try {
+      const { checkout } = this.saleorState;
+      const { data, error } = await this.jobsManager.run(
+        "cart",
+        "checkoutPaymentsInfo",
+        {
+          checkout,
+        }
+      );
+      if (data) {
+        return {
+          data,
+        };
+      }
+    } catch (error) {
+      console.log("Error in refreshCheckoutPayment", error);
+      return {
+        error,
+        pending: false,
+      };
+    }
+  };
+
+  addItemRest = async (
+    variantId: string,
+    quantity: number,
+    tags?: string[],
+    line_item?: any,
+    useDummyAddress = true,
+    isRecalculate = false,
+    checkoutMetadataInput?: any
+  ) => {
+    try {
+      const { checkout } = this.saleorState;
+
+      if (checkout?.id || checkout?._W?.id) {
+        const { data, error } = await this.jobsManager.run(
+          "cart",
+          "addItemRest",
+          {
+            variantId,
+            quantity,
+            tags,
+            line_item,
+            useDummyAddress,
+            isRecalculate,
+            checkoutMetadataInput,
+          }
+        );
+        this.jobsManager.run("cart", "checkoutPaymentsInfo", {
+          checkout: data,
+        });
+        if (data) {
+          return {
+            data,
+            pending: true,
+          };
+        }
+        if (error) {
+          return { error };
+        }
+      }
+      return {
+        pending: false,
+      };
+    } catch (error) {
+      return {
+        error,
+        pending: false,
+      };
+    }
+  };
+
+  updateItemRest = async (
+    variantId: string,
+    quantity: number,
+    isRecalculate = false,
+    line_item?: any,
+    checkoutMetadataInput?: any
+  ) => {
+    try {
+      const { checkout } = this.saleorState;
+
+      if (checkout?.id || checkout?._W?.id) {
+        const { data, error } = await this.jobsManager.run(
+          "cart",
+          "updateItemRest",
+          {
+            variantId,
+            quantity,
+            isRecalculate,
+            line_item,
+            checkoutMetadataInput,
+          }
+        );
+        this.jobsManager.run("cart", "checkoutPaymentsInfo", {
+          checkout: data,
+        });
+        if (data) {
+          return {
+            data,
+            pending: true,
+          };
+        }
+        if (error) {
+          return { error };
+        }
+      }
+      return {
+        pending: false,
+      };
+    } catch (error) {
+      return {
+        error,
+        pending: false,
+      };
+    }
+  };
+
+  updateItemsWithLineRest = async (
+    linesToAdd: any,
+    isRecalculate = false,
+    checkoutMetadataInput?: any
+  ) => {
+    try {
+      const { checkout } = this.saleorState;
+
+      if (checkout?.id || checkout?._W?.id) {
+        const { data, error } = await this.jobsManager.run(
+          "cart",
+          "updateItemsWithLineRest",
+          {
+            linesToAdd,
+            isRecalculate,
+            checkoutMetadataInput,
+          }
+        );
+        this.jobsManager.run("cart", "checkoutPaymentsInfo", {
+          checkout: data,
+        });
+        if (data) {
+          return {
+            data,
+            pending: true,
+          };
+        }
+        if (error) {
+          return { error };
+        }
+      }
+      return {
+        pending: false,
+      };
+    } catch (error) {
+      return {
+        error,
+        pending: false,
+      };
+    }
+  };
+
+  removeItemRest = async (
+    variantId: string,
+    updateShippingMethod = true,
+    isRecalculate = false,
+    line_item?: any,
+    checkoutMetadataInput?: any
+  ) => {
+    try {
+      const { checkout } = this.saleorState;
+
+      if (checkout?.id || checkout?._W?.id) {
+        const { data, error } = await this.jobsManager.run(
+          "cart",
+          "removeItemRest",
+          {
+            variantId,
+            updateShippingMethod,
+            isRecalculate,
+            line_item,
+            checkoutMetadataInput,
+          }
+        );
+        this.jobsManager.run("cart", "checkoutPaymentsInfo", {
+          checkout: data,
+        });
+        if (data) {
+          return {
+            data,
+            pending: true,
+          };
+        }
+        if (error) {
+          return { error };
+        }
+      }
+      return {
+        pending: false,
+      };
+    } catch (error) {
+      return {
+        error,
+        pending: false,
+      };
+    }
+  };
+  setCartItem = async () => {
+    console.log("in empty setCartItem");
+
+    return {};
     // if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
     //   const { data, error } = await this.jobsManager.addToQueue("cart", "setCartItem");
     //   if (error) {
     //     console.log("in error setCartItem",error)
-    //     return { 
+    //     return {
     //       error,
     //     };
     //   }
     //   console.log("in data setCartItem",data)
 
-    //   return { 
+    //   return {
     //     data,
     //     pending: true,
     //   };
@@ -159,8 +393,8 @@ export class SaleorCartAPI extends ErrorListener {
     // return {
     //   pending: false,
     // };
-  }
-  removeItem = async (variantId:string) => {
+  };
+  removeItem = async (variantId: string) => {
     // 1. save in local storage
     // this.localStorageManager.removeItemFromCart(variantId);
     // 2. save online if possible (if checkout id available)
@@ -182,18 +416,22 @@ export class SaleorCartAPI extends ErrorListener {
     //   }
     // }
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
-      console.log("in removeItem if")
-      const { data, error } = await this.jobsManager.run("cart", "removeCartTwo",{variantId});
-      console.log("removeItem",data,error)
+      console.log("in removeItem if");
+      const { data, error } = await this.jobsManager.run(
+        "cart",
+        "removeCartTwo",
+        { variantId }
+      );
+      console.log("removeItem", data, error);
       if (error) {
-        console.log("in error removeItem",error)
-        return { 
+        console.log("in error removeItem", error);
+        return {
           error,
         };
       }
-      console.log("in data removeItem",data)
+      console.log("in data removeItem", data);
 
-      return { 
+      return {
         data,
         pending: true,
       };
@@ -223,18 +461,18 @@ export class SaleorCartAPI extends ErrorListener {
     //   }
     // }
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
-      console.log("in subtractItem if")
+      console.log("in subtractItem if");
       const { data, error } = await this.jobsManager.run("cart", "setCartItem");
-      console.log("subtractItem",data,error)
+      console.log("subtractItem", data, error);
       if (error) {
-        console.log("in error subtractItem",error)
-        return { 
+        console.log("in error subtractItem", error);
+        return {
           error,
         };
       }
-      console.log("in data subtractItem",data)
+      console.log("in data subtractItem", data);
 
-      return { 
+      return {
         data,
         pending: true,
       };
@@ -264,20 +502,20 @@ export class SaleorCartAPI extends ErrorListener {
     //   }
     // }
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
-      console.log("in updateItem if")
+      console.log("in updateItem if");
       const { data, error } = await this.jobsManager.run("cart", "setCartItem");
-      console.log("updateItem",data,error)
+      console.log("updateItem", data, error);
       if (error) {
         this.localStorageManager.updateItemInCart(variantId, quantity - 1);
 
-        console.log("in error updateItem",error)
-        return { 
+        console.log("in error updateItem", error);
+        return {
           error,
         };
       }
-      console.log("in data updateItem",data)
+      console.log("in data updateItem", data);
 
-      return { 
+      return {
         data,
         pending: true,
       };
@@ -288,8 +526,8 @@ export class SaleorCartAPI extends ErrorListener {
   };
   //method to update cart with latest checkout
   updateCart = async () => {
-    if(this.saleorState.checkout){
+    if (this.saleorState.checkout) {
       this.jobsManager.addToQueue("cart", "setCartItem");
     }
-  }
+  };
 }

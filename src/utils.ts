@@ -62,8 +62,16 @@ export function findValueInEnum<TEnum extends object>(
     throw new Error(`Value ${needle} not found in enum`);
   }
 
-  return (needle as unknown) as TEnum[keyof TEnum];
+  return needle as unknown as TEnum[keyof TEnum];
 }
+
+export const parseJson = (value: any) => {
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+};
 
 export async function axiosRequest(
   url: string,
@@ -72,11 +80,13 @@ export async function axiosRequest(
   options: any = {}
 ) {
   let userSpecificHeaders = {};
-  const token = await AsyncStorage.getItem("token");
-  if (token) {
+  const tokenData = await AsyncStorage.getItem("token");
+  const userToken =
+    tokenData && parseJson(tokenData) ? parseJson(tokenData)?.item : "";
+  if (tokenData && userToken) {
     userSpecificHeaders = {
       ...userSpecificHeaders,
-      Authorization: `JWT ${token}`,
+      Authorization: `JWT ${userToken}`,
     };
   }
 

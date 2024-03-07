@@ -14,6 +14,52 @@ export const getWishlist = gql`
               name
               slug
               isAvailableForPurchase
+              defaultVariant {
+                id
+                sku
+                name
+                metadata {
+                  key
+                  value
+                }
+                attributes {
+                  attribute {
+                    name
+                  }
+                  values {
+                    name
+                  }
+                }
+                quantityAvailable(countryCode: IN)
+                images {
+                  id
+                  url
+                  alt
+                }
+                pricing {
+                  onSale
+                  priceUndiscounted {
+                    gross {
+                      amount
+                      currency
+                    }
+                    net {
+                      amount
+                      currency
+                    }
+                  }
+                  price {
+                    gross {
+                      amount
+                      currency
+                    }
+                    net {
+                      amount
+                      currency
+                    }
+                  }
+                }
+              }
               metadata {
                 key
                 value

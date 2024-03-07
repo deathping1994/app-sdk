@@ -64,16 +64,11 @@ export interface IPayment {
 
 export interface ICheckout {
   id?: string;
-  token?: any;
+  token: any;
   email?: string;
-  shippingAddress?: ICheckoutAddress | null;
-  billingAddress?: ICheckoutAddress | null;
-  billingAsShipping?: boolean;
-  promoCodeDiscount?: ICheckoutModelPromoCodeDiscount;
-  lines?: ICheckoutModelLine[] | null;
-  availableShippingMethods?: Checkout_availableShippingMethods[];
-  availablePaymentGateways?: Checkout_availablePaymentGateways[];
-  shippingMethod?: ICheckoutModelShippingMethod | null;
+  shippingAddress?: IAddress | null;
+  shippingMethod?: IShippingMethod | null;
+  billingAddress?: IAddress | null;
 }
 
 export enum FunctionErrorCheckoutTypes {

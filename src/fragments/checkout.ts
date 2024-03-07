@@ -79,7 +79,15 @@ export const checkoutProductVariantFragment = gql`
     product {
       id
       name
+      metadata {
+        key
+        value
+      }
       slug
+      category {
+        slug
+        name
+      }
       tags {
         name
       }
@@ -136,6 +144,10 @@ export const atcChecckoutFragment = gql`
     shippingMethod {
       ...ShippingMethod
     }
+    metadata {
+      key
+      value
+    }
     lines {
       ...CheckoutLine
     }
@@ -168,6 +180,19 @@ export const checkoutFragment = gql`
     }
     email
     note
+    metadata {
+      key
+      value
+    }
+    cashback {
+      amount
+      willAddOn
+    }
+    paymentMethod {
+      cashbackDiscountAmount
+      couponDiscount
+      prepaidDiscountAmount
+    }
     availableShippingMethods {
       ...ShippingMethod
     }

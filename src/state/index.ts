@@ -259,6 +259,7 @@ export class SaleorState extends NamedObservable<StateItems> {
   };
 
   private onCheckoutUpdate = (checkout?: ICheckoutModel) => {
+    console.log("onCheckoutUpdate", checkout);
     this.checkout = checkout;
     this.summaryPrices = SaleorState.calculateSummaryPrices(checkout);
     this.notifyChange(StateItems.CHECKOUT, this.checkout);

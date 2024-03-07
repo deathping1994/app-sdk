@@ -100,6 +100,163 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     }
   };
 
+  addItemRest = async ({
+    variantId,
+    quantity,
+    tags,
+    line_item,
+    useDummyAddress = true,
+    isRecalculate = false,
+    checkoutMetadataInput,
+  }: {
+    variantId: string;
+    quantity: number;
+    tags?: string[];
+    line_item?: any;
+    useDummyAddress: boolean;
+    isRecalculate: boolean;
+    checkoutMetadataInput?: any;
+  }) => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    if (checkout) {
+      const { data, error } = await this.apolloClientManager.addItemRest(
+        variantId,
+        quantity,
+        tags,
+        line_item,
+        useDummyAddress,
+        isRecalculate,
+        checkoutMetadataInput,
+        checkout
+      );
+      if (data) {
+        await this.localStorageHandler.setCheckout(data);
+        console.log("addItemRest job in data", data);
+        return { data };
+      }
+      if (error) {
+        console.log("Error in addItemRest", error);
+        return { error };
+      }
+    }
+  };
+
+  updateItemRest = async ({
+    variantId,
+    quantity,
+    isRecalculate = false,
+    line_item,
+    checkoutMetadataInput,
+  }: {
+    variantId: string;
+    quantity: number;
+    isRecalculate: boolean;
+    line_item?: any;
+    checkoutMetadataInput?: any;
+  }) => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    if (checkout) {
+      const { data, error } = await this.apolloClientManager.updateItemRest(
+        variantId,
+        quantity,
+        isRecalculate,
+        line_item,
+        checkoutMetadataInput,
+        checkout
+      );
+      if (data) {
+        await this.localStorageHandler.setCheckout(data);
+        console.log("updateItemRest job in data", data);
+        return { data };
+      }
+      if (error) {
+        console.log("Error in updateItemRest", error);
+        return { error };
+      }
+    }
+  };
+
+  updateItemsWithLineRest = async ({
+    linesToAdd,
+    isRecalculate = false,
+    checkoutMetadataInput,
+  }: {
+    linesToAdd: any;
+    isRecalculate: boolean;
+    checkoutMetadataInput?: any;
+  }) => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    if (checkout) {
+      const { data, error } =
+        await this.apolloClientManager.updateItemsWithLineRest(
+          linesToAdd,
+          isRecalculate,
+          checkoutMetadataInput,
+          checkout
+        );
+      if (data) {
+        await this.localStorageHandler.setCheckout(data);
+        console.log("updateItemRest job in data", data);
+        return { data };
+      }
+      if (error) {
+        console.log("Error in updateItemRest", error);
+        return { error };
+      }
+    }
+  };
+
+  removeItemRest = async ({
+    variantId,
+    updateShippingMethod,
+    isRecalculate,
+    line_item,
+    checkoutMetadataInput,
+  }: {
+    variantId: string;
+    updateShippingMethod?: boolean;
+    isRecalculate?: boolean;
+    line_item?: any;
+    checkoutMetadataInput?: any;
+  }) => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    if (checkout) {
+      const { data, error } = await this.apolloClientManager.removeItemRest(
+        variantId,
+        updateShippingMethod,
+        isRecalculate,
+        line_item,
+        checkoutMetadataInput,
+        checkout
+      );
+      if (data) {
+        await this.localStorageHandler.setCheckout(data);
+        console.log("addItemRest job in data", data);
+        return { data };
+      }
+      if (error) {
+        console.log("Error in addItemRest", error);
+        return { error };
+      }
+    }
+  };
+
+  checkoutPaymentsInfo = async ({ checkout }: { checkout: any }) => {
+    if (checkout?.token) {
+      const { data, error } =
+        await this.apolloClientManager.checkoutPaymentsInfo(checkout);
+      if (data) {
+        await this.localStorageHandler.setCheckout(data);
+        console.log("checkoutPaymentsInfo job in data", data);
+        return { data };
+      }
+      if (error) {
+        console.log("Error in checkoutPaymentsInfo", error);
+        return { error };
+      }
+    }
+  };
+
   removeCartTwo = async ({ variantId }: { variantId: string }) => {
     let checkout = await LocalStorageHandler.getCheckout();
 

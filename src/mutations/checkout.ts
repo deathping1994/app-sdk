@@ -1,6 +1,10 @@
 import { gql } from "@apollo/client";
 
-import { atcChecckoutFragment, checkoutFragment } from "../fragments/checkout";
+import {
+  atcChecckoutFragment,
+  checkoutFragment,
+  checkoutPriceFragment,
+} from "../fragments/checkout";
 import { paymentFragment } from "../fragments/payment";
 import { orderDetailFragment } from "../fragments/order";
 import {
@@ -120,24 +124,19 @@ export const updateCheckoutShippingAddressMutation = gql`
     $checkoutId: ID!
     $shippingAddress: AddressInput!
     $email: String!
+    $isRecalculate: Boolean
   ) {
     checkoutShippingAddressUpdate(
       checkoutId: $checkoutId
       shippingAddress: $shippingAddress
+      email: $email
+      isRecalculate: $isRecalculate
     ) {
       errors: checkoutErrors {
         ...CheckoutError
       }
       checkout {
         ...Checkout
-      }
-    }
-    checkoutEmailUpdate(checkoutId: $checkoutId, email: $email) {
-      checkout {
-        ...Checkout
-      }
-      errors: checkoutErrors {
-        ...CheckoutError
       }
     }
   }
@@ -149,10 +148,12 @@ export const updateCheckoutShippingMethodMutation = gql`
   mutation UpdateCheckoutShippingMethod(
     $checkoutId: ID!
     $shippingMethodId: ID!
+    $isRecalculate: Boolean
   ) {
     checkoutShippingMethodUpdate(
       checkoutId: $checkoutId
       shippingMethodId: $shippingMethodId
+      isRecalculate: $isRecalculate
     ) {
       checkout {
         ...Checkout
@@ -171,11 +172,13 @@ export const updateCheckoutPaymentMethodMutation = gql`
     $checkoutId: ID!
     $gatewayId: String!
     $useCashback: Boolean!
+    $isRecalculate: Boolean
   ) {
     checkoutPaymentMethodUpdate(
       checkoutId: $checkoutId
       gatewayId: $gatewayId
       useCashback: $useCashback
+      isRecalculate: $isRecalculate
     ) {
       checkout {
         ...Checkout
@@ -189,8 +192,16 @@ export const updateCheckoutPaymentMethodMutation = gql`
 
 export const addCheckoutPromoCode = gql`
   ${checkoutFragment}
-  mutation AddCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {
-    checkoutAddPromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
+  mutation AddCheckoutPromoCode(
+    $checkoutId: ID!
+    $promoCode: String!
+    $isRecalculate: Boolean
+  ) {
+    checkoutAddPromoCode(
+      checkoutId: $checkoutId
+      promoCode: $promoCode
+      isRecalculate: $isRecalculate
+    ) {
       checkout {
         ...Checkout
       }
@@ -204,8 +215,16 @@ export const addCheckoutPromoCode = gql`
 
 export const removeCheckoutPromoCode = gql`
   ${checkoutFragment}
-  mutation RemoveCheckoutPromoCode($checkoutId: ID!, $promoCode: String!) {
-    checkoutRemovePromoCode(checkoutId: $checkoutId, promoCode: $promoCode) {
+  mutation RemoveCheckoutPromoCode(
+    $checkoutId: ID!
+    $promoCode: String!
+    $isRecalculate: Boolean
+  ) {
+    checkoutRemovePromoCode(
+      checkoutId: $checkoutId
+      promoCode: $promoCode
+      isRecalculate: $isRecalculate
+    ) {
       checkout {
         ...Checkout
       }
@@ -291,6 +310,49 @@ export const REMOVE_CHECKOUT_LINE_MUTATION = gql`
       }
       errors: checkoutErrors {
         ...CheckoutError
+      }
+    }
+  }
+`;
+
+export const CHECKOUT_PAYMENTS = gql`
+  ${checkoutPriceFragment}
+  query CheckoutPayments($token: UUID) {
+    checkout(token: $token) {
+      id
+      token
+      totalPrice {
+        ...Price
+      }
+      cashback {
+        amount
+        willAddOn
+      }
+      voucherCode
+      discount {
+        amount
+        currency
+      }
+      paymentMethod {
+        cashbackDiscountAmount
+        couponDiscount
+        prepaidDiscountAmount
+      }
+      subtotalPrice {
+        ...Price
+      }
+    }
+  }
+`;
+
+export const updateCheckoutMetaData = gql`
+  mutation UpdateCheckoutMeta($checkoutId: ID!, $input: [MetadataInput!]!) {
+    updateMetadata(id: $checkoutId, input: $input) {
+      item {
+        metadata {
+          key
+          value
+        }
       }
     }
   }

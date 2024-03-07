@@ -35,6 +35,7 @@ import {
   ICheckoutModel,
   ICheckoutModelLine,
   IPaymentModel,
+  LocalStorageHandler,
 } from "../../helpers/LocalStorageHandler";
 import * as AuthMutations from "../../mutations/auth";
 import * as UserMutations from "../../mutations/user";
@@ -135,7 +136,8 @@ import {
   REST_API_ENDPOINTS,
   REST_API_METHODS_TYPES,
   dummyCheckoutFields,
-} from "src/consts";
+  getDBIdFromGraphqlId,
+} from "../../consts";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -471,6 +473,41 @@ export class ApolloClientManager {
     };
   };
 
+  updateCheckoutMeta = async (checkout: any, metaInput: any) => {
+    try {
+      if (checkout?.id && metaInput) {
+        const variables = {
+          checkoutId: checkout?.id,
+          input: metaInput,
+        };
+        const { data, errors } = await this.client.mutate<any, any>({
+          fetchPolicy: "no-cache",
+          mutation: CheckoutMutations.updateCheckoutMetaData,
+          variables,
+        });
+        if (data) {
+          const latestCheckoutMetadata = data?.updateMetadata?.item?.metadata;
+          const updatedCheckout = {
+            ...checkout,
+            metadata: latestCheckoutMetadata,
+          };
+          return {
+            data: this.constructCheckoutModel(updatedCheckout),
+          };
+        }
+        if (errors?.length) {
+          return {
+            error: errors,
+          };
+        }
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   getCheckout = async (
     isUserSignedIn: boolean,
     checkoutToken: string | null
@@ -723,14 +760,20 @@ export class ApolloClientManager {
     return {};
   };
 
-  createCheckoutRest = async (tags?: string[], checkoutMetadataInput?: any) => {
+  createCheckoutRest = async (
+    lines?: any,
+    isRecalculate: boolean,
+    tags?: string[],
+    checkoutMetadataInput?: any
+  ) => {
     try {
       const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.CREATE_CHECKOUT}`;
       const createCheckoutInput = {
         checkoutInput: {
-          lines: [],
+          isRecalculate,
+          lines: lines || [],
           email: "dummy@dummy.com",
-          ...(tags ? { tags: tags } : {}),
+          tags: tags || [],
           ...(checkoutMetadataInput
             ? { checkoutMetadataInput: checkoutMetadataInput }
             : {}),
@@ -746,13 +789,12 @@ export class ApolloClientManager {
         ...dummyCheckoutFields,
         ...createCheckoutRes,
       };
-
       if (res?.data?.errors) {
         return {
           error: res?.data?.errors,
         };
       }
-      if (res?.data?.errors.length) {
+      if (res?.data?.errors?.length) {
         return {
           error: res?.data?.errors,
         };
@@ -867,6 +909,418 @@ export class ApolloClientManager {
     return {};
   };
 
+  addItemRest = async (
+    variantId: string,
+    quantity: number,
+    prevQuantity: number,
+    updateShippingMethod: boolean = true,
+    isRecalculate = false,
+    line_item?: any,
+    checkoutMetadataInput?: any,
+    checkout?: any
+  ) => {
+    console.log("initialCheckout-LocalStorageHandler", checkout);
+    if (checkout?.id || checkout?._W?.id) {
+      try {
+        const dbVariantId = getDBIdFromGraphqlId(variantId, "ProductVariant");
+        const input = {
+          checkoutId: checkout?.token,
+          lines: [
+            {
+              quantity,
+              variantId: String(dbVariantId),
+            },
+          ],
+          isRecalculate,
+          ...(checkoutMetadataInput
+            ? { checkoutMetadataInput: checkoutMetadataInput }
+            : {}),
+        };
+        const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.ADD_TO_CART}`;
+        const res = await axiosRequest(
+          fullUrl,
+          REST_API_METHODS_TYPES.POST,
+          input
+        );
+        if (res?.data?.errors?.length) {
+          return {
+            errors: res?.data?.errors,
+          };
+        }
+        if (res?.data?.token) {
+          const updatedLines = res?.data?.lines.map((line: any) => {
+            const productData = {
+              ...line.variant.product,
+              metadata: line?.variant?.product?.metadata || [],
+              tags: line?.variant?.product?.tags?.map((tagname: string) => ({
+                name: tagname,
+                __typename: "TagType",
+              })),
+            };
+            const quantityAvailableValue =
+              line?.variant?.id === variantId &&
+              line_item?.variant?.quantityAvailable
+                ? line_item?.variant?.quantityAvailable
+                : line.variant.quantityAvailable || 50;
+
+            const updatedLineVariantAttributes = line?.variant?.attributes?.map(
+              (item: any) => {
+                return {
+                  ...item,
+                  values: item.values?.map((valueItem: any) => ({
+                    ...valueItem,
+                    value: valueItem.value || valueItem.name,
+                  })),
+                };
+              }
+            );
+            const lineWithProduct = {
+              ...line,
+              variant: {
+                ...line.variant,
+                attributes: updatedLineVariantAttributes,
+                product: productData,
+                quantityAvailable: quantityAvailableValue,
+              },
+            };
+            return lineWithProduct;
+          });
+          const updatedCheckout = {
+            ...checkout,
+            ...res.data,
+            lines: updatedLines,
+          };
+
+          console.log("@@@@@@updatedCheckout", updatedCheckout);
+
+          if (updatedCheckout) {
+            return {
+              data: this.constructCheckoutModel(updatedCheckout),
+            };
+          }
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
+  updateItemRest = async (
+    variantId: string,
+    quantity: number,
+    isRecalculate = false,
+    line_item?: any,
+    checkoutMetadataInput?: any,
+    checkout?: any
+  ) => {
+    console.log("initialCheckout-LocalStorageHandler-updateItemRest", checkout);
+    if (checkout?.id || checkout?._W?.id) {
+      try {
+        const dbVariantId = getDBIdFromGraphqlId(variantId, "ProductVariant");
+        if (dbVariantId && quantity) {
+          const input = {
+            checkoutId: checkout?.token,
+            lines: [
+              {
+                quantity,
+                variantId: String(dbVariantId),
+              },
+            ],
+            isRecalculate,
+            ...(checkoutMetadataInput
+              ? { checkoutMetadataInput: checkoutMetadataInput }
+              : {}),
+          };
+          const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.UPDATE_CART}`;
+          const res = await axiosRequest(
+            fullUrl,
+            REST_API_METHODS_TYPES.POST,
+            input
+          );
+          if (res?.data?.errors?.length) {
+            return {
+              errors: res?.data?.errors,
+            };
+          }
+
+          if (res?.data?.token) {
+            const updatedLines = res?.data?.lines.map((line: any) => {
+              const productData = {
+                ...line.variant.product,
+                metadata: line?.variant?.product?.metadata || [],
+                tags: line?.variant?.product?.tags?.map((tagname: string) => ({
+                  name: tagname,
+                  __typename: "TagType",
+                })),
+              };
+              const quantityAvailableValue =
+                line?.variant?.id === variantId &&
+                line_item?.variant?.quantityAvailable
+                  ? line_item?.variant?.quantityAvailable
+                  : line.variant.quantityAvailable || 50;
+
+              const updatedLineVariantAttributes =
+                line?.variant?.attributes?.map((item: any) => {
+                  return {
+                    ...item,
+                    values: item.values?.map((valueItem: any) => ({
+                      ...valueItem,
+                      value: valueItem.value || valueItem.name,
+                    })),
+                  };
+                });
+
+              const lineWithProduct = {
+                ...line,
+                variant: {
+                  ...line.variant,
+                  attributes: updatedLineVariantAttributes,
+                  product: productData,
+                  quantityAvailable: quantityAvailableValue,
+                },
+              };
+              return lineWithProduct;
+            });
+            const updatedCheckout = {
+              ...checkout,
+              ...res.data,
+              lines: updatedLines,
+            };
+
+            console.log("@@@@@@updatedCheckout", updatedCheckout);
+
+            if (updatedCheckout) {
+              return {
+                data: this.constructCheckoutModel(updatedCheckout),
+              };
+            }
+          }
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
+  updateItemsWithLineRest = async (
+    linesToAdd: any,
+    isRecalculate = false,
+    checkoutMetadataInput?: any,
+    checkout?: any
+  ) => {
+    console.log(
+      "initialCheckout-LocalStorageHandler-updateItemsWithLineRest",
+      checkout
+    );
+    if (checkout?.id || checkout?._W?.id) {
+      try {
+        if (linesToAdd) {
+          const input = {
+            checkoutId: checkout?.token,
+            lines: linesToAdd,
+            isRecalculate,
+            ...(checkoutMetadataInput
+              ? { checkoutMetadataInput: checkoutMetadataInput }
+              : {}),
+          };
+
+          const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.UPDATE_CART}`;
+          const res = await axiosRequest(
+            fullUrl,
+            REST_API_METHODS_TYPES.POST,
+            input
+          );
+          if (res?.data?.errors?.length) {
+            return {
+              errors: res?.data?.errors,
+            };
+          }
+
+          if (res?.data?.token) {
+            const updatedLines = res?.data?.lines.map((line: any) => {
+              const productData = {
+                ...line.variant.product,
+                metadata: line?.variant?.product?.metadata || [],
+                tags: line?.variant?.product?.tags?.map((tagname: string) => ({
+                  name: tagname,
+                  __typename: "TagType",
+                })),
+              };
+              const quantityAvailableValue =
+                line.variant.quantityAvailable || 50;
+
+              const updatedLineVariantAttributes =
+                line?.variant?.attributes?.map((item: any) => {
+                  return {
+                    ...item,
+                    values: item.values?.map((valueItem: any) => ({
+                      ...valueItem,
+                      value: valueItem.value || valueItem.name,
+                    })),
+                  };
+                });
+
+              const lineWithProduct = {
+                ...line,
+                variant: {
+                  ...line.variant,
+                  attributes: updatedLineVariantAttributes,
+                  product: productData,
+                  quantityAvailable: quantityAvailableValue,
+                },
+              };
+              return lineWithProduct;
+            });
+            const updatedCheckout = {
+              ...checkout,
+              ...res.data,
+              lines: updatedLines,
+            };
+
+            console.log("@@@@@@updatedCheckout", updatedCheckout);
+
+            if (updatedCheckout) {
+              return {
+                data: this.constructCheckoutModel(updatedCheckout),
+              };
+            }
+          }
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
+  removeItemRest = async (
+    variantId: string,
+    updateShippingMethod = true,
+    isRecalculate = false,
+    line_item?: any,
+    checkoutMetadataInput?: any,
+    checkout?: any
+  ) => {
+    console.log("initialCheckout-LocalStorageHandler-removeItemRest", checkout);
+    if (checkout?.id || checkout?._W?.id) {
+      try {
+        const dbVariantId = getDBIdFromGraphqlId(variantId, "ProductVariant");
+        if (dbVariantId) {
+          const input = {
+            checkoutId: checkout?.token,
+            lines: [
+              {
+                quantity: 0,
+                variantId: String(dbVariantId),
+              },
+            ],
+            isRecalculate,
+            ...(checkoutMetadataInput
+              ? { checkoutMetadataInput: checkoutMetadataInput }
+              : {}),
+          };
+          const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.UPDATE_CART}`;
+          const res = await axiosRequest(
+            fullUrl,
+            REST_API_METHODS_TYPES.POST,
+            input
+          );
+          if (res?.data?.errors?.length || !res?.data?.token) {
+            return {
+              errors: res?.data?.errors,
+            };
+          }
+          const updatedLines = res?.data?.lines.map((line: any) => {
+            const productData = {
+              ...line.variant.product,
+              metadata: line?.variant?.product?.metadata || [],
+              tags: line?.variant?.product?.tags?.map((tagname: string) => ({
+                name: tagname,
+                __typename: "TagType",
+              })),
+            };
+
+            const updatedLineVariantAttributes = line?.variant?.attributes?.map(
+              (item: any) => {
+                return {
+                  ...item,
+                  values: item.values?.map((valueItem: any) => ({
+                    ...valueItem,
+                    value: valueItem.value || valueItem.name,
+                  })),
+                };
+              }
+            );
+            const lineWithProduct = {
+              ...line,
+              variant: {
+                ...line.variant,
+                attributes: updatedLineVariantAttributes,
+                product: productData,
+                quantityAvailable: line_item?.variant?.quantityAvailable || 50,
+              },
+            };
+            return lineWithProduct;
+          });
+          const updatedCheckout = {
+            ...checkout,
+            ...res.data,
+            lines: updatedLines,
+          };
+          console.log("@@@@@@updatedCheckout", updatedCheckout);
+
+          if (updatedCheckout) {
+            return {
+              data: this.constructCheckoutModel(updatedCheckout),
+            };
+          }
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
+  checkoutPaymentsInfo = async (checkout: ICheckoutModel) => {
+    const checkoutId = checkout.id;
+    if (checkoutId) {
+      try {
+        const { data, errors } = await this.client.query<any, any>({
+          query: CheckoutMutations.CHECKOUT_PAYMENTS,
+          fetchPolicy: "no-cache",
+          variables: {
+            token: checkout?.token,
+          },
+        });
+        console.log("resssssssssssscheckoutPaymentsInfo", data);
+        if (data?.checkout?.token) {
+          const updatedCheckoutDetails = {
+            ...checkout,
+            ...data.checkout,
+          };
+          return {
+            data: this.constructCheckoutModel(updatedCheckoutDetails),
+          };
+        }
+        if (errors) {
+          return { errors };
+        }
+      } catch (error) {}
+    }
+    return {};
+  };
+
   removeCartTwo = async (variantId: string, checkout: ICheckoutModel) => {
     const checkoutId = checkout.id;
     const { lines } = checkout;
@@ -916,12 +1370,14 @@ export class ApolloClientManager {
   setShippingAddress = async (
     shippingAddress: ICheckoutAddress,
     email: string,
-    checkoutId: string
+    checkoutId: string,
+    isRecalculate = true
   ) => {
     try {
       const variables = {
         checkoutId,
         email,
+        isRecalculate,
         shippingAddress: {
           city: shippingAddress.city,
           companyName: shippingAddress.companyName,
@@ -951,11 +1407,11 @@ export class ApolloClientManager {
           error: errors,
         };
       }
-      if (data?.checkoutEmailUpdate?.errors.length) {
-        return {
-          error: data?.checkoutEmailUpdate?.errors,
-        };
-      }
+      // if (data?.checkoutEmailUpdate?.errors.length) {
+      //   return {
+      //     error: data?.checkoutEmailUpdate?.errors,
+      //   };
+      // }
       if (data?.checkoutShippingAddressUpdate?.errors.length) {
         return {
           error: data?.checkoutShippingAddressUpdate?.errors,
@@ -1128,7 +1584,8 @@ export class ApolloClientManager {
   updateCheckoutPayment = async (
     checkoutId: string,
     gatewayId: string,
-    useCashback: boolean
+    useCashback: boolean,
+    isRecalculate = true
   ) => {
     try {
       const { data, errors } = await this.client.mutate<
@@ -1140,6 +1597,7 @@ export class ApolloClientManager {
           checkoutId,
           gatewayId,
           useCashback,
+          isRecalculate,
         },
       });
       console.log("dsfbdsfd", data);
@@ -1170,7 +1628,11 @@ export class ApolloClientManager {
     }
   };
 
-  setShippingMethod = async (shippingMethodId: string, checkoutId: string) => {
+  setShippingMethod = async (
+    shippingMethodId: string,
+    checkoutId: string,
+    isRecalculate = true
+  ) => {
     try {
       const { data, errors } = await this.client.mutate<
         UpdateCheckoutShippingMethod,
@@ -1180,6 +1642,7 @@ export class ApolloClientManager {
         variables: {
           checkoutId,
           shippingMethodId,
+          isRecalculate,
         },
       });
 
@@ -1208,14 +1671,18 @@ export class ApolloClientManager {
     }
   };
 
-  addPromoCode = async (promoCode: string, checkoutId: string) => {
+  addPromoCode = async (
+    promoCode: string,
+    checkoutId: string,
+    isRecalculate = true
+  ) => {
     try {
       const { data, errors } = await this.client.mutate<
         AddCheckoutPromoCode,
         AddCheckoutPromoCodeVariables
       >({
         mutation: CheckoutMutations.addCheckoutPromoCode,
-        variables: { checkoutId, promoCode },
+        variables: { checkoutId, promoCode, isRecalculate },
       });
 
       if (errors?.length) {
@@ -1241,14 +1708,18 @@ export class ApolloClientManager {
     }
   };
 
-  removePromoCode = async (promoCode: string, checkoutId: string) => {
+  removePromoCode = async (
+    promoCode: string,
+    checkoutId: string,
+    isRecalculate = true
+  ) => {
     try {
       const { data, errors } = await this.client.mutate<
         RemoveCheckoutPromoCode,
         RemoveCheckoutPromoCodeVariables
       >({
         mutation: CheckoutMutations.removeCheckoutPromoCode,
-        variables: { checkoutId, promoCode },
+        variables: { checkoutId, promoCode, isRecalculate },
       });
 
       if (errors?.length) {
@@ -1362,6 +1833,8 @@ export class ApolloClientManager {
         },
       });
 
+      console.log("xxxxxxxcheckoutcomplete", data);
+
       if (errors?.length) {
         return {
           error: errors,
@@ -1385,33 +1858,14 @@ export class ApolloClientManager {
     }
   };
 
-  private constructCheckoutModel = ({
-    id,
-    token,
-    email,
-    shippingAddress,
-    billingAddress,
-    discount,
-    discountName,
-    voucherCode,
-    lines,
-    availablePaymentGateways,
-    availableShippingMethods,
-    shippingMethod,
-    note,
-  }:
-    | Checkout
-    | AddCheckoutLine_checkoutLinesUpdate_checkout
-    | any): ICheckoutModel => ({
-    availablePaymentGateways,
-    availableShippingMethods: availableShippingMethods
-      ? availableShippingMethods.filter(filterNotEmptyArrayItems)
+  private constructCheckoutModel = (
+    checkout: Checkout | AddCheckoutLine_checkoutLinesUpdate_checkout | any
+  ): ICheckoutModel => ({
+    ...checkout,
+    availableShippingMethods: checkout?.availableShippingMethods
+      ? checkout?.availableShippingMethods.filter(filterNotEmptyArrayItems)
       : [],
-    billingAddress,
-    email,
-    id,
-    note,
-    lines: lines
+    lines: checkout?.lines
       ?.filter(item => item?.quantity && item.variant.id)
       .map(item => {
         const itemVariant = item?.variant;
@@ -1436,13 +1890,10 @@ export class ApolloClientManager {
         };
       }),
     promoCodeDiscount: {
-      discount,
-      discountName,
-      voucherCode,
+      discount: checkout?.discount,
+      discountName: checkout?.discountName,
+      voucherCode: checkout?.voucherCode,
     },
-    shippingAddress,
-    shippingMethod,
-    token,
   });
 
   private constructPaymentModel = ({

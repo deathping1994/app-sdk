@@ -209,10 +209,8 @@ export class AuthAPI extends ErrorListener {
       };
     }
 
-    const {
-      data: userData,
-      dataError: userDataError,
-    } = await this.jobsManager.run("auth", "provideUser", undefined);
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
     if (this.config.loadOnStart.checkout) {
       await this.jobsManager.run("checkout", "provideCheckout", {
         isUserSignedIn: !!data?.user,
@@ -248,10 +246,8 @@ export class AuthAPI extends ErrorListener {
       };
     }
 
-    const {
-      data: userData,
-      dataError: userDataError,
-    } = await this.jobsManager.run("auth", "provideUser", undefined);
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
     if (this.config.loadOnStart.checkout) {
       await this.jobsManager.run("checkout", "provideCheckout", {
         isUserSignedIn: !!data?.user,
@@ -289,10 +285,8 @@ export class AuthAPI extends ErrorListener {
       };
     }
 
-    const {
-      data: userData,
-      dataError: userDataError,
-    } = await this.jobsManager.run("auth", "provideUser", undefined);
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
     if (this.config.loadOnStart.checkout) {
       await this.jobsManager.run("checkout", "provideCheckout", {
         isUserSignedIn: !!data?.user,

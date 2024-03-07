@@ -54,12 +54,28 @@ export class SaleorCheckoutAPI extends ErrorListener {
     super();
     this.saleorState = saleorState;
     this.jobsManager = jobsManager;
-
     this.loaded = false;
+
+    this.checkout = saleorState?.checkout || {};
+    this.selectedShippingAddressId =
+      saleorState?.checkout?.selectedShippingAddressId;
+    this.selectedBillingAddressId =
+      saleorState?.checkout?.selectedBillingAddressId;
+    this.availablePaymentGateways =
+      saleorState?.checkout?.availablePaymentGateways;
+    this.availableShippingMethods =
+      saleorState?.checkout?.availableShippingMethods;
+    this.billingAsShipping = saleorState?.checkout?.billingAsShipping;
+    this.promoCodeDiscount = {
+      discount: saleorState?.checkout?.promoCodeDiscount?.discount,
+      discountName: saleorState?.checkout?.promoCodeDiscount?.discountName,
+      voucherCode: saleorState?.checkout?.promoCodeDiscount?.voucherCode,
+    };
 
     this.saleorState.subscribeToChange(
       StateItems.CHECKOUT,
       (checkout: ICheckoutModel) => {
+        console.log("checkout change event running", checkout);
         const {
           id,
           token,
@@ -74,7 +90,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           shippingMethod,
           promoCodeDiscount,
         } = checkout || {};
-        this.checkout = this.saleorState.checkout;
+        this.checkout = checkout;
         this.selectedShippingAddressId = selectedShippingAddressId;
         this.selectedBillingAddressId = selectedBillingAddressId;
         this.availablePaymentGateways = availablePaymentGateways;
@@ -113,6 +129,22 @@ export class SaleorCheckoutAPI extends ErrorListener {
     return checkout;
   };
 
+  updateCheckoutMeta = async (metaInput: any) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "updateCheckoutMeta",
+      {
+        metaInput,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
   createCheckoutNew = async (
     shippingAddress: IAddress,
     email: string,
@@ -147,6 +179,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   createCheckoutRest = async (
+    lines,
+    isRecalculate = false,
     tags?: string[],
     checkoutMetadataInput?: any
   ): CheckoutResponse => {
@@ -154,10 +188,15 @@ export class SaleorCheckoutAPI extends ErrorListener {
       "checkout",
       "createCheckoutRest",
       {
+        lines,
+        isRecalculate,
         tags,
         checkoutMetadataInput,
       }
     );
+    this.jobsManager.run("cart", "checkoutPaymentsInfo", {
+      checkout: data,
+    });
 
     return {
       data,
@@ -168,7 +207,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   setShippingAddress = async (
     shippingAddress: IAddress,
-    email: string
+    email: string,
+    isRecalculate = true
   ): CheckoutResponse => {
     const co = this.saleorState.checkout?._W
       ? this.saleorState.checkout?._W
@@ -187,6 +227,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           email,
           selectedShippingAddressId: shippingAddress.id,
           shippingAddress,
+          isRecalculate,
         }
       );
 
@@ -371,7 +412,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   updateCheckoutPayment = async (
     gatewayId: string,
-    useCashback: boolean
+    useCashback: boolean,
+    isRecalculate = true
   ): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;
     if (checkoutId) {
@@ -382,6 +424,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
           checkoutId,
           gatewayId,
           useCashback,
+          isRecalculate,
         }
       );
       console.log("dsfb", checkoutId, gatewayId, data);
@@ -400,7 +443,10 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  setShippingMethod = async (shippingMethodId: string): CheckoutResponse => {
+  setShippingMethod = async (
+    shippingMethodId: string,
+    isRecalculate = true
+  ): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;
 
     if (checkoutId) {
@@ -410,6 +456,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
         {
           checkoutId,
           shippingMethodId,
+          isRecalculate,
         }
       );
       return {
@@ -429,7 +476,10 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  addPromoCode = async (promoCode: string): CheckoutResponse => {
+  addPromoCode = async (
+    promoCode: string,
+    isRecalculate = true
+  ): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;
 
     if (checkoutId) {
@@ -439,6 +489,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
         {
           checkoutId,
           promoCode,
+          isRecalculate,
         }
       );
 
@@ -459,14 +510,17 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  removePromoCode = async (promoCode: string): CheckoutResponse => {
+  removePromoCode = async (
+    promoCode: string,
+    isRecalculate = true
+  ): CheckoutResponse => {
     const checkoutId = this.saleorState.checkout?.id;
 
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "removePromoCode",
-        { checkoutId, promoCode }
+        { checkoutId, promoCode, isRecalculate }
       );
 
       return {
@@ -537,6 +591,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
         "completeCheckout",
         { ...input, checkoutId }
       );
+      console.log("xxxxxxxcheckoutcomplete-apicheckout", data);
       return {
         data,
         dataError,

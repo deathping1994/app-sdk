@@ -19,6 +19,7 @@ export interface SetShippingAddressJobInput {
   shippingAddress: ICheckoutAddress;
   email: string;
   selectedShippingAddressId?: string;
+  isRecalculate?: boolean;
 }
 
 export interface SetBillingAddressJobInput {
@@ -37,17 +38,20 @@ export interface SetBillingAddressWithEmailJobInput {
 export interface PaymentMethodUpdateJobInput {
   checkoutId: string;
   gatewayId: string;
-  useCashback: boolean
+  useCashback: boolean;
+  isRecalculate?: boolean;
 }
 
 export interface SetShippingMethodJobInput {
   checkoutId: string;
   shippingMethodId: string;
+  isRecalculate?: boolean;
 }
 
 export interface AddPromoCodeJobInput {
   checkoutId: string;
   promoCode: string;
+  isRecalculate?: boolean;
 }
 
 export interface RemovePromoCodeJobInput {
