@@ -144,16 +144,24 @@ export const getDBIdFromGraphqlId = (
   schema?: string
 ): number | void => {
   // This is temporary solution, we will use slugs in the future
-  if (typeof window !== "undefined") {
-    const rawId = Base64.atob(graphqlId);
-    const regexp = /(\w+):(\d+)/;
-    const arr = regexp.exec(rawId);
+  try {
+    if (typeof window !== "undefined") {
+      const rawId = Base64.atob(graphqlId);
+      const regexp = /(\w+):(\d+)/;
+      const arr = regexp.exec(rawId);
 
-    if (schema && schema !== arr![1]) {
-      throw new Error("Schema is not correct");
+      if (schema && schema !== arr![1]) {
+        throw new Error("Schema is not correct");
+      }
+      return parseInt(arr![2], 10);
     }
-    return parseInt(arr![2], 10);
+  } catch (error) {
+    console.log(error);
   }
 };
+export const CUSTOM_PRODUCT_METADATA_FIELDS = [
+  "product_card_attributes",
+  "average_rating",
+];
 
 export default Base64;

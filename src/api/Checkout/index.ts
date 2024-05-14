@@ -268,6 +268,21 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  fetchLatestCheckout = async (isUserSignedIn = false) => {
+    const { data, dataError } = await this.jobsManager.run("checkout", "provideCheckout", {
+      isUserSignedIn,
+    });
+
+    if (dataError) {
+      return {
+        error: dataError,
+      };
+    }
+    return {
+      data,
+    };
+  };
+
   setBillingAddress = async (
     billingAddress: IAddress,
     email?: string

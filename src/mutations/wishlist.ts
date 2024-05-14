@@ -24,15 +24,14 @@ export const WishlistAddProduct = gql`
                   thumbnail {
                     url
                   }
-                  images {
-                    id
-                    alt
-                    url
-                  }
-                  variants {
+                  defaultVariant {
                     id
                     sku
                     name
+                    metadata {
+                      key
+                      value
+                    }
                     attributes {
                       attribute {
                         name
@@ -71,7 +70,12 @@ export const WishlistAddProduct = gql`
                       }
                     }
                   }
-                  productType{
+                  images {
+                    id
+                    alt
+                    url
+                  }
+                  productType {
                     name
                   }
                   pricing {
@@ -159,10 +163,14 @@ export const WishlistRemoveProduct = gql`
                     alt
                     url
                   }
-                  variants {
+                  defaultVariant {
                     id
                     sku
                     name
+                    metadata {
+                      key
+                      value
+                    }
                     attributes {
                       attribute {
                         name
@@ -201,7 +209,7 @@ export const WishlistRemoveProduct = gql`
                       }
                     }
                   }
-                  productType{
+                  productType {
                     name
                   }
                   pricing {

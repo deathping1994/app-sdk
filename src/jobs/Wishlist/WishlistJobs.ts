@@ -22,7 +22,9 @@ export class WishlistJobs extends JobsHandler<{}> {
   }
 
   getWishlist = async () => {
-    const { data, error } = await this.apolloClientManager.getWishlistItems(20);
+    const { data, error } = await this.apolloClientManager.getWishlistItems(
+      100
+    );
     if (error) {
       return {
         dataError: {
