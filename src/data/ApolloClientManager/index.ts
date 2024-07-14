@@ -190,6 +190,24 @@ export class ApolloClientManager {
     };
   };
 
+  addVariantInWishlist = async (variantId: string) => {
+    const { data, errors } = await this.client.mutate<any,any>({
+      mutation: WishlistMutations.WishlistAddVariant,
+      variables: {
+        variantId,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    return {
+      data: data?.WishlistAddVariantt?.wishlist,
+    };
+  };
+
   removeWishlistItems = async (productId: string) => {
     const { data, errors } = await this.client.mutate<
       wishlistRemoveProduct,

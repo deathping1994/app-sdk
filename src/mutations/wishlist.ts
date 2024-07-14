@@ -129,6 +129,138 @@ export const WishlistAddProduct = gql`
     }
   }
 `;
+
+export const WishlistAddVariant = gql`
+  mutation wishlistAddVariant($variantId: ID!) {
+    WishlistAddVariant: wishlistAddVariant(variantId: $variantId) {
+      wishlist {
+        id
+        wishlist {
+          id
+          createdAt
+          items(first: 20) {
+            edges {
+              node {
+                id
+                product {
+                  id
+                  name
+                  isPublished
+                  slug
+                  isAvailableForPurchase
+                  metadata {
+                    key
+                    value
+                  }
+                  thumbnail {
+                    url
+                  }
+                  images {
+                    id
+                    alt
+                    url
+                  }
+                  variants {
+                    id
+                    sku
+                    name
+                    attributes {
+                      attribute {
+                        name
+                      }
+                      values {
+                        name
+                      }
+                    }
+                    quantityAvailable(countryCode: IN)
+                    images {
+                      id
+                      url
+                      alt
+                    }
+                    pricing {
+                      onSale
+                      priceUndiscounted {
+                        gross {
+                          amount
+                          currency
+                        }
+                        net {
+                          amount
+                          currency
+                        }
+                      }
+                      price {
+                        gross {
+                          amount
+                          currency
+                        }
+                        net {
+                          amount
+                          currency
+                        }
+                      }
+                    }
+                  }
+                  productType{
+                    name
+                  }
+                  pricing {
+                    priceRangeUndiscounted {
+                      start {
+                        net {
+                          amount
+                          currency
+                        }
+                        gross {
+                          amount
+                          currency
+                        }
+                      }
+                      stop {
+                        net {
+                          amount
+                          currency
+                        }
+                        gross {
+                          amount
+                          currency
+                        }
+                      }
+                    }
+                    priceRange {
+                      start {
+                        net {
+                          amount
+                          currency
+                        }
+                        gross {
+                          amount
+                          currency
+                        }
+                      }
+                      stop {
+                        net {
+                          amount
+                          currency
+                        }
+                        gross {
+                          amount
+                          currency
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const WishlistRemoveProduct = gql`
   mutation wishlistRemoveProduct($productId: ID!) {
     WishlistRemoveProduct: wishlistRemoveProduct(productId: $productId) {

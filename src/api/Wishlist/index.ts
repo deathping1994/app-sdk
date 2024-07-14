@@ -79,6 +79,19 @@ export class SaleorWishlistAPI extends ErrorListener {
     };
   };
 
+  addProductVariantInWishlist = async (variantId: string) => {
+    const  {data, dataError } = await this.jobsManager.run(
+      "wishlist",
+      "addProductVariantInWishlist",
+      { variantId }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  }
+
   removeItemInWishlist = async (productId: string) => {
     // 1. save in local storage
 

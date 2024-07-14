@@ -58,4 +58,25 @@ export class WishlistJobs extends JobsHandler<{}> {
 
     return { data };
   };
+
+  addProductVariantInWishlist = async ({ variantId }: { variantId: string }) => {
+    const { data, error } = await this.apolloClientManager.addVariantInWishlist(
+      variantId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+        },
+      };
+    }
+
+    if (data)
+      this.localStorageHandler.setWishlist({
+        items: data[0]?.wishlist.items.edges.map(edge => edge.node.product),
+      });
+
+    return { data };
+  };
 }
