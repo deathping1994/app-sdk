@@ -138,6 +138,7 @@ export const atcChecckoutFragment = gql`
   ${paymentGatewayFragment}
   fragment Checkout on Checkout {
     id
+    blockCod
     availableShippingMethods {
       ...ShippingMethod
     }
@@ -213,6 +214,7 @@ export const checkoutFragment = gql`
     discountName
     translatedDiscountName
     voucherCode
+    blockCod
     availablePaymentGateways {
       ...PaymentGateway
     }
