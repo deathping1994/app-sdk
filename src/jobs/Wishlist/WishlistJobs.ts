@@ -60,6 +60,7 @@ export class WishlistJobs extends JobsHandler<{}> {
   };
 
   addProductVariantInWishlist = async ({ variantId }: { variantId: string }) => {
+    console.log('Step 2-> addProductVariantInWishlist called');
     const { data, error } = await this.apolloClientManager.addVariantInWishlist(
       variantId
     );

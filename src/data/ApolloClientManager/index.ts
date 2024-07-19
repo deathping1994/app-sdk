@@ -191,6 +191,7 @@ export class ApolloClientManager {
   };
 
   addVariantInWishlist = async (variantId: string) => {
+    console.log('Step 3-> mutation called',WishlistMutations.WishlistAddVariant);
     const { data, errors } = await this.client.mutate<any,any>({
       mutation: WishlistMutations.WishlistAddVariant,
       variables: {
@@ -226,6 +227,28 @@ export class ApolloClientManager {
     }
     return {
       data: data?.WishlistRemoveProduct?.wishlist,
+    };
+  };
+
+  removeWishlistVariants = async (variantId: string) => {
+    console.log('Step 2-> removeWishlistVariants called',variantId);
+    const { data, errors } = await this.client.mutate<
+      any,
+      any
+    >({
+      mutation: WishlistMutations.WishlistRemoveVariant,
+      variables: {
+        variantId,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    return {
+      data: data?.WishlistRemoveVariant?.wishlist,
     };
   };
 

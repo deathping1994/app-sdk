@@ -80,6 +80,7 @@ export class SaleorWishlistAPI extends ErrorListener {
   };
 
   addProductVariantInWishlist = async (variantId: string) => {
+    console.log('Step 1-> addProductVariantInWishlist called');
     const  {data, dataError } = await this.jobsManager.run(
       "wishlist",
       "addProductVariantInWishlist",
@@ -98,6 +99,19 @@ export class SaleorWishlistAPI extends ErrorListener {
     // 2. save online if possible (if checkout id available)
     const { data } = await this.apolloClientManager.removeWishlistItems(
       productId
+    );
+
+    this.localStorageManager.addItemInWishlist(
+      data ? data[0]?.wishlist.items.edges.map(edge => edge.node.product) : []
+    );
+  };
+
+  removeVariantInWishlist = async (variantId: string) => {
+    // 1. save in local storage
+
+    // 2. save online if possible (if checkout id available)
+    const { data } = await this.apolloClientManager.removeWishlistVariants(
+      variantId
     );
 
     this.localStorageManager.addItemInWishlist(

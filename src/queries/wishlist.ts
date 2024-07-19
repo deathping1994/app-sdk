@@ -8,36 +8,22 @@ export const getWishlist = gql`
         edges {
           node {
             id
-
-            product {
+            product{
               id
-              name
-              slug
               isAvailableForPurchase
-              metadata {
-                key
-                value
-              }
-              productType {
-                name
-              }
-              thumbnail {
-                url
-              }
-              images {
-                id
-                url
-                alt
-              }
-              variants {
-                id
-                sku
-                name
-                metadata {
-                  key
-                  value
-                }
-                attributes {
+              slug
+            }
+            variants(first:$first){
+              edges{
+                node{
+                  id
+                  name
+                  sku
+                  metadata{
+                    key
+                    value
+                  }
+                  attributes {
                   attribute {
                     name
                   }
@@ -45,6 +31,7 @@ export const getWishlist = gql`
                     name
                   }
                 }
+                quantityAvailableByWarehouse
                 quantityAvailable(countryCode: IN)
                 images {
                   id
@@ -74,60 +61,6 @@ export const getWishlist = gql`
                     }
                   }
                 }
-              }
-
-              pricing {
-                priceRangeUndiscounted {
-                  start {
-                    net {
-                      amount
-                      currency
-                    }
-                    gross {
-                      amount
-                      currency
-                    }
-                  }
-                  stop {
-                    net {
-                      amount
-                      currency
-                    }
-                    gross {
-                      amount
-                      currency
-                    }
-                  }
-                }
-                priceRange {
-                  start {
-                    net {
-                      amount
-                      currency
-                    }
-                    gross {
-                      amount
-                      currency
-                    }
-                  }
-                  stop {
-                    net {
-                      amount
-                      currency
-                    }
-                    gross {
-                      amount
-                      currency
-                    }
-                  }
-                }
-              }
-            }
-            variants(first: $first) {
-              edges {
-                node {
-                  id
-                  name
                 }
               }
             }
