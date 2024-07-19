@@ -107,6 +107,7 @@ export class SaleorWishlistAPI extends ErrorListener {
   };
 
   removeVariantInWishlist = async (variantId: string) => {
+    console.log('Step 1-> removeVariantInWishlist called',variantId);
     // 1. save in local storage
 
     // 2. save online if possible (if checkout id available)
