@@ -66,6 +66,21 @@ export class SaleorWishlistAPI extends ErrorListener {
     };
   };
 
+  getWishlistVariants = () => {
+    const { wishlist } = this.saleorState;
+    if (wishlist?.items && wishlist.items.length && wishlist?.items[0]?.variants) {
+      let variants = [];
+      wishlist.items?.forEach(item=> {
+        variants.push(...item?.variants?.edges?.map((edge)=>edge.node));
+
+        console.log('variantssss',variants,item);
+      });
+
+      return variants;
+    }
+    return [];
+  }
+
   addItemInWishlist = async (productId: string) => {
     const { data, dataError } = await this.jobsManager.run(
       "wishlist",
@@ -116,7 +131,7 @@ export class SaleorWishlistAPI extends ErrorListener {
     );
 
     this.localStorageManager.addItemInWishlist(
-      data ? data[0]?.wishlist.items.edges.map(edge => edge.node.product) : []
+      data ? data?.items.edges.map(edge => edge.node) : []
     );
   };
 }
