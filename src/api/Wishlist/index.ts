@@ -54,11 +54,11 @@ export class SaleorWishlistAPI extends ErrorListener {
     this.saleorState.loadWishlist();
   }
   
-  getWishlist = async () => {
+  getWishlist = async (warehouseId: string) => {
     const { data, dataError } = await this.jobsManager.run(
       "wishlist",
       "getWishlist",
-      undefined
+      { warehouseId }
     );
     return {
       data,
@@ -131,7 +131,7 @@ export class SaleorWishlistAPI extends ErrorListener {
     );
 
     this.localStorageManager.addItemInWishlist(
-      data ? data?.items.edges.map(edge => edge.node) : []
+      data ? data[0]?.wishlist?.items?.edges?.map(edge => edge.node) : []
     );
   };
 }

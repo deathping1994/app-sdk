@@ -131,125 +131,67 @@ export const WishlistAddProduct = gql`
 `;
 
 export const WishlistAddVariant = gql`
-  mutation wishlistAddVariant($variantId: ID!) {
-    WishlistAddVariant: wishlistAddVariant(variantId: $variantId) {
+mutation wishlistAddVariant($variantId: ID!) {
+  WishlistAddVariant: wishlistAddVariant(variantId: $variantId) {
+    wishlist {
+      id
       wishlist {
         id
-        wishlist {
-          id
-          createdAt
-          items(first: 20) {
-            edges {
-              node {
+        createdAt
+        items(first: 20) {
+          edges {
+            node {
+              id
+              product{
                 id
-                product {
-                  id
-                  name
-                  isPublished
-                  slug
-                  isAvailableForPurchase
-                  metadata {
-                    key
-                    value
-                  }
-                  thumbnail {
-                    url
-                  }
-                  images {
+                name
+                slug
+                isAvailableForPurchase
+              }
+              variants(first:20){
+                edges{
+                  node{
                     id
-                    alt
-                    url
-                  }
-                  variants {
-                    id
-                    sku
                     name
-                    attributes {
-                      attribute {
+                    sku
+                    attributes{
+                      attribute{
                         name
                       }
-                      values {
+                      values{
                         name
                       }
                     }
-                    quantityAvailable(countryCode: IN)
-                    images {
+                    quantityAvailableByWarehouse
+                    quantityAvailable(countryCode:IN)
+                    images{
                       id
                       url
                       alt
                     }
                     pricing {
-                      onSale
-                      priceUndiscounted {
-                        gross {
-                          amount
-                          currency
-                        }
-                        net {
-                          amount
-                          currency
-                        }
+                    onSale
+                    priceUndiscounted {
+                      gross {
+                        amount
+                        currency
                       }
-                      price {
-                        gross {
-                          amount
-                          currency
-                        }
-                        net {
-                          amount
-                          currency
-                        }
+                      net {
+                        amount
+                        currency
+                      }
+                    }
+                    price {
+                      gross {
+                        amount
+                        currency
+                      }
+                      net {
+                        amount
+                        currency
                       }
                     }
                   }
-                  productType{
-                    name
-                  }
-                  pricing {
-                    priceRangeUndiscounted {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                    priceRange {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
                   }
                 }
               }
@@ -259,6 +201,7 @@ export const WishlistAddVariant = gql`
       }
     }
   }
+}
 `;
 
 export const WishlistRemoveProduct = gql`
@@ -404,43 +347,34 @@ export const WishlistRemoveVariant = gql`
             edges {
               node {
                 id
-                product {
+                product{
                   id
                   name
-                  isPublished
                   slug
                   isAvailableForPurchase
-                  metadata {
-                    key
-                    value
-                  }
-                  thumbnail {
-                    url
-                  }
-                  images {
-                    id
-                    alt
-                    url
-                  }
-                  variants {
-                    id
-                    sku
-                    name
-                    attributes {
-                      attribute {
-                        name
-                      }
-                      values {
-                        name
-                      }
-                    }
-                    quantityAvailable(countryCode: IN)
-                    images {
+                }
+                variants(first:20){
+                  edges{
+                    node{
                       id
-                      url
-                      alt
-                    }
-                    pricing {
+                      name
+                      sku
+                      attributes{
+                        attribute{
+                          name
+                        }
+                        values{
+                          name
+                        }
+                      }
+                      quantityAvailableByWarehouse
+                      quantityAvailable(countryCode:IN)
+                      images{
+                        id
+                        url
+                        alt
+                      }
+                      pricing {
                       onSale
                       priceUndiscounted {
                         gross {
@@ -463,54 +397,6 @@ export const WishlistRemoveVariant = gql`
                         }
                       }
                     }
-                  }
-                  productType{
-                    name
-                  }
-                  pricing {
-                    priceRangeUndiscounted {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                    priceRange {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
                     }
                   }
                 }

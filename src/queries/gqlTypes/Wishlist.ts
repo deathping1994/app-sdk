@@ -448,4 +448,5 @@ export interface Wishlist {
 
 export interface WishlistVariables {
   first: number;
+  warehouseId: string;
 }

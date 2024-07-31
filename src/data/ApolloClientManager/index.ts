@@ -147,7 +147,7 @@ export class ApolloClientManager {
       .subscribe(value => next(value.data?.me), error, complete);
   };
 
-  getWishlistItems = async (first: number) => {
+  getWishlistItems = async (first: number,warehouseId: string) => {
     const { data, errors } = await this.client.query<
       Wishlist,
       WishlistVariables
@@ -155,6 +155,7 @@ export class ApolloClientManager {
       query: getWishlist,
       variables: {
         first,
+        warehouseId
       },
       fetchPolicy: "network-only",
     });

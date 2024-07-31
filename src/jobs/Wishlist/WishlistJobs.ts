@@ -20,8 +20,8 @@ export class WishlistJobs extends JobsHandler<{}> {
     this.apolloClientManager = apolloClientManager;
   }
 
-  getWishlist = async () => {
-    const { data, error } = await this.apolloClientManager.getWishlistItems(20);
+  getWishlist = async ({ warehouseId }: { warehouseId: string }) => {
+    const { data, error } = await this.apolloClientManager.getWishlistItems(20,warehouseId);
     if (error) {
       return {
         dataError: {
@@ -31,7 +31,7 @@ export class WishlistJobs extends JobsHandler<{}> {
     }
     if (data) {
       this.localStorageHandler.setWishlist({
-        items: data?.items.edges.map(edge => edge.node),
+        items: data?.items?.edges?.map(edge => edge.node),
       });
     }
 
@@ -75,7 +75,7 @@ export class WishlistJobs extends JobsHandler<{}> {
 
     if (data)
       this.localStorageHandler.setWishlist({
-        items: data?.items.edges.map(edge => edge.node),
+        items: data[0]?.wishlist?.items?.edges?.map(edge => edge.node),
       });
 
     return { data };

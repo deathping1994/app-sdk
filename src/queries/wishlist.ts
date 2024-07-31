@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const getWishlist = gql`
-  query Wishlist($first: Int!) {
-    wishlist {
+  query Wishlist($first: Int!,$warehouseId: ID!) {
+    wishlist(warehouseId:$warehouseId) {
       id
       items(first: $first) {
         edges {
