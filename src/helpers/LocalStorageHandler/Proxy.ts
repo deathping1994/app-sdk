@@ -78,6 +78,7 @@ class LocalStorageHandlerProxy extends NamedObservable<
   protected async clearStorage(): Promise<void> {
     try {
       await AsyncStorage.clear();
+      await AsyncStorage.setItem("firstAppLaunch", "launched");
     } catch (error) {
       throw new Error(error.message);
     }
