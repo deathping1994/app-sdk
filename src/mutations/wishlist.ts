@@ -129,6 +129,81 @@ export const WishlistAddProduct = gql`
     }
   }
 `;
+
+export const WishlistAddVariant = gql`
+mutation wishlistAddVariant($variantId: ID!) {
+  WishlistAddVariant: wishlistAddVariant(variantId: $variantId) {
+    wishlist {
+      id
+      wishlist {
+        id
+        createdAt
+        items(first: 20) {
+          edges {
+            node {
+              id
+              product{
+                id
+                name
+                slug
+                isAvailableForPurchase
+              }
+              variants(first:20){
+                edges{
+                  node{
+                    id
+                    name
+                    sku
+                    attributes{
+                      attribute{
+                        name
+                      }
+                      values{
+                        name
+                      }
+                    }
+                    quantityAvailableByWarehouse
+                    quantityAvailable(countryCode:IN)
+                    images{
+                      id
+                      url
+                      alt
+                    }
+                    pricing {
+                    onSale
+                    priceUndiscounted {
+                      gross {
+                        amount
+                        currency
+                      }
+                      net {
+                        amount
+                        currency
+                      }
+                    }
+                    price {
+                      gross {
+                        amount
+                        currency
+                      }
+                      net {
+                        amount
+                        currency
+                      }
+                    }
+                  }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
 export const WishlistRemoveProduct = gql`
   mutation wishlistRemoveProduct($productId: ID!) {
     WishlistRemoveProduct: wishlistRemoveProduct(productId: $productId) {
@@ -248,6 +323,80 @@ export const WishlistRemoveProduct = gql`
                           currency
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const WishlistRemoveVariant = gql`
+  mutation wishlistRemoveVariant($variantId: ID!) {
+    WishlistRemoveVariant: wishlistRemoveVariant(variantId: $variantId) {
+      wishlist {
+        id
+        wishlist {
+          id
+          createdAt
+          items(first: 20) {
+            edges {
+              node {
+                id
+                product{
+                  id
+                  name
+                  slug
+                  isAvailableForPurchase
+                }
+                variants(first:20){
+                  edges{
+                    node{
+                      id
+                      name
+                      sku
+                      attributes{
+                        attribute{
+                          name
+                        }
+                        values{
+                          name
+                        }
+                      }
+                      quantityAvailableByWarehouse
+                      quantityAvailable(countryCode:IN)
+                      images{
+                        id
+                        url
+                        alt
+                      }
+                      pricing {
+                      onSale
+                      priceUndiscounted {
+                        gross {
+                          amount
+                          currency
+                        }
+                        net {
+                          amount
+                          currency
+                        }
+                      }
+                      price {
+                        gross {
+                          amount
+                          currency
+                        }
+                        net {
+                          amount
+                          currency
+                        }
+                      }
+                    }
                     }
                   }
                 }

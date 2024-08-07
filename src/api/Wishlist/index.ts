@@ -54,17 +54,32 @@ export class SaleorWishlistAPI extends ErrorListener {
     this.saleorState.loadWishlist();
   }
   
-  getWishlist = async () => {
+  getWishlist = async (warehouseId: string) => {
     const { data, dataError } = await this.jobsManager.run(
       "wishlist",
       "getWishlist",
-      undefined
+      { warehouseId }
     );
     return {
       data,
       dataError,
     };
   };
+
+  getWishlistVariants = () => {
+    const { wishlist } = this.saleorState;
+    if (wishlist?.items && wishlist.items.length && wishlist?.items[0]?.variants) {
+      let variants = [];
+      wishlist.items?.forEach(item=> {
+        variants.push(...item?.variants?.edges?.map((edge)=>edge.node));
+
+        console.log('variantssss',variants,item);
+      });
+
+      return variants;
+    }
+    return [];
+  }
 
   addItemInWishlist = async (productId: string) => {
     const { data, dataError } = await this.jobsManager.run(
@@ -79,6 +94,20 @@ export class SaleorWishlistAPI extends ErrorListener {
     };
   };
 
+  addProductVariantInWishlist = async (variantId: string) => {
+    console.log('Step 1-> addProductVariantInWishlist called');
+    const  {data, dataError } = await this.jobsManager.run(
+      "wishlist",
+      "addProductVariantInWishlist",
+      { variantId }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  }
+
   removeItemInWishlist = async (productId: string) => {
     // 1. save in local storage
 
@@ -89,6 +118,20 @@ export class SaleorWishlistAPI extends ErrorListener {
 
     this.localStorageManager.addItemInWishlist(
       data ? data[0]?.wishlist.items.edges.map(edge => edge.node.product) : []
+    );
+  };
+
+  removeVariantInWishlist = async (variantId: string) => {
+    console.log('Step 1-> removeVariantInWishlist called',variantId);
+    // 1. save in local storage
+
+    // 2. save online if possible (if checkout id available)
+    const { data } = await this.apolloClientManager.removeWishlistVariants(
+      variantId
+    );
+
+    this.localStorageManager.addItemInWishlist(
+      data ? data[0]?.wishlist?.items?.edges?.map(edge => edge.node) : []
     );
   };
 }

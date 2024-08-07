@@ -147,7 +147,7 @@ export class ApolloClientManager {
       .subscribe(value => next(value.data?.me), error, complete);
   };
 
-  getWishlistItems = async (first: number) => {
+  getWishlistItems = async (first: number,warehouseId: string) => {
     const { data, errors } = await this.client.query<
       Wishlist,
       WishlistVariables
@@ -155,10 +155,12 @@ export class ApolloClientManager {
       query: getWishlist,
       variables: {
         first,
+        warehouseId
       },
       fetchPolicy: "network-only",
     });
 
+    console.log('getWishlist 3 ',data,errors)
     if (errors?.length) {
       return {
         error: errors,
@@ -190,6 +192,26 @@ export class ApolloClientManager {
     };
   };
 
+  addVariantInWishlist = async (variantId: string) => {
+    console.log('Step 3-> mutation called',WishlistMutations.WishlistAddVariant);
+    const { data, errors } = await this.client.mutate<any,any>({
+      mutation: WishlistMutations.WishlistAddVariant,
+      variables: {
+        variantId,
+      },
+    });
+    console.log('1234 mutation res-',data,errors)
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    return {
+      data: data?.WishlistAddVariant?.wishlist,
+    };
+  };
+
   removeWishlistItems = async (productId: string) => {
     const { data, errors } = await this.client.mutate<
       wishlistRemoveProduct,
@@ -208,6 +230,27 @@ export class ApolloClientManager {
     }
     return {
       data: data?.WishlistRemoveProduct?.wishlist,
+    };
+  };
+
+  removeWishlistVariants = async (variantId: string) => {
+    const { data, errors } = await this.client.mutate<
+      any,
+      any
+    >({
+      mutation: WishlistMutations.WishlistRemoveVariant,
+      variables: {
+        variantId,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    return {
+      data: data?.WishlistRemoveVariant?.wishlist,
     };
   };
 
@@ -802,7 +845,6 @@ export class ApolloClientManager {
     checkout: any,
     ) => {
     const checkoutId = checkout?.id;
-
     if (checkoutId) {
 
       try {
