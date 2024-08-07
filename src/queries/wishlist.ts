@@ -13,7 +13,7 @@ export const getWishlist = gql`
               isAvailableForPurchase
               slug
             }
-            variants(first:$first){
+						variants(first:$first){
               edges{
                 node{
                   id

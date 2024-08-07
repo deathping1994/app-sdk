@@ -160,6 +160,7 @@ export class ApolloClientManager {
       fetchPolicy: "network-only",
     });
 
+    console.log('getWishlist 3 ',data,errors)
     if (errors?.length) {
       return {
         error: errors,
@@ -199,6 +200,7 @@ export class ApolloClientManager {
         variantId,
       },
     });
+    console.log('1234 mutation res-',data,errors)
 
     if (errors?.length) {
       return {
@@ -206,7 +208,7 @@ export class ApolloClientManager {
       };
     }
     return {
-      data: data?.WishlistAddVariantt?.wishlist,
+      data: data?.WishlistAddVariant?.wishlist,
     };
   };
 
@@ -232,7 +234,6 @@ export class ApolloClientManager {
   };
 
   removeWishlistVariants = async (variantId: string) => {
-    console.log('Step 2-> removeWishlistVariants called',variantId);
     const { data, errors } = await this.client.mutate<
       any,
       any
@@ -844,7 +845,6 @@ export class ApolloClientManager {
     checkout: any,
     ) => {
     const checkoutId = checkout?.id;
-
     if (checkoutId) {
 
       try {
