@@ -123,6 +123,7 @@ export const checkoutLineFragment = gql`
   fragment CheckoutLine on CheckoutLine {
     id
     quantity
+    quantityAfterDiscount
     totalPrice {
       ...Price
     }
@@ -132,8 +133,25 @@ export const checkoutLineFragment = gql`
   }
 `;
 
+export const discountLineFragment = gql`
+  fragment DiscountedCheckoutLine on DiscountedCheckoutLine {
+    id
+    totalPrice{
+      currency
+      gross{
+        currency
+        amount
+      }
+    }
+    quantity
+    variant
+  }
+
+`;
+
 export const atcChecckoutFragment = gql`
   ${checkoutLineFragment}
+  ${discountLineFragment}
   ${checkoutShippingMethodFragment}
   ${paymentGatewayFragment}
   fragment Checkout on Checkout {
@@ -152,6 +170,9 @@ export const atcChecckoutFragment = gql`
     lines {
       ...CheckoutLine
     }
+    discountedLines {
+      ...DiscountedCheckoutLine
+    }
     availablePaymentGateways {
       ...PaymentGateway
     }
@@ -160,6 +181,7 @@ export const atcChecckoutFragment = gql`
 
 export const checkoutFragment = gql`
   ${checkoutLineFragment}
+  ${discountLineFragment}
   ${checkoutAddressFragment}
   ${checkoutPriceFragment}
   ${checkoutShippingMethodFragment}
@@ -205,6 +227,9 @@ export const checkoutFragment = gql`
     }
     lines {
       ...CheckoutLine
+    }
+    discountedLines {
+      ...DiscountedCheckoutLine
     }
     isShippingRequired
     discount {
