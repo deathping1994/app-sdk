@@ -116,7 +116,11 @@ export class SaleorCartAPI extends ErrorListener {
   getDiscountedItems = () => {
     const { checkout } = this.saleorState;
     if (checkout?.discountedLines) {
-      return checkout?.discountedLines?.filter(line => line.quantity > 0);
+      return checkout?.discountedLines?.filter(line => line.quantity > 0)?.map(l => ({
+        ...l,
+        variantSku: l?.variant,
+        variant: checkout?.lines?.find(checkoutLine => checkoutLine?.id === l?.id)?.variant,
+      }));
     }
     return [];
   };
