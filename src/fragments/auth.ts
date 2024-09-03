@@ -17,6 +17,23 @@ export const userFragment = gql`
     tags {
       name
     }
+    membershipHistory {
+      id
+      metadata{
+        key
+        value
+      }
+      membershipPurchase
+      membershipExpiry
+      membershipCashbackAmount
+      membershipCashbackDiscount
+      membershipFreeShipping
+      createdAt
+      updatedAt
+      membershipAmount
+      membershipDiscount
+      usedVouchers
+    }
     metadata {
       key
       value

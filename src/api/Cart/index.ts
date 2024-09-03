@@ -221,19 +221,18 @@ export class SaleorCartAPI extends ErrorListener {
       const { checkout } = this.saleorState;
 
       if (checkout?.id || checkout?._W?.id) {
-        const { data, error } = await this.jobsManager.run(
-          "cart",
-          "addItemRest",
-          {
-            variantId,
-            quantity,
-            tags,
-            line_item,
-            useDummyAddress,
-            isRecalculate,
-            checkoutMetadataInput,
-          }
-        );
+        const res = await this.jobsManager.run("cart", "addItemRest", {
+          variantId,
+          quantity,
+          tags,
+          line_item,
+          useDummyAddress,
+          isRecalculate,
+          checkoutMetadataInput,
+        });
+        console.log("res-addItemRest", res);
+        const data = res?.data;
+        const error = res?.error;
         this.jobsManager.run("cart", "checkoutPaymentsInfo", {
           checkout: data,
         });
@@ -246,6 +245,7 @@ export class SaleorCartAPI extends ErrorListener {
         if (error) {
           return { error };
         }
+        return res;
       }
       return {
         pending: false,
@@ -269,17 +269,16 @@ export class SaleorCartAPI extends ErrorListener {
       const { checkout } = this.saleorState;
 
       if (checkout?.id || checkout?._W?.id) {
-        const { data, error } = await this.jobsManager.run(
-          "cart",
-          "updateItemRest",
-          {
-            variantId,
-            quantity,
-            isRecalculate,
-            line_item,
-            checkoutMetadataInput,
-          }
-        );
+        const res = await this.jobsManager.run("cart", "updateItemRest", {
+          variantId,
+          quantity,
+          isRecalculate,
+          line_item,
+          checkoutMetadataInput,
+        });
+        const data = res?.data;
+        const error = res?.error;
+        console.log("res-updateItemRest", res);
         this.jobsManager.run("cart", "checkoutPaymentsInfo", {
           checkout: data,
         });
@@ -292,6 +291,7 @@ export class SaleorCartAPI extends ErrorListener {
         if (error) {
           return { error };
         }
+        return res;
       }
       return {
         pending: false,
@@ -313,7 +313,7 @@ export class SaleorCartAPI extends ErrorListener {
       const { checkout } = this.saleorState;
 
       if (checkout?.id || checkout?._W?.id) {
-        const { data, error } = await this.jobsManager.run(
+        const res = await this.jobsManager.run(
           "cart",
           "updateItemsWithLineRest",
           {
@@ -322,6 +322,9 @@ export class SaleorCartAPI extends ErrorListener {
             checkoutMetadataInput,
           }
         );
+        const data = res?.data;
+        const error = res?.error;
+        console.log("res-updateItemsWithLineRest", res);
         this.jobsManager.run("cart", "checkoutPaymentsInfo", {
           checkout: data,
         });
@@ -334,6 +337,7 @@ export class SaleorCartAPI extends ErrorListener {
         if (error) {
           return { error };
         }
+        return res;
       }
       return {
         pending: false,
