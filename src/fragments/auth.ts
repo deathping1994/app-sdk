@@ -19,10 +19,11 @@ export const userFragment = gql`
     }
     membershipHistory {
       id
-      metadata{
+      metadata {
         key
         value
       }
+      isActive
       membershipPurchase
       membershipExpiry
       membershipCashbackAmount
