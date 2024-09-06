@@ -350,4 +350,30 @@ export class SaleorCartAPI extends ErrorListener {
     };
   };
 
+  checkoutVerifyForMultipleItems = async (warehouseId: String) => {
+    
+    // this.localStorageManager.addItemsToCart(variantArray);
+    console.log('checkout verify step 2',warehouseId);
+    if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
+      const { data, error } = await  this.jobsManager.run(
+        "cart",
+        "setCartItems", {warehouseId}
+      );
+
+      if (error) {
+        return {
+          error,
+        };
+      }
+
+      return {
+        data,
+        pending: true,
+      };
+    }
+    return {
+      pending: false,
+    };
+  };
+
 }

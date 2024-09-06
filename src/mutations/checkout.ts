@@ -23,6 +23,29 @@ export const updateCheckoutLineMutation = gql`
   }
 `;
 
+export const updateCheckoutForWarehouse = gql`
+  mutation checkoutVerifyForWarehouse($checkoutId:ID!,$warehouseId:String!){
+    checkoutVerifyForWarehouse(checkoutId:$checkoutId,warehouseId:$warehouseId){
+      checkoutErrors{
+        field
+        message
+        code
+      }
+      checkout{
+        created
+        lastChange
+        lines{
+          id
+          variant{
+            id
+            sku
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const refreshCartMutation = gql`
   ${checkoutFragment}
   ${checkoutErrorFragment}
