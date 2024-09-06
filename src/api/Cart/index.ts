@@ -105,6 +105,26 @@ export class SaleorCartAPI extends ErrorListener {
     return [];
   };
 
+  getItemsAfterDiscount = () => {
+    const { checkout } = this.saleorState;
+    if (checkout?.lines) {
+      return checkout?.lines?.filter(line => line?.quantityAfterDiscount > 0);
+    }
+    return [];
+  };
+
+  getDiscountedItems = () => {
+    const { checkout } = this.saleorState;
+    if (checkout?.discountedLines) {
+      return checkout?.discountedLines?.filter(line => line.quantity > 0)?.map(l => ({
+        ...l,
+        variantSku: l?.variant,
+        variant: checkout?.lines?.find(checkoutLine => checkoutLine?.id === l?.id)?.variant,
+      }));
+    }
+    return [];
+  };
+
   addItem = async (variantId: string, quantity: number) => {
     // 1. save in local storage
     // await this.localStorageManager.addItemToCart(variantId, quantity);

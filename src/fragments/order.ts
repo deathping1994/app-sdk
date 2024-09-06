@@ -38,9 +38,22 @@ export const orderDetailFragment = gql`
     shippingAddress {
       ...Address
     }
+    discountedLines{
+      id
+      quantity
+      variant
+      totalPrice{
+        currency
+        gross{
+          currency
+          amount
+        }
+      }
+    }
     lines {
       productName
       quantity
+      quantityAfterDiscount
       variant {
         ...ProductVariant
       }
