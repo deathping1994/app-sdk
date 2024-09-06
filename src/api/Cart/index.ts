@@ -357,7 +357,7 @@ export class SaleorCartAPI extends ErrorListener {
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
       const { data, error } = await  this.jobsManager.run(
         "cart",
-        "setCartItems", {warehouseId}
+        "setCartItems", warehouseId
       );
 
       if (error) {
