@@ -161,17 +161,20 @@ class CheckoutJobs extends JobsHandler<{}> {
     tags,
     checkoutMetadataInput,
     isRecalculate = false,
+    address,
   }): {
     lines?: any;
     isRecalculate?: boolean;
     tags?: string[];
     checkoutMetadataInput?: any;
+    address?: any;
   } => {
     const { data, error } = await this.apolloClientManager.createCheckoutRest(
       lines,
       isRecalculate,
       tags,
-      checkoutMetadataInput
+      checkoutMetadataInput,
+      address
     );
 
     if (error) {
