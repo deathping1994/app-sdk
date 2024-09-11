@@ -764,7 +764,8 @@ export class ApolloClientManager {
     lines?: any,
     isRecalculate: boolean,
     tags?: string[],
-    checkoutMetadataInput?: any
+    checkoutMetadataInput?: any,
+    address?: any,
   ) => {
     try {
       const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.CREATE_CHECKOUT}`;
@@ -777,6 +778,7 @@ export class ApolloClientManager {
           ...(checkoutMetadataInput
             ? { checkoutMetadataInput: checkoutMetadataInput }
             : {}),
+          shippingAddress: address,
         },
       };
       const res = await axiosRequest(

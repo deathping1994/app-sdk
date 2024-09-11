@@ -182,7 +182,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
     lines,
     isRecalculate = false,
     tags?: string[],
-    checkoutMetadataInput?: any
+    checkoutMetadataInput?: any,
+    address?: any,
   ): CheckoutResponse => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
@@ -192,6 +193,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
         isRecalculate,
         tags,
         checkoutMetadataInput,
+        address,
       }
     );
     this.jobsManager.run("cart", "checkoutPaymentsInfo", {
