@@ -779,7 +779,6 @@ export class ApolloClientManager {
             ? { checkoutMetadataInput: checkoutMetadataInput }
             : {}),
           shippingAddress: address,
-          billingAddress: address,
         },
       };
       const res = await axiosRequest(
