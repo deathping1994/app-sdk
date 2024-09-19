@@ -103,8 +103,8 @@
     "@react-native-async-storage/async-storage": "1.15.4",
     "@react-native-community/netinfo": "6.0.0",
     "graphql": "^15.5.0",
-    "react": "17.0.1",
-    "react-native": "0.64.0"
+    "react": "18.2.0",
+    "react-native": "0.73.9"
   },
   "husky": {
     "hooks": {
