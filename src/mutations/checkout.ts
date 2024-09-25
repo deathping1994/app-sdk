@@ -333,6 +333,17 @@ export const CHECKOUT_PAYMENTS = gql`
         amount
         currency
       }
+      shippingPrice {
+        currency
+        gross {
+          currency
+          amount
+        }
+        net {
+          currency
+          amount
+        }
+      }
       paymentMethod {
         cashbackDiscountAmount
         couponDiscount
