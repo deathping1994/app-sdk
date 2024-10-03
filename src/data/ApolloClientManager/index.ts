@@ -784,6 +784,11 @@ export class ApolloClientManager {
         REST_API_METHODS_TYPES.POST,
         createCheckoutInput
       );
+      if (res?.axiosError) {
+        return {
+          error: res?.axiosError,
+        };
+      }
       const createCheckoutRes = res?.data;
       const updatedCheckout = {
         ...dummyCheckoutFields,
@@ -942,6 +947,11 @@ export class ApolloClientManager {
           REST_API_METHODS_TYPES.POST,
           input
         );
+        if (res?.axiosError) {
+          return {
+            error: res?.axiosError,
+          };
+        }
         if (res?.data?.errors?.length) {
           return {
             errors: res?.data?.errors,
@@ -1040,6 +1050,11 @@ export class ApolloClientManager {
             REST_API_METHODS_TYPES.POST,
             input
           );
+          if (res?.axiosError) {
+            return {
+              error: res?.axiosError,
+            };
+          }
           if (res?.data?.errors?.length) {
             return {
               errors: res?.data?.errors,
@@ -1136,6 +1151,11 @@ export class ApolloClientManager {
             REST_API_METHODS_TYPES.POST,
             input
           );
+          if (res?.axiosError) {
+            return {
+              error: res?.axiosError,
+            };
+          }
           if (res?.data?.errors?.length) {
             return {
               errors: res?.data?.errors,
@@ -1233,6 +1253,11 @@ export class ApolloClientManager {
             REST_API_METHODS_TYPES.POST,
             input
           );
+          if (res?.axiosError) {
+            return {
+              error: res?.axiosError,
+            };
+          }
           if (res?.data?.errors?.length || !res?.data?.token) {
             return {
               errors: res?.data?.errors,

@@ -112,7 +112,9 @@ export async function axiosRequest(
       return response;
     } catch (error) {
       console.log("Error occurred in axiosRequest", error);
-      return;
+      return {
+        axiosError: error,
+      };
     }
   }
   return null;
