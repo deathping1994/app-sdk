@@ -932,6 +932,50 @@ export class ApolloClientManager {
     return {};
   };
 
+  setCartItems = async (
+    warehouseId: any,
+    checkoutId: String
+  ) => {
+    console.log('checkout verify step 4',warehouseId,'checkoutId ',checkoutId);
+    console.log('warehouseId', warehouseId,);
+    
+    if (checkoutId) {
+      try {
+        const { data, errors } = await this.client.mutate<
+           any,
+          any
+        >({
+          mutation: CheckoutMutations.updateCheckoutForWarehouse,
+          variables: {
+            checkoutId,
+            warehouseId,
+          },
+        });
+        console.log('checkout data',data);
+        if (errors?.length) {
+          return {
+            error: errors,
+          };
+        }
+        if (data?.checkoutLinesUpdate?.errors.length) {
+          return {
+            error: data?.checkoutLinesUpdate?.errors,
+          };
+        }
+        if (data?.checkoutLinesUpdate?.checkout) {
+          return {
+            data: this.constructCheckoutModel(data.checkoutLinesUpdate.checkout),
+          };
+        }
+      } catch (error) {
+        return {
+          error,
+        };
+      }
+    }
+    return {};
+  };
+
   updateCartItem = async (
     variantId: string,
     quantity: number,
