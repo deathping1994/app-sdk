@@ -957,14 +957,14 @@ export class ApolloClientManager {
             error: errors,
           };
         }
-        if (data?.checkoutLinesUpdate?.errors.length) {
+        if (data?.checkoutVerifyForWarehouse?.checkoutErrors?.length) {
           return {
-            error: data?.checkoutLinesUpdate?.errors,
+            error: data?.checkoutVerifyForWarehouse?.checkoutErrors
           };
         }
-        if (data?.checkoutLinesUpdate?.checkout) {
+        if (data?.checkoutVerifyForWarehouse?.checkout) {
           return {
-            data: this.constructCheckoutModel(data.checkoutLinesUpdate.checkout),
+            data: this.constructCheckoutModel(data?.checkoutVerifyForWarehouse?.checkout),
           };
         }
       } catch (error) {
