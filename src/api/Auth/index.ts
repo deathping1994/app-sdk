@@ -218,9 +218,9 @@ export class AuthAPI extends ErrorListener {
         isUserSignedIn: !!data?.user,
       });
     }
-
+    const userDataWithToken={...userData,token:data?.token};
     return {
-      data: userData,
+      data: userDataWithToken,
       dataError: userDataError,
       pending: false,
     };
