@@ -7,6 +7,11 @@ export enum ErrorCartTypes {
   "SET_CART_ITEM",
 }
 
+interface addToCartProps {
+  lines: [{quantity: number, variantId: string}];
+  checkoutMetadataInput: {key: string, value: string}[];
+}
+
 export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
   private apolloClientManager: ApolloClientManager;
 
@@ -91,6 +96,59 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
 
         return { data };
       }
+    }
+  };
+
+  addToCart = async (
+    {
+      lines,
+      checkoutMetadataInput
+    }: addToCartProps
+  ) => {
+  
+    // const userId = await AsyncStorage.getItem("user_id");
+    let checkout = await LocalStorageHandler.getCheckout();
+  
+    if (checkout) {
+      console.log("setCartItem job in if", checkout);
+  
+      try {
+        let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/add_to_cart/',
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              checkoutId: checkout?.id,
+              lines: lines,
+              checkoutMetadataInput: checkoutMetadataInput,
+              isRecalculate: true
+            }),
+          }
+        );
+        let data =  await jsonData.json();
+  
+        let obj = {
+          ...(checkout?._W ? checkout?._W : checkout),
+          availablePaymentGateways: data?.availablePaymentGateways,
+          availableShippingMethods: data?.availableShippingMethods,
+          promoCodeDiscount: data?.promoCodeDiscount,
+          shippingMethod: data?.shippingMethod,
+          lines: data?.lines
+        };
+  
+        await this.localStorageHandler?.setCheckout(obj);
+        console.log("setCartItem job in data", data);
+  
+        return data;
+      } catch (error) {
+        console.error('error while add to cart',error);
+      }
+    }
+    else{
+      console.error('add_to_cart : checkout is not found');
     }
   };
 
