@@ -10,6 +10,7 @@ export enum ErrorCartTypes {
 interface addToCartProps {
   lines: [{quantity: number, variantId: string}];
   checkoutMetadataInput: {key: string, value: string}[];
+  warehouseId?: string;
 }
 
 export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
@@ -102,7 +103,8 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
   addToCart = async (
     {
       lines,
-      checkoutMetadataInput
+      checkoutMetadataInput,
+      warehouseId
     }: addToCartProps
   ) => {
   
@@ -110,41 +112,47 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     let checkout = await LocalStorageHandler.getCheckout();
   
     if (checkout) {
-      console.log("setCartItem job in if", checkout);
+      console.log("add_to_cart job in if", checkout);
+      let obj = {
+        checkoutId: checkout?.id,
+        lines: lines,
+        checkoutMetadataInput: checkoutMetadataInput,
+        isRecalculate: true
+      };
+      if(warehouseId) obj={...obj,warehouseId:warehouseId}
   
       try {
-        let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/add_to_cart/',
+        let jsonData = await fetch('https://cambaytigerstagehapi.farziengineer.co/rest/add_to_cart/',
           {
             method: "POST",
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              checkoutId: checkout?.id,
-              lines: lines,
-              checkoutMetadataInput: checkoutMetadataInput,
-              isRecalculate: true
-            }),
+            body: JSON.stringify(obj),
           }
         );
         let data =  await jsonData.json();
-  
-        let obj = {
-          ...(checkout?._W ? checkout?._W : checkout),
-          availablePaymentGateways: data?.availablePaymentGateways,
-          availableShippingMethods: data?.availableShippingMethods,
-          promoCodeDiscount: data?.promoCodeDiscount,
-          shippingMethod: data?.shippingMethod,
-          lines: data?.lines
-        };
-  
-        await this.localStorageHandler?.setCheckout(obj);
-        console.log("setCartItem job in data", data);
+
+        if(jsonData?.ok){
+          let obj = {
+            ...(checkout?._W ? checkout?._W : checkout),
+            availablePaymentGateways: data?.availablePaymentGateways,
+            availableShippingMethods: data?.availableShippingMethods,
+            promoCodeDiscount: data?.promoCodeDiscount,
+            shippingMethod: data?.shippingMethod,
+            lines: data?.lines
+          };
+    
+          await this.localStorageHandler?.setCheckout(obj);
+
+        }
+        data={...data,ok:jsonData?.ok};
+        console.log("add_to_cart job in data", data);
   
         return data;
       } catch (error) {
-        console.error('error while add to cart',error);
+        console.error('error while add_to_cart',error);
       }
     }
     else{

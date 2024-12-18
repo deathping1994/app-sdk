@@ -20,6 +20,7 @@ import {
 interface addToCartProps {
   lines: [{quantity: number, variantId: string}];
   checkoutMetadataInput: {key: string, value: string}[];
+  warehouseId?: string;
 }
 export class SaleorCartAPI extends ErrorListener {
   loaded: boolean;
@@ -331,14 +332,15 @@ export class SaleorCartAPI extends ErrorListener {
 
   addToCart = async ({
     lines,
-    checkoutMetadataInput
+    checkoutMetadataInput,
+    warehouseId
   }: addToCartProps) => {
     
     // this.localStorageManager.addItemsToCart(variantArray);
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
       const { data, error } = await  this.jobsManager.run(
         "cart",
-        "setCartItemsTwo", {lines, checkoutMetadataInput}
+        "addToCart", {lines, checkoutMetadataInput, warehouseId}
       );
 
       if (error) {
