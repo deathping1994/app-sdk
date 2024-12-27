@@ -10,7 +10,6 @@ export enum ErrorCartTypes {
 interface addToCartProps {
   lines: [{quantity: number, variantId: string}];
   checkoutMetadataInput: {key: string, value: string}[];
-  warehouseId?: string;
 }
 
 export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
@@ -103,11 +102,10 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
   addToCart = async (
     {
       lines,
-      checkoutMetadataInput,
-      warehouseId
+      checkoutMetadataInput
     }: addToCartProps
   ) => {
-  
+    console.log('add_to_cart 4');
     // const userId = await AsyncStorage.getItem("user_id");
     let checkout = await LocalStorageHandler.getCheckout();
   
@@ -119,7 +117,6 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         checkoutMetadataInput: checkoutMetadataInput,
         isRecalculate: true
       };
-      if(warehouseId) obj={...obj,warehouseId:warehouseId}
   
       try {
         let jsonData = await fetch('https://cambaytigerstagehapi.farziengineer.co/rest/add_to_cart/',
@@ -150,7 +147,10 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         data={...data,ok:jsonData?.ok};
         console.log("add_to_cart job in data", data);
   
-        return data;
+        return {
+          data,
+          error: undefined
+        };
       } catch (error) {
         console.error('error while add_to_cart',error);
       }
@@ -240,23 +240,37 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     if (checkout) {
       console.log("setCartItem job in if", checkout)
 
-      const { data, error } = await this.apolloClientManager.updateCartItem(
-        variantId,
-        quantity,
-        checkout
-      );
-      if (error) {
-        console.log("setCartItem job in error", error)
+      let jsonData = await fetch('https://cambaytigerstagehapi.farziengineer.co/rest/update_cart/',
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              checkoutId: checkout?.id,
+              lines: [{
+                quantity: quantity,
+                variantId: variantId
+              }],
+              isRecalculate: true,
+              checkoutMetadataInput: []
+            }),
+          }
+        );
+        let data =  await jsonData.json();
+      if (!jsonData?.ok) {
+        console.log("setCartItem job in error", jsonData)
         // this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
-        return { error };
+        return { jsonData };
 
       } else if (data) {
-        console.log("setCartItem job in data", data)
+        console.log("setCartItem job in data", data);
 
         let obj = typeof data=="object" && data.token ? {
           ...(checkout?._W ? checkout?._W : checkout),
           ...data
-        } : checkout;
+        } : {...checkout};
 
         await this.localStorageHandler.setCheckout(obj);
         console.log("setCartItem job in data", data)

@@ -1,3 +1,4 @@
+import { LocalStorageHandler } from "@crisfcodes/saleor-native-sdk/src/helpers";
 import { MapFn, QueryShape, WatchMapFn } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
