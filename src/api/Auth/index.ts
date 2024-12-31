@@ -311,7 +311,7 @@ export class AuthAPI extends ErrorListener {
   ): PromiseRunResponse<DataErrorAuthTypes> => {
     const { data, dataError } = await this.jobsManager.run(
       "auth",
-      "signInMobile",
+      "signInMobileGokwik",
       {
         refreshToken,
         csrfToken,
