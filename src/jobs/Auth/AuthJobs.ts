@@ -164,23 +164,6 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
-  signInMobileGokwik = async ({
-    refreshToken,
-    csrfToken,
-    token,
-  }: {
-    refreshToken: any;
-    csrfToken: string;
-    token: string;
-  }): PromiseAuthJobRunResponse => {
-    
-    this.localStorageHandler.setSignInToken(token || null);
-    this.localStorageHandler.setCsrfToken(csrfToken || null);
-    this.localStorageHandler.setRefreshToken(refreshToken || null);
-
-    return {};
-  };
-
   confirmAccountV2 = async ({
     otp,
     phone,
