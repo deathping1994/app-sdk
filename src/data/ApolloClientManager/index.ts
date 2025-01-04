@@ -138,9 +138,13 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
+import { CompleteCheckoutJobInput } from "src/jobs/Checkout/types";
+import { PromiseCheckoutJobRunResponse } from "src/jobs/Checkout/CheckoutJobs";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
+
+  private localStorageHandler: LocalStorageHandler;
 
   constructor(client: ApolloClient<any>) {
     this.client = client;
@@ -1881,6 +1885,14 @@ export class ApolloClientManager {
         error,
       };
     }
+  };
+
+  completeCheckoutGokwik = async ({
+  }: CompleteCheckoutJobInput): PromiseCheckoutJobRunResponse => {
+      await this.localStorageHandler.setCheckout({});
+      await this.localStorageHandler.setPayment({});
+
+    return {};
   };
 
   private constructCheckoutModel = (
