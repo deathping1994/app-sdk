@@ -1887,14 +1887,6 @@ export class ApolloClientManager {
     }
   };
 
-  completeCheckoutGokwik = async ({
-  }: CompleteCheckoutJobInput): PromiseCheckoutJobRunResponse => {
-      await this.localStorageHandler.setCheckout({});
-      await this.localStorageHandler.setPayment({});
-
-    return {};
-  };
-
   private constructCheckoutModel = (
     checkout: Checkout | AddCheckoutLine_checkoutLinesUpdate_checkout | any
   ): ICheckoutModel => ({

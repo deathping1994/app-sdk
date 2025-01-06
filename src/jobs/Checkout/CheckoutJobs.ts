@@ -493,7 +493,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
-  completeCheckoutGokwik = async ({
+  clearCheckout = async ({
    
   }: CompleteCheckoutJobInput): PromiseCheckoutJobRunResponse => {
       await this.localStorageHandler.setCheckout({});
