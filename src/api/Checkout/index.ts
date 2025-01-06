@@ -624,7 +624,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  completeCheckoutGokwik = async (
+  clearCheckout = async (
     input?: CompleteCheckoutInput
   ): CheckoutResponse => {
     const co = this.saleorState.checkout?._W
@@ -634,7 +634,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
-        "completeCheckoutGokwik",
+        "clearCheckout",
         { ...input, checkoutId }
       );
       console.log("xxxxxxxcheckoutcomplete-apicheckout", data);

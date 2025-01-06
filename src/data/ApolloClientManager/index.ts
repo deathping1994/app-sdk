@@ -138,13 +138,9 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
-import { CompleteCheckoutJobInput } from "src/jobs/Checkout/types";
-import { PromiseCheckoutJobRunResponse } from "src/jobs/Checkout/CheckoutJobs";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
-
-  private localStorageHandler: LocalStorageHandler;
 
   constructor(client: ApolloClient<any>) {
     this.client = client;
