@@ -623,4 +623,35 @@ export class SaleorCheckoutAPI extends ErrorListener {
       pending: false,
     };
   };
+  
+  clearCheckout = async (
+    input?: CompleteCheckoutInput
+  ): CheckoutResponse => {
+    const co = this.saleorState.checkout?._W
+      ? this.saleorState.checkout?._W
+      : this.saleorState.checkout;
+    const checkoutId = co?.id;
+    if (checkoutId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "clearCheckout",
+        { ...input, checkoutId }
+      );
+      console.log("xxxxxxxcheckoutcomplete-apicheckout", data);
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    return {
+      functionError: {
+        error: new Error(
+          "You need to set shipping address before creating payment."
+        ),
+        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
+      },
+      pending: false,
+    };
+  };
 }
