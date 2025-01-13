@@ -303,6 +303,40 @@ export class AuthAPI extends ErrorListener {
     };
   };
 
+  signInMobileGokwik = async (
+    refreshToken: any,
+    csrfToken: string,
+    token: string
+    // autoSignIn: boolean
+  ): PromiseRunResponse<DataErrorAuthTypes> => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "signInMobileGokwik",
+      {
+        refreshToken,
+        csrfToken,
+        token,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+      
+    return {
+      data: userData,
+      dataError: userDataError,
+      pending: false,
+    };
+  };
+
   /**
    * Sign out user by clearing cache, local storage and authentication token.
    */
