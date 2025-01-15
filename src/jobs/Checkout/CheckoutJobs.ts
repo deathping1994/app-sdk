@@ -138,7 +138,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     
     try {
       console.log('in chekcoutJob',checkoutMetadataInput);
-      const jsonData = await fetch('https://cambaytigerstagehapi.farziengineer.co/rest/create_checkout/',
+      const jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/create_checkout/',
         {
           method: "POST",
           credentials: "include",

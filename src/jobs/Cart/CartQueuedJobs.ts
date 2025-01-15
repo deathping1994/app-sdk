@@ -119,7 +119,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       };
   
       try {
-        let jsonData = await fetch('https://cambaytigerstagehapi.farziengineer.co/rest/add_to_cart/',
+        let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/add_to_cart/',
           {
             method: "POST",
             credentials: "include",
@@ -240,7 +240,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     if (checkout) {
       console.log("setCartItem job in if", checkout)
 
-      let jsonData = await fetch('https://cambaytigerstagehapi.farziengineer.co/rest/update_cart/',
+      let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/update_cart/',
           {
             method: "POST",
             credentials: "include",
