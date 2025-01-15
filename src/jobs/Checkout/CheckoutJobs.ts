@@ -129,40 +129,57 @@ class CheckoutJobs extends JobsHandler<{}> {
 
   createCheckout = async ({
     email,
-    lines,
-    shippingAddress,
+    checkoutMetadataInput,
     selectedShippingAddressId,
-    billingAddress,
     selectedBillingAddressId,
+    lines
   }: CreateCheckoutJobInput): PromiseCheckoutJobRunResponse => {
-    const { data, error } = await this.apolloClientManager.createCheckout(
-      email,
-      lines,
-      shippingAddress,
-      billingAddress
-    );
+    
+    
+    try {
+      console.log('in chekcoutJob',checkoutMetadataInput);
+      const jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/create_checkout/',
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            checkoutInput:{
+              email: email,
+              lines: lines,
+              checkoutMetadataInput: checkoutMetadataInput,
+              isRecalculate: true
+          }}),
+        }
+      );
+      if(jsonData?.ok){
+        const data = await jsonData?.json();
 
-    if (error) {
-      /**
-       * TODO: Differentiate errors!!! THIS IS A BUG!!!
-       * DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS is just one of every possible - instead of deprecated errors, checkoutErrors should be used.
-       */
-      return {
-        dataError: {
-          error,
-          type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS,
-        },
-      };
+        await this.localStorageHandler.setCheckout({
+          ...data,
+          selectedBillingAddressId,
+          selectedShippingAddressId,
+        });
+        return {
+          data,
+        };
+      }
+      else{
+        console.error('Create Checkout Api failed',jsonData);
+        return {
+          ok: jsonData?.ok,
+          message: 'Something went wrong'
+        }
+      }
+    } catch (error) {
+        console.error('error while creating checkout :',error);
+        return {
+          dataError: error
+        }
     }
 
-    await this.localStorageHandler.setCheckout({
-      ...data,
-      selectedBillingAddressId,
-      selectedShippingAddressId,
-    });
-    return {
-      data,
-    };
   };
 
   setShippingAddress = async ({

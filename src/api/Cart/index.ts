@@ -16,6 +16,11 @@ import {
   ISubtotalPrice,
   ITotalPrice,
 } from "./types";
+
+interface addToCartProps {
+  lines: [{quantity: number, variantId: string}];
+  checkoutMetadataInput: {key: string, value: string}[];
+}
 export class SaleorCartAPI extends ErrorListener {
   loaded: boolean;
   items: IItems;
@@ -69,6 +74,7 @@ export class SaleorCartAPI extends ErrorListener {
     this.saleorState.subscribeToChange(
       StateItems.SUMMARY_PRICES,
       (summaryPrices: ISaleorStateSummeryPrices) => {
+        console.log('531-> summaryPrices',summaryPrices);
         const { totalPrice, subtotalPrice, shippingPrice, discount } =
           summaryPrices || {};
         this.totalPrice = totalPrice;
@@ -282,7 +288,7 @@ export class SaleorCartAPI extends ErrorListener {
           error,
         };
       }
-      console.log("in data updateItem",data)
+      console.log("in data updateItem",data);
 
       return { 
         data,
@@ -317,6 +323,36 @@ export class SaleorCartAPI extends ErrorListener {
       return { 
         data,
         pending: true,
+      };
+    }
+    return {
+      pending: false,
+    };
+  };
+
+  addToCart = async ({
+    lines,
+    checkoutMetadataInput
+  }: addToCartProps) => {
+    
+    // this.localStorageManager.addItemsToCart(variantArray);
+    if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
+      console.log('add_to_cart 3');
+      const { data, error } = await  this.jobsManager.run(
+        "cart",
+        "addToCart", {lines, checkoutMetadataInput}
+      );
+
+      if (error) {
+        return {
+          error,
+        };
+      }
+
+      return {
+        data,
+        pending: true,
+        error
       };
     }
     return {

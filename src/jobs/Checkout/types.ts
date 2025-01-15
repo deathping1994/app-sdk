@@ -7,11 +7,12 @@ export interface ProvideCheckoutJobInput {
 
 export interface CreateCheckoutJobInput {
   email: string;
-  lines: Array<{ variantId: string; quantity: number }>;
   shippingAddress?: ICheckoutAddress;
   selectedShippingAddressId?: string;
   billingAddress?: ICheckoutAddress;
   selectedBillingAddressId?: string;
+  checkoutMetadataInput: Array<{ key: string; value: string}>;
+  lines: [];
 }
 
 export interface ReOrderJobInput {

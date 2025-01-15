@@ -7,6 +7,11 @@ export enum ErrorCartTypes {
   "SET_CART_ITEM",
 }
 
+interface addToCartProps {
+  lines: [{quantity: number, variantId: string}];
+  checkoutMetadataInput: {key: string, value: string}[];
+}
+
 export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
   private apolloClientManager: ApolloClientManager;
 
@@ -94,6 +99,67 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     }
   };
 
+  addToCart = async (
+    {
+      lines,
+      checkoutMetadataInput
+    }: addToCartProps
+  ) => {
+    console.log('add_to_cart 4');
+    // const userId = await AsyncStorage.getItem("user_id");
+    let checkout = await LocalStorageHandler.getCheckout();
+  
+    if (checkout) {
+      console.log("add_to_cart job in if", checkout);
+      let obj = {
+        checkoutId: checkout?.id,
+        lines: lines,
+        checkoutMetadataInput: checkoutMetadataInput,
+        isRecalculate: true
+      };
+  
+      try {
+        let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/add_to_cart/',
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(obj),
+          }
+        );
+        let data =  await jsonData.json();
+
+        if(jsonData?.ok){
+          let obj = {
+            ...(checkout?._W ? checkout?._W : checkout),
+            availablePaymentGateways: data?.availablePaymentGateways,
+            availableShippingMethods: data?.availableShippingMethods,
+            promoCodeDiscount: data?.promoCodeDiscount,
+            shippingMethod: data?.shippingMethod,
+            lines: data?.lines
+          };
+    
+          await this.localStorageHandler?.setCheckout(obj);
+
+        }
+        data={...data,ok:jsonData?.ok};
+        console.log("add_to_cart job in data", data);
+  
+        return {
+          data,
+          error: undefined
+        };
+      } catch (error) {
+        console.error('error while add_to_cart',error);
+      }
+    }
+    else{
+      console.error('add_to_cart : checkout is not found');
+    }
+  };
+
   setCartItemsTwo = async (variantArray: any) => {
     let checkout = await LocalStorageHandler.getCheckout();
 
@@ -174,23 +240,37 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     if (checkout) {
       console.log("setCartItem job in if", checkout)
 
-      const { data, error } = await this.apolloClientManager.updateCartItem(
-        variantId,
-        quantity,
-        checkout
-      );
-      if (error) {
-        console.log("setCartItem job in error", error)
+      let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/update_cart/',
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              checkoutId: checkout?.id,
+              lines: [{
+                quantity: quantity,
+                variantId: variantId
+              }],
+              isRecalculate: true,
+              checkoutMetadataInput: []
+            }),
+          }
+        );
+        let data =  await jsonData.json();
+      if (!jsonData?.ok) {
+        console.log("setCartItem job in error", jsonData)
         // this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
-        return { error };
+        return { jsonData };
 
       } else if (data) {
-        console.log("setCartItem job in data", data)
+        console.log("setCartItem job in data", data);
 
         let obj = typeof data=="object" && data.token ? {
           ...(checkout?._W ? checkout?._W : checkout),
           ...data
-        } : checkout;
+        } : {...checkout};
 
         await this.localStorageHandler.setCheckout(obj);
         console.log("setCartItem job in data", data)
