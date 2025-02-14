@@ -1898,7 +1898,7 @@ export class ApolloClientManager {
         return {
           id: item!.id,
           quantity: item!.quantity,
-          quantityAfterDiscount: item?.quantityAfterDiscount,
+          // quantityAfterDiscount: item?.quantityAfterDiscount,
           totalPrice: item?.totalPrice,
           variant: {
             attributes: itemVariant?.attributes,

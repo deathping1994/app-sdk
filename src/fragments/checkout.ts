@@ -123,7 +123,6 @@ export const checkoutLineFragment = gql`
   fragment CheckoutLine on CheckoutLine {
     id
     quantity
-    quantityAfterDiscount
     totalPrice {
       ...Price
     }
@@ -151,12 +150,10 @@ export const discountLineFragment = gql`
 
 export const atcChecckoutFragment = gql`
   ${checkoutLineFragment}
-  ${discountLineFragment}
   ${checkoutShippingMethodFragment}
   ${paymentGatewayFragment}
   fragment Checkout on Checkout {
     id
-    blockCod
     availableShippingMethods {
       ...ShippingMethod
     }
@@ -170,9 +167,6 @@ export const atcChecckoutFragment = gql`
     lines {
       ...CheckoutLine
     }
-    discountedLines {
-      ...DiscountedCheckoutLine
-    }
     availablePaymentGateways {
       ...PaymentGateway
     }
@@ -181,7 +175,6 @@ export const atcChecckoutFragment = gql`
 
 export const checkoutFragment = gql`
   ${checkoutLineFragment}
-  ${discountLineFragment}
   ${checkoutAddressFragment}
   ${checkoutPriceFragment}
   ${checkoutShippingMethodFragment}
@@ -228,9 +221,6 @@ export const checkoutFragment = gql`
     lines {
       ...CheckoutLine
     }
-    discountedLines {
-      ...DiscountedCheckoutLine
-    }
     isShippingRequired
     discount {
       currency
@@ -239,7 +229,6 @@ export const checkoutFragment = gql`
     discountName
     translatedDiscountName
     voucherCode
-    blockCod
     availablePaymentGateways {
       ...PaymentGateway
     }
