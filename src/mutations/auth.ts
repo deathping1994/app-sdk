@@ -20,6 +20,25 @@ export const tokenAuthMutation = gql`
   }
 `;
 
+export const runnerLoginMutation =  gql`
+  ${userFragment}
+  mutation runnerloginApp(storeName: String!, password: String!, phone: String!){
+    runnerLogin(phone: $phone, password: $password, storeName: $storeName){
+      runnerErrors{
+        message
+        code
+        field
+      }
+      accessToken
+      csrfToken
+      refreshToken
+      user {
+        ...User
+      }
+    }
+  }
+`;
+
 export const tokenVeryficationMutation = gql`
   ${accountErrorFragment}
   mutation VerifyToken($token: String!) {
