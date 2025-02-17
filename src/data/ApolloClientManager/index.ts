@@ -404,6 +404,40 @@ export class ApolloClientManager {
     };
   };
 
+  loginRunner = async (storeName: any, password: string, phone: string) => {
+    const { data, errors } = await this.client.mutate<
+      OTPAuthentication,
+      OTPAuthenticationVariables
+    >({
+      fetchPolicy: "no-cache",
+      mutation: AuthMutations.runnerLoginMutation,
+      variables: {
+        storeName,
+        password,
+        phone,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.runnerLogin?.runnerErrors?.length) {
+      return {
+        error: data.runnerLogin.runnerErrors,
+      };
+    }
+    return {
+      data: {
+        csrfToken: data?.runnerLogin?.csrfToken,
+        token: data?.runnerLogin?.token,
+        refreshToken: data?.runnerLogin?.refreshToken,
+        user: data?.runnerLogin?.user,
+      },
+    };
+  };
+
   signOut = async () => {
     await this.client.resetStore();
   };
