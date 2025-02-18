@@ -12,13 +12,13 @@ export interface CreateCheckoutJobInput {
   billingAddress?: ICheckoutAddress;
   selectedBillingAddressId?: string;
   checkoutMetadataInput: Array<{ key: string; value: string}>;
-  lines: [];
+  lines: Array<{ variantId: string; quantity: number }> | [];
 }
 
 export interface ReOrderJobInput {
-  orderId: String,
-  skipLines: boolean,
-  warehouseId: String,
+  orderId: String;
+  skipLines: boolean;
+  warehouseId: String;
 }
 
 export interface SetShippingAddressJobInput {
