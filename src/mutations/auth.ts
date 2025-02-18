@@ -32,9 +32,6 @@ export const runnerLoginMutation =  gql`
       accessToken
       csrfToken
       refreshToken
-      user {
-        ...User
-      }
     }
   }
 `;
