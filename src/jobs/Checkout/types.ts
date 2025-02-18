@@ -26,7 +26,7 @@ export interface SetShippingAddressJobInput {
   shippingAddress: ICheckoutAddress;
   email: string;
   selectedShippingAddressId?: string;
-  isRecalculate?: boolean;
+  isRecalculate?:boolean;
 }
 
 export interface SetBillingAddressJobInput {
@@ -44,9 +44,9 @@ export interface SetBillingAddressWithEmailJobInput {
 }
 
 export type CashBackMethodType =
-  | "CASHBACK"
-  | "RECHARGE_WALLET"
-  | "CASHBACK_AND_RECHARGE_WALLET";
+| "CASHBACK"
+| "RECHARGE_WALLET"
+| "CASHBACK_AND_RECHARGE_WALLET";
 
 export interface PaymentMethodUpdateJobInput {
   checkoutId: string;
