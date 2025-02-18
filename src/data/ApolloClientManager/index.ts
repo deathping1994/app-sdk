@@ -431,7 +431,7 @@ export class ApolloClientManager {
     return {
       data: {
         csrfToken: data?.runnerLogin?.csrfToken,
-        token: data?.runnerLogin?.token,
+        token: data?.runnerLogin?.accessToken,
         refreshToken: data?.runnerLogin?.refreshToken,
         // user: data?.runnerLogin?.user,
       },
