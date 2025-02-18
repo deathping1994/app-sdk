@@ -433,7 +433,7 @@ export class ApolloClientManager {
         csrfToken: data?.runnerLogin?.csrfToken,
         token: data?.runnerLogin?.token,
         refreshToken: data?.runnerLogin?.refreshToken,
-        user: data?.runnerLogin?.user,
+        // user: data?.runnerLogin?.user,
       },
     };
   };
