@@ -11,14 +11,14 @@ export interface CreateCheckoutJobInput {
   selectedShippingAddressId?: string;
   billingAddress?: ICheckoutAddress;
   selectedBillingAddressId?: string;
-  checkoutMetadataInput: Array<{ key: string; value: string}>;
-  lines: [];
+  checkoutMetadataInput: Array<{ key: string; value: string }>;
+  lines: Array<{ variantId: string; quantity: number }> | [];
 }
 
 export interface ReOrderJobInput {
-  orderId: String,
-  skipLines: boolean,
-  warehouseId: String,
+  orderId: String;
+  skipLines: boolean;
+  warehouseId: String;
 }
 
 export interface SetShippingAddressJobInput {
@@ -26,7 +26,7 @@ export interface SetShippingAddressJobInput {
   shippingAddress: ICheckoutAddress;
   email: string;
   selectedShippingAddressId?: string;
-  isRecalculate?:boolean;
+  isRecalculate?: boolean;
 }
 
 export interface SetBillingAddressJobInput {
@@ -44,9 +44,9 @@ export interface SetBillingAddressWithEmailJobInput {
 }
 
 export type CashBackMethodType =
-| 'CASHBACK'
-| 'RECHARGE_WALLET'
-| 'CASHBACK_AND_RECHARGE_WALLET';
+  | "CASHBACK"
+  | "RECHARGE_WALLET"
+  | "CASHBACK_AND_RECHARGE_WALLET";
 
 export interface PaymentMethodUpdateJobInput {
   checkoutId: string;
