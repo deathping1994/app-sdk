@@ -194,6 +194,27 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  accountUpdate = async ({
+    input,
+  }: {
+    input: any;
+  }): PromiseAuthJobRunResponse => {
+    const { data, error } = await this.apolloClientManager.accountUpdate(input);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.SIGN_IN,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   signOut = async (): PromiseAuthJobRunResponse => {
     await this.localStorageHandler.clear();
 

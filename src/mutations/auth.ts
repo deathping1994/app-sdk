@@ -20,10 +20,14 @@ export const tokenAuthMutation = gql`
   }
 `;
 
-export const runnerLoginMutation =  gql`
-  mutation runnerloginApp($storeName: String!, $password: String!, $phone: String!){
-    runnerLogin(phone: $phone, password: $password, storeName: $storeName){
-      runnerErrors{
+export const runnerLoginMutation = gql`
+  mutation runnerloginApp(
+    $storeName: String!
+    $password: String!
+    $phone: String!
+  ) {
+    runnerLogin(phone: $phone, password: $password, storeName: $storeName) {
+      runnerErrors {
         message
         code
         field
@@ -112,6 +116,22 @@ export const CONFIRM_ACCOUNT = gql`
       errors {
         field
         message
+      }
+    }
+  }
+`;
+
+export const UPDATE_ACCOUNT = gql`
+  ${userFragment}
+  mutation accountUpdate($input: AccountInput!) {
+    accountUpdate(input: $input) {
+      user {
+        ...User
+      }
+      accountErrors {
+        field
+        message
+        code
       }
     }
   }
