@@ -370,6 +370,32 @@ export class ApolloClientManager {
     };
   };
 
+  accountUpdate = async input => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: AuthMutations.UPDATE_ACCOUNT,
+      variables: {
+        input,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.accountUpdate?.accountErrors?.length) {
+      return {
+        error: data?.accountUpdate?.accountErrors,
+      };
+    }
+    return {
+      data: {
+        user: data?.accountUpdate?.user,
+      },
+    };
+  };
+
   signInMobile = async (checkoutId: any, otp: string, phone: string) => {
     const { data, errors } = await this.client.mutate<
       OTPAuthentication,

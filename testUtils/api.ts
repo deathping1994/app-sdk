@@ -51,7 +51,7 @@ export async function setupAPI() {
   const cache = await createSaleorCache({ persistCache: true });
   const apiUrl =
     process.env.API_URL ||
-    "https://plixlifefcstagehapi.farziengineer.co/graphql/?source=website";
+    "https://laundreeestageapi.farziengineer.co/graphql/?source=android-app";
   const invalidTokenLink = invalidTokenLinkWithTokenHandler(() => null);
   const links = [
     invalidTokenLink,

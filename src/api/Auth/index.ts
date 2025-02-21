@@ -224,6 +224,41 @@ export class AuthAPI extends ErrorListener {
     };
   };
 
+  accountUpdate = async (
+    input: any
+    // autoSignIn: boolean
+  ): PromiseRunResponse<DataErrorAuthTypes> => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "accountUpdate",
+      {
+        input,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    // const { data: userData, dataError: userDataError } =
+    //   await this.jobsManager.run("auth", "provideUser", undefined);
+    // if (this.config.loadOnStart.checkout) {
+    //   await this.jobsManager.run("checkout", "provideCheckout", {
+    //     isUserSignedIn: !!data?.user,
+    //   });
+    // }
+
+    return {
+      data: data?.user,
+      dataError: dataError,
+      pending: false,
+    };
+  };
+
   /**
    * Tries to authenticate user with given email and password.
    * @param email Email used for authentication.
@@ -360,7 +395,7 @@ export class AuthAPI extends ErrorListener {
   loginRunner = async (
     phone: string,
     storeName: any,
-    password: string,
+    password: string
   ): PromiseRunResponse<DataErrorAuthTypes> => {
     const { data, dataError } = await this.jobsManager.run(
       "auth",
