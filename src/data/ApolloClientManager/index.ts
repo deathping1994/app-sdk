@@ -116,6 +116,7 @@ import {
   CompleteCheckoutInput,
   VerifySignInTokenInput,
   RefreshSignInTokenInput,
+  CreatePickupInput,
 } from "./types";
 import {
   OTPAuthentication,
@@ -138,6 +139,7 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
+import { pickupCreateMutation } from "src/mutations/pickAndDrop";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1936,6 +1938,48 @@ export class ApolloClientManager {
         };
       }
       return {};
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  // Pick And Drop
+  createPickup = async ({
+    isExpress,
+    pickupSlot,
+    customer,
+  }: CreatePickupInput) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: pickupCreateMutation,
+        variables: {
+          pickupCreateInput: {
+            status: "SCHEDULED",
+            customer,
+            isExpress,
+            slot: pickupSlot,
+          },
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.pickUpErrors?.length) {
+        return {
+          error: data?.pickUpErrors,
+        };
+      }
+      if (data?.pickUpCreate) {
+        return {
+          data: data.pickUpCreate,
+        };
+      }
     } catch (error) {
       return {
         error,
