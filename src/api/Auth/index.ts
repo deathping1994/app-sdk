@@ -394,7 +394,7 @@ export class AuthAPI extends ErrorListener {
   //Runner Login
   loginRunner = async (
     phone: string,
-    storeName: any,
+    storeCode: any,
     password: string
   ): PromiseRunResponse<DataErrorAuthTypes> => {
     const { data, dataError } = await this.jobsManager.run(
@@ -402,7 +402,7 @@ export class AuthAPI extends ErrorListener {
       "loginRunner",
       {
         phone,
-        storeName,
+        storeCode,
         password,
       }
     );
