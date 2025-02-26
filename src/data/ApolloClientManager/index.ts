@@ -436,15 +436,12 @@ export class ApolloClientManager {
     };
   };
 
-  loginRunner = async (storeName: any, password: string, phone: string) => {
-    const { data, errors } = await this.client.mutate<
-      OTPAuthentication,
-      OTPAuthenticationVariables
-    >({
+  loginRunner = async (storeCode: any, password: string, phone: string) => {
+    const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
       mutation: AuthMutations.runnerLoginMutation,
       variables: {
-        storeName,
+        storeCode,
         password,
         phone,
       },

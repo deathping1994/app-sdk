@@ -22,11 +22,11 @@ export const tokenAuthMutation = gql`
 
 export const runnerLoginMutation = gql`
   mutation runnerloginApp(
-    $storeName: String!
+    $storeCode: String!
     $password: String!
     $phone: String!
   ) {
-    runnerLogin(phone: $phone, password: $password, storeName: $storeName) {
+    runnerLogin(phone: $phone, password: $password, storeCode: $storeCode) {
       runnerErrors {
         message
         code

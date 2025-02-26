@@ -303,15 +303,15 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
 
   loginRunner = async ({
     phone,
-    storeName,
+    storeCode,
     password,
   }: {
-    checkoutId: any;
-    otp: string;
+    storeCode: any;
+    password: string;
     phone: string;
   }): PromiseAuthJobRunResponse => {
     const { data, error } = await this.apolloClientManager.loginRunner(
-      storeName,
+      storeCode,
       password,
       phone
     );
