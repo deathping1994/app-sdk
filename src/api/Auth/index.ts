@@ -452,5 +452,11 @@ export class AuthAPI extends ErrorListener {
         pending: false,
       };
     }
+
+    if (data) {
+      return {
+        data,
+      };
+    }
   };
 }

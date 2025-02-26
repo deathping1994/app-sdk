@@ -1,7 +1,7 @@
 import { DataErrorCheckoutTypes } from "../../api/Checkout/types";
 import { ApolloClientManager } from "../../data/ApolloClientManager";
 import { LocalStorageHandler } from "../../helpers/LocalStorageHandler";
-import { DataErrorAuthTypes } from "../../api/Auth/types";
+import { DataErrorAuthTypes, DataErrorPickUpTypes } from "../../api/Auth/types";
 
 import { JobRunResponse } from "../types";
 import { JobsHandler } from "../JobsHandler";
@@ -352,5 +352,18 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
       pickupSlot,
       customer,
     });
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorPickUpTypes.PICK_UP,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
   };
 }
