@@ -44,3 +44,13 @@ export interface CompleteCheckoutInput {
   redirectUrl?: string;
   storeSource?: boolean;
 }
+
+export interface CreatePickupInput {
+  isExpress?: boolean;
+  pickupSlot: {
+    date: any;
+    startTime: any;
+    endTime: any;
+  };
+  customer: string;
+}

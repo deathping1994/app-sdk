@@ -432,4 +432,25 @@ export class AuthAPI extends ErrorListener {
       pending: false,
     };
   };
+
+  // Pickup Create
+  createPickup = async (isExpress = false, pickupSlot) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "createPickup",
+      {
+        isExpress,
+        pickupSlot,
+        customer: this?.user?.id,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+  };
 }
