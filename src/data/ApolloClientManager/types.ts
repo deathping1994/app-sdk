@@ -54,3 +54,17 @@ export interface CreatePickupInput {
   };
   customer: string;
 }
+
+export interface CreatePickupFrequencyInput {
+  isExpress?: boolean;
+  pickupSlot: {
+    date: any;
+    startTime: any;
+    endTime: any;
+  };
+  startDate: any;
+  endDate: any;
+  daysOfWeek: any;
+  frequencyType: any;
+  customer: string;
+}

@@ -41,3 +41,42 @@ export const pickupCreateMutation = gql`
     }
   }
 `;
+
+export const createPickupFrequencyMutation = gql`
+  mutation CreatePickupFrequencyApp($frequencyInput: FrequencyInput) {
+    createFrequencyForPickup(input: $frequencyInput) {
+      frequency {
+        id
+        isExpress
+        slot {
+          date
+          endTime
+          startTime
+          frequencySet {
+            edges {
+              node {
+                frequencyType
+              }
+            }
+          }
+        }
+        frequencyType
+        status
+        daysOfWeek
+        startDate
+        endDate
+        createdAt
+        updatedAt
+      }
+      pickUpErrors {
+        field
+        message
+        code
+      }
+      errors {
+        field
+        message
+      }
+    }
+  }
+`;

@@ -366,4 +366,50 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
       data,
     };
   };
+
+  setPickupFrequency = async ({
+    isExpress,
+    pickupSlot,
+    startDate,
+    endDate,
+    daysOfWeek,
+    frequencyType,
+    customer,
+  }: {
+    isExpress?: boolean;
+    pickupSlot: {
+      date: any;
+      startTime: any;
+      endTime: any;
+    };
+    customer: string;
+    startDate: any;
+    endDate: any;
+    daysOfWeek: any;
+    frequencyType: any;
+  }) => {
+    const { data, error } =
+      await this.apolloClientManager.createPickupFrequency({
+        isExpress,
+        pickupSlot,
+        startDate,
+        endDate,
+        daysOfWeek,
+        frequencyType,
+        customer,
+      });
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorPickUpTypes.PICK_UP,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
 }
