@@ -459,4 +459,41 @@ export class AuthAPI extends ErrorListener {
       };
     }
   };
+
+  setPickupFrequency = async (
+    isExpress = false,
+    pickupSlot,
+    startDate,
+    endDate,
+    daysOfWeek,
+    frequencyType
+  ) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "setPickupFrequency",
+      {
+        isExpress,
+        pickupSlot,
+        startDate,
+        endDate,
+        daysOfWeek,
+        frequencyType,
+        customer: this?.user?.id,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    if (data) {
+      return {
+        data,
+      };
+    }
+  };
 }

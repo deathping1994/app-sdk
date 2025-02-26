@@ -117,6 +117,7 @@ import {
   VerifySignInTokenInput,
   RefreshSignInTokenInput,
   CreatePickupInput,
+  CreatePickupFrequencyInput,
 } from "./types";
 import {
   OTPAuthentication,
@@ -139,7 +140,10 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
-import { pickupCreateMutation } from "src/mutations/pickAndDrop";
+import {
+  createPickupFrequencyMutation,
+  pickupCreateMutation,
+} from "src/mutations/pickAndDrop";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1970,7 +1974,7 @@ export class ApolloClientManager {
         };
       }
 
-      if (data?.pickUpErrors?.length) {
+      if (data?.pickUpCreate?.pickUpErrors?.length) {
         return {
           error: data?.pickUpErrors,
         };
@@ -1978,6 +1982,54 @@ export class ApolloClientManager {
       if (data?.pickUpCreate) {
         return {
           data: data.pickUpCreate,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  createPickupFrequency = async ({
+    isExpress,
+    pickupSlot,
+    startDate,
+    endDate,
+    daysOfWeek,
+    frequencyType,
+    customer,
+  }: CreatePickupFrequencyInput) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: createPickupFrequencyMutation,
+        variables: {
+          frequencyInput: {
+            isExpress,
+            slot: pickupSlot,
+            startDate,
+            endDate,
+            daysOfWeek,
+            frequencyType,
+            customer,
+          },
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.createFrequencyForPickup?.pickUpErrors?.length) {
+        return {
+          error: data?.createFrequencyForPickup?.pickUpErrors,
+        };
+      }
+      if (data?.createFrequencyForPickup) {
+        return {
+          data: data.createFrequencyForPickup,
         };
       }
     } catch (error) {
