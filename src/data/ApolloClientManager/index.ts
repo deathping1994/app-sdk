@@ -140,10 +140,6 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
-import {
-  createPickupFrequencyMutation,
-  pickupCreateMutation,
-} from "src/mutations/pickAndDrop";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1954,7 +1950,7 @@ export class ApolloClientManager {
   }: CreatePickupInput) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
-        mutation: pickupCreateMutation,
+        mutation: AuthMutations.pickupCreateMutation,
         variables: {
           pickupCreateInput: {
             status: "SCHEDULED",
@@ -1999,7 +1995,7 @@ export class ApolloClientManager {
   }: CreatePickupFrequencyInput) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
-        mutation: createPickupFrequencyMutation,
+        mutation: AuthMutations.createPickupFrequencyMutation,
         variables: {
           frequencyInput: {
             isExpress,
