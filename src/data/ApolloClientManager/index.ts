@@ -1559,9 +1559,9 @@ export class ApolloClientManager {
         },
       });
       console.log("cmsblockquery", data);
-      if (data) {
+      if (data?.cmsBlocks?.edges) {
         return {
-          data,
+          data: data?.cmsBlocks?.edges,
         };
       }
       if (errors) {
