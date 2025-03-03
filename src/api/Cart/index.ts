@@ -560,7 +560,9 @@ export class SaleorCartAPI extends ErrorListener {
   };
 
   getCMSBlocks = async (group?: string) => {
-    const { data, error } = await this.jobsManager.run("cart", "getCMSBlocks");
+    const { data, error } = await this.jobsManager.run("cart", "getCMSBlocks", {
+      group,
+    });
     if (error) {
       return {
         error,

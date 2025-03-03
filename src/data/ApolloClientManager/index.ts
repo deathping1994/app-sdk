@@ -140,7 +140,6 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
-import { cmsBlockQuery } from "src/queries/misc";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1549,7 +1548,7 @@ export class ApolloClientManager {
   getCMSBlocks = async (group?: string) => {
     try {
       const { data, errors } = await this.client.query<any, any>({
-        query: cmsBlockQuery,
+        query: AuthMutations.cmsBlockQuery,
         fetchPolicy: "no-cache",
         variables: {
           filter: group
