@@ -291,4 +291,16 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       }
     }
   };
+
+  getCMSBlocks = async ({ group }: { group?: string }) => {
+    const { data, error } = await this.apolloClientManager.getCMSBlocks(group);
+    if (data) {
+      console.log("getCMSBlocks job in data", data);
+      return { data };
+    }
+    if (error) {
+      console.log("Error in getCMSBlocks", error);
+      return { error };
+    }
+  };
 }
