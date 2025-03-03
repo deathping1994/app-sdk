@@ -189,7 +189,7 @@ export const createPickupFrequencyMutation = gql`
           date
           endTime
           startTime
-          frequencySet {
+          frequencySet(first: 100) {
             edges {
               node {
                 frequencyType

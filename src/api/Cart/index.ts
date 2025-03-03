@@ -116,11 +116,15 @@ export class SaleorCartAPI extends ErrorListener {
   getDiscountedItems = () => {
     const { checkout } = this.saleorState;
     if (checkout?.discountedLines) {
-      return checkout?.discountedLines?.filter(line => line.quantity > 0)?.map(l => ({
-        ...l,
-        variantSku: l?.variant,
-        variant: checkout?.lines?.find(checkoutLine => checkoutLine?.id === l?.id)?.variant,
-      }));
+      return checkout?.discountedLines
+        ?.filter(line => line.quantity > 0)
+        ?.map(l => ({
+          ...l,
+          variantSku: l?.variant,
+          variant: checkout?.lines?.find(
+            checkoutLine => checkoutLine?.id === l?.id
+          )?.variant,
+        }));
     }
     return [];
   };
@@ -553,5 +557,17 @@ export class SaleorCartAPI extends ErrorListener {
     if (this.saleorState.checkout) {
       this.jobsManager.addToQueue("cart", "setCartItem");
     }
+  };
+
+  getCMSBlocks = async (group?: string) => {
+    const { data, error } = await this.jobsManager.run("cart", "getCMSBlocks");
+    if (error) {
+      return {
+        error,
+      };
+    }
+    return {
+      data,
+    };
   };
 }

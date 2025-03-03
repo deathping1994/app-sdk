@@ -140,6 +140,7 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
+import { cmsBlockQuery } from "src/queries/misc";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -1543,6 +1544,31 @@ export class ApolloClientManager {
         error,
       };
     }
+  };
+
+  getCMSBlocks = async (group?: string) => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: cmsBlockQuery,
+        fetchPolicy: "no-cache",
+        variables: {
+          filter: group
+            ? {
+                group,
+              }
+            : {},
+        },
+      });
+      console.log("cmsblockquery", data);
+      if (data) {
+        return {
+          data,
+        };
+      }
+      if (errors) {
+        return { errors };
+      }
+    } catch (error) {}
   };
 
   setBillingAddress = async (
