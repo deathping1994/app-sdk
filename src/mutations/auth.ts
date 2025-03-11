@@ -232,3 +232,44 @@ export const cmsBlockQuery = gql`
     }
   }
 `;
+
+export const runnerPickups = gql`
+  query RunnerPickupsApp($filter: PickupFilterInput, $sortBy: PickupSorter) {
+    pickUps(first: 100, filter: $filter, sortBy: $sortBy) {
+      edges {
+        node {
+          id
+          isExpress
+          slot {
+            date
+            startTime
+            endTime
+          }
+          cancelReason
+          status
+          store {
+            clientCode
+            clientName
+            id
+          }
+          customer {
+            id
+            phone
+            firstName
+            lastName
+            defaultShippingAddress {
+              city
+              cityArea
+              countryArea
+              firstName
+              lastName
+              postalCode
+              streetAddress1
+              streetAddress2
+            }
+          }
+        }
+      }
+    }
+  }
+`;
