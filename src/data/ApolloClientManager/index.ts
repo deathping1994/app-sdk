@@ -2057,6 +2057,45 @@ export class ApolloClientManager {
     }
   };
 
+  getRunnerPickups = async ({
+    filters,
+    sortBy,
+  }: {
+    filters: any;
+    sortBy?: any;
+  }) => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: AuthMutations.runnerPickups,
+        variables: {
+          filter: filters,
+          sortBy: sortBy,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      // if (data?.pickUps?.edges?.length) {
+      //   return {
+      //     error: data?.createFrequencyForPickup?.pickUpErrors,
+      //   };
+      // }
+      if (data?.pickUps?.edges?.length) {
+        return {
+          data: data?.pickUps?.edges?.map(edge => edge?.node),
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   private constructCheckoutModel = (
     checkout: Checkout | AddCheckoutLine_checkoutLinesUpdate_checkout | any
   ): ICheckoutModel => ({

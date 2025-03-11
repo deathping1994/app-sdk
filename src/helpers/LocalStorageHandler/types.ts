@@ -18,6 +18,9 @@ export enum LocalStorageItems {
   CHECKOUT = "data_checkout",
   PAYMENT = "data_payment",
   WISHLIST = "data_wishlist",
+  USER_PICKUPS = "user_pickups",
+  RUNNER_PICKUPS = "runner_pickups",
+  RUNNER_DROPOFFS = "runner_dropoffs",
 }
 export enum LocalStorageEvents {
   CLEAR = "clear",
