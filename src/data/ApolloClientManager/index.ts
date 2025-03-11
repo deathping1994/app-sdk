@@ -2057,13 +2057,7 @@ export class ApolloClientManager {
     }
   };
 
-  getRunnerPickups = async ({
-    filters,
-    sortBy,
-  }: {
-    filters: any;
-    sortBy?: any;
-  }) => {
+  getRunnerPickups = async (filters: any, sortBy: any) => {
     try {
       const { data, errors } = await this.client.query<any, any>({
         query: AuthMutations.runnerPickups,
