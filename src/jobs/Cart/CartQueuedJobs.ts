@@ -317,4 +317,19 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       console.log("Error in getRunnerPickups", error);
     }
   };
+
+  getRunnerDropoffs = async ({ filters, sortBy }) => {
+    const { data, error } = await this.apolloClientManager.getRunnerDropoffs(
+      filters,
+      sortBy
+    );
+    if (data) {
+      // await this.localStorageHandler.setCheckout(data);
+      console.log("getRunnerDropoffs job in data", data);
+      return { data };
+    }
+    if (error) {
+      console.log("Error in getRunnerDropoffs", error);
+    }
+  };
 }

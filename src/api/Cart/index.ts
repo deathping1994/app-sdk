@@ -595,4 +595,27 @@ export class SaleorCartAPI extends ErrorListener {
       data,
     };
   };
+
+  getRunnerDropoffs = async (filters = {}, sortBy?: any) => {
+    const { data, error } = await this.jobsManager.run(
+      "cart",
+      "getRunnerDropoffs",
+      {
+        filters: {
+          runnerId: this.saleorState?.user?.id,
+          ...filters,
+        },
+        sortBy,
+      }
+    );
+
+    if (error) {
+      return {
+        error,
+      };
+    }
+    return {
+      data,
+    };
+  };
 }

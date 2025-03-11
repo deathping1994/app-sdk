@@ -2065,6 +2065,7 @@ export class ApolloClientManager {
           filter: filters,
           sortBy: sortBy,
         },
+        fetchPolicy: "network-only",
       });
 
       if (errors?.length) {
@@ -2081,6 +2082,34 @@ export class ApolloClientManager {
       if (data?.pickUps?.edges?.length) {
         return {
           data: data?.pickUps?.edges?.map(edge => edge?.node),
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  getRunnerDropoffs = async (filters: any, sortBy: any) => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: AuthMutations.runnerDropoffs,
+        variables: {
+          filter: filters,
+          sortBy: sortBy,
+        },
+        fetchPolicy: "network-only",
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      if (data?.dropOffs?.edges?.length) {
+        return {
+          data: data?.dropOffs?.edges?.map(edge => edge?.node),
         };
       }
     } catch (error) {

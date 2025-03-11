@@ -273,3 +273,60 @@ export const runnerPickups = gql`
     }
   }
 `;
+
+export const runnerDropoffs = gql`
+  query RunnerDropoffsApp($filter: DropOffFilterInput, $sortBy: DropoffSorter) {
+    dropOffs(first: 100, filter: $filter, sortBy: $sortBy) {
+      edges {
+        node {
+          id
+          runner {
+            id
+          }
+          status
+          dropOffDate
+          order {
+            total {
+              gross {
+                amount
+              }
+            }
+            paymentStatus
+            isPaid
+            isExpress
+            client {
+              clientCode
+              clientName
+              id
+
+              coordinates {
+                lat
+                lng
+              }
+            }
+            user {
+              id
+              firstName
+              lastName
+              phone
+              defaultShippingAddress {
+                city
+                cityArea
+                countryArea
+                firstName
+                lastName
+                phone
+                postalCode
+                streetAddress1
+                streetAddress2
+              }
+              client {
+                clientCode
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
