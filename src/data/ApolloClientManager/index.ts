@@ -41,6 +41,7 @@ import * as AuthMutations from "../../mutations/auth";
 import * as UserMutations from "../../mutations/user";
 import * as CheckoutMutations from "../../mutations/checkout";
 import * as WishlistMutations from "../../mutations/wishlist";
+import * as LaundreeeMutations from "../../mutations/laundreee";
 import {
   AddCheckoutPromoCode,
   AddCheckoutPromoCodeVariables,
@@ -2110,6 +2111,40 @@ export class ApolloClientManager {
       if (data?.dropOffs?.edges?.length) {
         return {
           data: data?.dropOffs?.edges?.map(edge => edge?.node),
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  // Pick And Drop
+  updatePickup = async ({ id, input }) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: LaundreeeMutations.pickupUpdate,
+        variables: {
+          id,
+          input,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.pickUpUpdate?.pickUpErrors?.length) {
+        return {
+          error: data?.pickUpErrors,
+        };
+      }
+      if (data?.pickUpUpdate) {
+        return {
+          data: data.pickUpUpdate?.pickUp,
         };
       }
     } catch (error) {
