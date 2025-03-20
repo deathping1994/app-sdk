@@ -460,6 +460,31 @@ export class AuthAPI extends ErrorListener {
     }
   };
 
+  updatePickup = async (id, input) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "updatePickup",
+      {
+        id,
+        input,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    if (data) {
+      return {
+        data,
+      };
+    }
+  };
+
   setPickupFrequency = async (
     isExpress = false,
     pickupSlot,

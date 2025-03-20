@@ -367,6 +367,26 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  updatePickup = async ({ id, input }: { id: string; input: any }) => {
+    const { data, error } = await this.apolloClientManager.updatePickup({
+      id,
+      input,
+    });
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorPickUpTypes.PICK_UP,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   setPickupFrequency = async ({
     isExpress,
     pickupSlot,
