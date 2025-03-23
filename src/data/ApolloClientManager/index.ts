@@ -2139,7 +2139,7 @@ export class ApolloClientManager {
 
       if (data?.pickUpUpdate?.pickUpErrors?.length) {
         return {
-          error: data?.pickUpErrors,
+          error: data?.pickUpUpdate?.pickUpErrors,
         };
       }
       if (data?.pickUpUpdate) {
