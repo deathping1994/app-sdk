@@ -49,7 +49,7 @@ export const dropoffUpdate = gql`
       dropOffErrors {
         message
         code
-        error
+        field
       }
     }
   }
