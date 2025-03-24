@@ -2154,6 +2154,39 @@ export class ApolloClientManager {
     }
   };
 
+  updateDropoff = async ({ id, input }) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: LaundreeeMutations.dropoffUpdate,
+        variables: {
+          id,
+          input,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.dropOffUpdate?.dropOffErrors?.length) {
+        return {
+          error: data?.dropOffUpdate?.dropOffErrors,
+        };
+      }
+      if (data?.dropOffUpdate?.dropOff) {
+        return {
+          data: data.dropOffUpdate?.dropOff,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   private constructCheckoutModel = (
     checkout: Checkout | AddCheckoutLine_checkoutLinesUpdate_checkout | any
   ): ICheckoutModel => ({

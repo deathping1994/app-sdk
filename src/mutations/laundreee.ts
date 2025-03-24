@@ -29,3 +29,28 @@ export const pickupUpdate = gql`
     }
   }
 `;
+
+export const dropoffUpdate = gql`
+  mutation DropoffUpdateApp($id: ID!, $input: DropOffCreateInput) {
+    dropOffUpdate(id: $id, input: $input) {
+      dropOff {
+        id
+        dropOffDate
+        status
+        runner {
+          id
+          phone
+          client {
+            clientCode
+            id
+          }
+        }
+      }
+      dropOffErrors {
+        message
+        code
+        error
+      }
+    }
+  }
+`;

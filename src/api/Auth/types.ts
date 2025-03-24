@@ -9,4 +9,5 @@ export enum DataErrorAuthTypes {
 
 export enum DataErrorPickUpTypes {
   "PICK_UP",
+  "DROP_OFF",
 }
