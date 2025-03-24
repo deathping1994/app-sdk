@@ -485,6 +485,31 @@ export class AuthAPI extends ErrorListener {
     }
   };
 
+  updateDropoff = async (id, input) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "updateDropoff",
+      {
+        id,
+        input,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    if (data) {
+      return {
+        data,
+      };
+    }
+  };
+
   setPickupFrequency = async (
     isExpress = false,
     pickupSlot,
