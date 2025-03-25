@@ -1995,7 +1995,7 @@ export class ApolloClientManager {
 
       if (data?.pickUpCreate?.pickUpErrors?.length) {
         return {
-          error: data?.pickUpErrors,
+          error: data?.pickUpCreate?.pickUpErrors,
         };
       }
       if (data?.pickUpCreate) {
