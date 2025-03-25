@@ -123,7 +123,7 @@ export const CONFIRM_ACCOUNT = gql`
 
 export const UPDATE_ACCOUNT = gql`
   ${userFragment}
-  mutation accountUpdate($input: AccountInput!) {
+  mutation accountUpdate($input: CustomerInput!) {
     accountUpdate(input: $input) {
       user {
         ...User
