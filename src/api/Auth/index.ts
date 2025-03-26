@@ -433,6 +433,34 @@ export class AuthAPI extends ErrorListener {
     };
   };
 
+  attachStoreToCustomer = async input => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "attachStoreToCustomer",
+      {
+        input,
+      }
+    );
+
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    if (data) {
+      return {
+        data,
+        userData,
+      };
+    }
+  };
+
   // Pickup Create
   createPickup = async (isExpress = false, pickupSlot) => {
     const { data, dataError } = await this.jobsManager.run(

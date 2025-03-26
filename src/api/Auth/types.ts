@@ -5,6 +5,7 @@ export enum DataErrorAuthTypes {
   "GET_USER",
   "REGISTER_ACCOUNT",
   "RESET_PASSWORD_REQUEST",
+  "ATTACH_STORE",
 }
 
 export enum DataErrorPickUpTypes {
