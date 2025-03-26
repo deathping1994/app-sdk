@@ -618,4 +618,35 @@ export class SaleorCartAPI extends ErrorListener {
       data,
     };
   };
+
+  getGarmentCategories = async () => {
+    const { data, error } = await this.jobsManager.run(
+      "cart",
+      "getGarmentCategories"
+    );
+
+    if (error) {
+      return {
+        error,
+      };
+    }
+    return {
+      data,
+    };
+  };
+
+  getServices = async filter => {
+    const { data, error } = await this.jobsManager.run("cart", "getServices", {
+      filter,
+    });
+
+    if (error) {
+      return {
+        error,
+      };
+    }
+    return {
+      data,
+    };
+  };
 }

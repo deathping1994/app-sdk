@@ -141,6 +141,10 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
+import {
+  garmentCategoriesQuery,
+  servicesQuery,
+} from "src/mutations/launMutations";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -486,6 +490,7 @@ export class ApolloClientManager {
     return {
       data: {
         user: data?.attachStore?.user,
+        message: data?.attachStore?.message,
       },
     };
   };
@@ -2139,6 +2144,53 @@ export class ApolloClientManager {
           data: data?.dropOffs?.edges?.map(edge => edge?.node),
         };
       }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  getGarmentCategories = async () => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: garmentCategoriesQuery,
+        fetchPolicy: "network-only",
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.garmentCategoriesQuery,
+      };
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  getServices = async filter => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: servicesQuery,
+        fetchPolicy: "network-only",
+        variables: {
+          filter,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.serviceUnits,
+      };
     } catch (error) {
       return {
         error,

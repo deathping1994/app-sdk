@@ -332,4 +332,28 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       console.log("Error in getRunnerDropoffs", error);
     }
   };
+
+  getGarmentCategories = async () => {
+    const { data, error } =
+      await this.apolloClientManager.getGarmentCategories();
+    if (data) {
+      // await this.localStorageHandler.setCheckout(data);
+      console.log("getGarmentCategories job in data", data);
+      return { data };
+    }
+    if (error) {
+      console.log("Error in getGarmentCategories", error);
+    }
+  };
+
+  getServices = async ({ filter }) => {
+    const { data, error } = await this.apolloClientManager.getServices(filter);
+    if (data) {
+      console.log("getServices job in data", data);
+      return { data };
+    }
+    if (error) {
+      console.log("Error in getServices", error);
+    }
+  };
 }
