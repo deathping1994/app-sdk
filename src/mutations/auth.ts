@@ -331,3 +331,20 @@ export const runnerDropoffs = gql`
     }
   }
 `;
+
+export const attachStoreToCustomerMutation = gql`
+  ${userFragment}
+  mutation AttachStore($input: AttachStoreInput) {
+    attachStore(input: $input) {
+      message
+      user {
+        ...User
+      }
+      attachStoreError {
+        code
+        field
+        message
+      }
+    }
+  }
+`;

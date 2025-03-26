@@ -464,6 +464,32 @@ export class ApolloClientManager {
     };
   };
 
+  attachStoreToCustomer = async (input: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: AuthMutations.attachStoreToCustomerMutation,
+      variables: {
+        input,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.attachStore?.attachStoreError?.length) {
+      return {
+        error: data.attachStore.attachStoreError,
+      };
+    }
+    return {
+      data: {
+        user: data?.attachStore?.user,
+      },
+    };
+  };
+
   signOut = async () => {
     await this.client.resetStore();
   };

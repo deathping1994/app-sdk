@@ -334,6 +334,24 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  attachStoreToCustomer = async ({ input }) => {
+    const { data, error } =
+      await this.apolloClientManager.attachStoreToCustomer(input);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.ATTACH_STORE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   createPickup = async ({
     isExpress,
     pickupSlot,
