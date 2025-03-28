@@ -120,7 +120,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
-  getCustomerCheckouts = ({ customerId }: { customerId: string }) => {
+  getCustomerCheckouts = async ({ customerId }: { customerId: string }) => {
     const { data, error } = await this.apolloClientManager.getCustomerCheckouts(
       customerId
     );
