@@ -101,6 +101,19 @@ export class LocalStorageHandler extends LocalStorageHandlerProxy {
     }
   }
 
+  async setCustomerCheckouts(
+    checkouts: ICheckoutModel[] | null
+  ): Promise<void> {
+    try {
+      return await this.saveItem(
+        LocalStorageItems.CUSTOMER_CHECKOUTS,
+        checkouts
+      );
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async setPayment(payment: IPaymentModel | null): Promise<void> {
     try {
       return await this.saveItem(LocalStorageItems.PAYMENT, payment);

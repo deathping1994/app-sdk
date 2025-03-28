@@ -3,6 +3,7 @@ import { PaymentGateway } from "../../fragments/gqlTypes/PaymentGateway";
 import { ErrorListener } from "../../helpers";
 import {
   ICheckoutModel,
+  ICustomerCheckouts,
   IPaymentModel,
 } from "../../helpers/LocalStorageHandler";
 import { JobsManager } from "../../jobs";
@@ -31,6 +32,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
   loaded: boolean;
 
   checkout?: ICheckout;
+
+  customerCheckouts?: ICustomerCheckouts[];
 
   promoCodeDiscount?: IPromoCodeDiscount;
 
@@ -103,6 +106,14 @@ export class SaleorCheckoutAPI extends ErrorListener {
         };
       }
     );
+
+    this.saleorState.subscribeToChange(
+      StateItems.CUSTOMER_CHECKOUTS,
+      customerCheckouts => {
+        this.customerCheckouts = this.saleorState.customerCheckouts;
+      }
+    );
+
     this.saleorState.subscribeToChange(
       StateItems.PAYMENT,
       (payment: IPaymentModel) => {
@@ -129,6 +140,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
     return checkout;
   };
 
+  getCustomerCheckouts = () => {
+    const { customerCheckouts } = this.saleorState;
+    return customerCheckouts;
+  };
+
   updateCheckoutMeta = async (metaInput: any) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
@@ -145,58 +161,24 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  createCheckoutNew = async (
-    shippingAddress: IAddress,
-    email: string,
-    variantId: string,
-    quantity: number
-  ): CheckoutResponse => {
-    const alteredLines = [
-      {
-        quantity: quantity,
-        variantId: variantId,
-      },
-    ];
-
-    console.log("sdfkjndsf", alteredLines);
-
+  createCheckoutNew = async (input): CheckoutResponse => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "createCheckout",
       {
-        email,
-        lines: alteredLines ?? [],
-        selectedShippingAddressId: shippingAddress.id,
-        shippingAddress,
+        input,
       }
     );
 
-    return {
-      data,
-      dataError,
-      pending: false,
-    };
-  };
-
-  createCheckoutRest = async (
-    lines,
-    isRecalculate = false,
-    tags?: string[],
-    checkoutMetadataInput?: any
-  ): CheckoutResponse => {
-    const { data, dataError } = await this.jobsManager.run(
-      "checkout",
-      "createCheckoutRest",
-      {
-        lines,
-        isRecalculate,
-        tags,
-        checkoutMetadataInput,
-      }
-    );
-    this.jobsManager.run("cart", "checkoutPaymentsInfo", {
-      checkout: data,
-    });
+    if (input?.customerId) {
+      const {
+        data: customerCheckouts,
+        loading,
+        error,
+      } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
+        customerId: input?.customerId,
+      });
+    }
 
     return {
       data,
@@ -269,9 +251,13 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   fetchLatestCheckout = async (isUserSignedIn = false) => {
-    const { data, dataError } = await this.jobsManager.run("checkout", "provideCheckout", {
-      isUserSignedIn,
-    });
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "provideCheckout",
+      {
+        isUserSignedIn,
+      }
+    );
 
     if (dataError) {
       return {

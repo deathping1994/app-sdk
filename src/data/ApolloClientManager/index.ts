@@ -143,6 +143,7 @@ import {
 } from "../../consts";
 import {
   garmentCategoriesQuery,
+  garmentsQuery,
   servicesQuery,
 } from "src/mutations/launMutations";
 
@@ -777,48 +778,10 @@ export class ApolloClientManager {
     };
   };
 
-  createCheckout = async (
-    email: string,
-    lines: Array<{ variantId: string; quantity: number }>,
-    shippingAddress?: ICheckoutAddress,
-    billingAddress?: ICheckoutAddress
-  ) => {
+  createCheckout = async (input: any) => {
     try {
       const variables = {
-        checkoutInput: {
-          billingAddress: billingAddress && {
-            city: billingAddress.city,
-            companyName: billingAddress.companyName,
-            country:
-              CountryCode[
-                billingAddress?.country?.code as keyof typeof CountryCode
-              ],
-            countryArea: billingAddress.countryArea,
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
-            phone: billingAddress.phone,
-            postalCode: billingAddress.postalCode,
-            streetAddress1: billingAddress.streetAddress1,
-            streetAddress2: billingAddress.streetAddress2,
-          },
-          email,
-          lines,
-          shippingAddress: shippingAddress && {
-            city: shippingAddress.city,
-            companyName: shippingAddress.companyName,
-            country:
-              CountryCode[
-                shippingAddress?.country?.code as keyof typeof CountryCode
-              ],
-            countryArea: shippingAddress.countryArea,
-            firstName: shippingAddress.firstName,
-            lastName: shippingAddress.lastName,
-            phone: shippingAddress.phone,
-            postalCode: shippingAddress.postalCode,
-            streetAddress1: shippingAddress.streetAddress1,
-            streetAddress2: shippingAddress.streetAddress2,
-          },
-        },
+        checkoutInput: input,
       };
       const { data, errors } = await this.client.mutate<
         CreateCheckout,
@@ -840,7 +803,7 @@ export class ApolloClientManager {
       }
       if (data?.checkoutCreate?.checkout) {
         return {
-          data: this.constructCheckoutModel(data.checkoutCreate.checkout),
+          data: data?.checkoutCreate?.checkout,
         };
       }
     } catch (error) {
@@ -849,6 +812,31 @@ export class ApolloClientManager {
       };
     }
     return {};
+  };
+
+  getCustomerCheckouts = async (customerId: string) => {
+    console.log("customerId-getCustomerCheckouts", customerId);
+    if (customerId) {
+      const { data, errors } = await this.client.query<any, any>({
+        fetchPolicy: "network-only",
+        query: CheckoutQueries.customerCheckouts,
+        variables: {
+          first: 1,
+          filter: {
+            customerId: [customerId],
+          },
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.customers?.edges?.[0]?.node?.checkout,
+      };
+    }
   };
 
   createCheckoutRest = async (
@@ -2171,6 +2159,18 @@ export class ApolloClientManager {
         error,
       };
     }
+  };
+
+  getGarments = async filter => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: garmentsQuery,
+        fetchPolicy: "network-only",
+        variables: {
+          filter,
+        },
+      });
+    } catch (err) {}
   };
 
   getServices = async filter => {

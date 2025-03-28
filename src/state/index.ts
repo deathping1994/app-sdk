@@ -7,6 +7,7 @@ import { User } from "../fragments/gqlTypes/User";
 import { NamedObservable } from "../helpers";
 import {
   ICheckoutModel,
+  ICustomerCheckouts,
   IPaymentModel,
   IWishlistModel,
   LocalStorageEvents,
@@ -46,6 +47,8 @@ export class SaleorState extends NamedObservable<StateItems> {
   signInTokenVerifying?: boolean;
 
   checkout?: ICheckoutModel;
+
+  customerCheckouts?: ICustomerCheckouts[];
 
   promoCode?: string;
 
@@ -108,6 +111,10 @@ export class SaleorState extends NamedObservable<StateItems> {
     this.localStorageHandler.subscribeToChange(
       LocalStorageItems.CHECKOUT,
       this.onCheckoutUpdate
+    );
+    this.localStorageHandler.subscribeToChange(
+      LocalStorageItems.CUSTOMER_CHECKOUTS,
+      this.onCustomerCheckoutsUpdate
     );
     this.localStorageHandler.subscribeToChange(
       LocalStorageItems.PAYMENT,
@@ -268,6 +275,14 @@ export class SaleorState extends NamedObservable<StateItems> {
       checkout: true,
       summaryPrices: true,
     });
+  };
+
+  private onCustomerCheckoutsUpdate = (
+    customerCheckouts?: ICustomerCheckouts[]
+  ) => {
+    console.log("onCustomerCheckoutsUpdate", customerCheckouts);
+    this.customerCheckouts = customerCheckouts;
+    this.notifyChange(StateItems.CUSTOMER_CHECKOUTS, this.customerCheckouts);
   };
 
   private onWishlistUpdate = (wishlist?: IWishlistModel) => {

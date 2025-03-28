@@ -21,6 +21,7 @@ export enum LocalStorageItems {
   USER_PICKUPS = "user_pickups",
   RUNNER_PICKUPS = "runner_pickups",
   RUNNER_DROPOFFS = "runner_dropoffs",
+  CUSTOMER_CHECKOUTS = "customer_checkouts",
 }
 export enum LocalStorageEvents {
   CLEAR = "clear",
@@ -134,6 +135,11 @@ export interface ICheckoutModel {
   _W?: any;
   timestamp?: any;
   item?: any;
+}
+
+export interface ICustomerCheckouts {
+  token: string;
+  service: any;
 }
 
 export interface IPaymentModel {

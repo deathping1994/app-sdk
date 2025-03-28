@@ -93,18 +93,10 @@ class CheckoutJobs extends JobsHandler<{}> {
   };
 
   createCheckout = async ({
-    email,
-    lines,
-    shippingAddress,
-    selectedShippingAddressId,
-    billingAddress,
-    selectedBillingAddressId,
+    input,
   }: CreateCheckoutJobInput): PromiseCheckoutJobRunResponse => {
     const { data, error } = await this.apolloClientManager.createCheckout(
-      email,
-      lines,
-      shippingAddress,
-      billingAddress
+      input
     );
 
     if (error) {
@@ -115,16 +107,35 @@ class CheckoutJobs extends JobsHandler<{}> {
       return {
         dataError: {
           error,
-          type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS,
+          type: DataErrorCheckoutTypes.CREATE_CHECKOUT,
         },
       };
     }
 
-    await this.localStorageHandler.setCheckout({
-      ...data,
-      selectedBillingAddressId,
-      selectedShippingAddressId,
-    });
+    // await this.localStorageHandler.setCheckout({
+    //   ...data,
+    // });
+    return {
+      data,
+    };
+  };
+
+  getCustomerCheckouts = ({ customerId }: { customerId: string }) => {
+    const { data, error } = await this.apolloClientManager.getCustomerCheckouts(
+      customerId
+    );
+    console.log("getCustomerCheckouts", data);
+    if (data) {
+      await this.localStorageHandler.setCustomerCheckouts(data);
+    }
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+        },
+      };
+    }
     return {
       data,
     };

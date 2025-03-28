@@ -38,3 +38,35 @@ export const checkoutProductVariants = gql`
     }
   }
 `;
+
+export const customerCheckouts = gql`
+  query Customers($first: Int, $filter: CustomerFilterInput) {
+    customers(filter: $filter, first: $first) {
+      edges {
+        node {
+          id
+          defaultShippingAddress {
+            id
+          }
+          defaultBillingAddress {
+            id
+          }
+          checkout {
+            token
+            service {
+              id
+              serviceCode
+              name
+              parentService {
+                serviceCode
+                id
+                name
+              }
+            }
+          }
+        }
+        cursor
+      }
+    }
+  }
+`;
