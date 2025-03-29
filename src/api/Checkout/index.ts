@@ -145,8 +145,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
     return customerCheckouts;
   };
 
-  getCustomerCheckoutByToken = (token: string) => {
-    const { data, dataError } = this.jobsManager.run(
+  getCustomerCheckoutByToken = async (token: string) => {
+    const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "getCustomerCheckoutByToken",
       {
