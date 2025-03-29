@@ -145,6 +145,21 @@ export class SaleorCheckoutAPI extends ErrorListener {
     return customerCheckouts;
   };
 
+  getCustomerCheckoutByToken = (token: string) => {
+    const { data, dataError } = this.jobsManager.run(
+      "checkout",
+      "getCustomerCheckoutByToken",
+      {
+        token,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
   updateCheckoutMeta = async (metaInput: any) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
@@ -184,6 +199,38 @@ export class SaleorCheckoutAPI extends ErrorListener {
       data,
       dataError,
       pending: false,
+    };
+  };
+
+  checkoutLineUpdate = async (checkoutId, lines) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineUpdate",
+      {
+        checkoutId,
+        lines,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
+  checkoutLineAdd = async (checkoutId, lines) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineAdd",
+      {
+        checkoutId,
+        lines,
+      }
+    );
+
+    return {
+      data,
+      dataError,
     };
   };
 
@@ -412,11 +459,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   updateCheckoutPayment = async (
+    checkoutId: string,
     gatewayId: string,
     useCashback: boolean,
     isRecalculate = true
   ): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
@@ -541,25 +588,17 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  createPayment = async (input: CreatePaymentInput): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
-    const billingAddress = this.saleorState.checkout?.billingAddress;
-    const amount = this.saleorState.summaryPrices?.totalPrice?.gross.amount;
-
-    if (
-      checkoutId &&
-      billingAddress &&
-      amount !== null &&
-      amount !== undefined
-    ) {
+  createPayment = async (
+    checkoutId,
+    input: CreatePaymentInput
+  ): CheckoutResponse => {
+    if (checkoutId && input) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "createPayment",
         {
-          ...input,
-          amount,
-          billingAddress,
           checkoutId,
+          paymentInput: input,
         }
       );
       return {
@@ -568,45 +607,32 @@ export class SaleorCheckoutAPI extends ErrorListener {
         pending: false,
       };
     }
-    return {
-      functionError: {
-        error: new Error(
-          "You need to set billing address before creating payment."
-        ),
-        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
-      },
-      pending: false,
-    };
   };
 
   completeCheckout = async (
     input?: CompleteCheckoutInput
   ): CheckoutResponse => {
-    const co = this.saleorState.checkout?._W
-      ? this.saleorState.checkout?._W
-      : this.saleorState.checkout;
-    const checkoutId = co?.id;
-    if (checkoutId) {
+    if (input?.checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "completeCheckout",
-        { ...input, checkoutId }
+        { ...input }
       );
       console.log("xxxxxxxcheckoutcomplete-apicheckout", data);
+      if (input?.customerId) {
+        const {
+          data: customerCheckouts,
+          loading,
+          error,
+        } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
+          customerId: input?.customerId,
+        });
+      }
       return {
         data,
         dataError,
         pending: false,
       };
     }
-    return {
-      functionError: {
-        error: new Error(
-          "You need to set shipping address before creating payment."
-        ),
-        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
-      },
-      pending: false,
-    };
   };
 }

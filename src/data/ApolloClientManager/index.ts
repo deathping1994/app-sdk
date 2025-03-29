@@ -839,6 +839,77 @@ export class ApolloClientManager {
     }
   };
 
+  getCustomerCheckoutByToken = async (token: string) => {
+    console.log("checkoutId-getCustomerCheckoutByToken", token);
+    if (token) {
+      const { data, errors } = await this.client.query<any, any>({
+        fetchPolicy: "network-only",
+        query: CheckoutQueries.customerCheckoutByToken,
+        variables: {
+          token,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.checkout,
+      };
+    }
+  };
+
+  checkoutLineUpdate = async (checkoutId: string, lines: any[]) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.updateCheckoutLineMutation,
+      variables: {
+        checkoutId,
+        lines,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.checkoutLineUpdate?.checkoutErrors?.length) {
+      return {
+        error: data?.checkoutLineUpdate?.checkoutErrors,
+      };
+    }
+    return {
+      data: data?.checkoutLineUpdate?.checkout,
+    };
+  };
+
+  checkoutLineAdd = async (checkoutId: string, lines: any[]) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.addCheckoutLineMutation,
+      variables: {
+        checkoutId,
+        lines,
+      },
+    });
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.checkoutLinesAdd?.checkoutErrors?.length) {
+      return {
+        error: data?.checkoutLinesAdd?.checkoutErrors,
+      };
+    }
+    return {
+      data: data?.checkoutLinesAdd?.checkout,
+    };
+  };
+
   createCheckoutRest = async (
     lines?: any,
     isRecalculate: boolean,
@@ -1744,9 +1815,7 @@ export class ApolloClientManager {
       }
       if (data?.checkoutPaymentMethodUpdate?.checkout) {
         return {
-          data: this.constructCheckoutModel(
-            data.checkoutPaymentMethodUpdate.checkout
-          ),
+          data: data.checkoutPaymentMethodUpdate.checkout,
         };
       }
       return {};
@@ -1780,16 +1849,14 @@ export class ApolloClientManager {
           error: errors,
         };
       }
-      if (data?.checkoutShippingMethodUpdate?.errors.length) {
+      if (data?.checkoutShippingMethodUpdate?.errors?.length) {
         return {
           error: data?.checkoutShippingMethodUpdate?.errors,
         };
       }
       if (data?.checkoutShippingMethodUpdate?.checkout) {
         return {
-          data: this.constructCheckoutModel(
-            data.checkoutShippingMethodUpdate.checkout
-          ),
+          data: data.checkoutShippingMethodUpdate.checkout,
         };
       }
       return {};
@@ -1877,37 +1944,16 @@ export class ApolloClientManager {
   };
 
   createPayment = async ({
-    amount,
     checkoutId,
-    gateway,
-    billingAddress,
-    token,
-    returnUrl,
-  }: CreatePaymentInput) => {
+    paymentInput,
+  }: {
+    checkoutId: string;
+    paymentInput: any;
+  }) => {
     try {
       const variables = {
         checkoutId,
-        paymentInput: {
-          amount,
-          billingAddress: {
-            city: billingAddress.city,
-            companyName: billingAddress.companyName,
-            country:
-              CountryCode[
-                billingAddress?.country?.code as keyof typeof CountryCode
-              ],
-            countryArea: billingAddress.countryArea,
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
-            phone: billingAddress.phone,
-            postalCode: billingAddress.postalCode,
-            streetAddress1: billingAddress.streetAddress1,
-            streetAddress2: billingAddress.streetAddress2,
-          },
-          gateway,
-          returnUrl,
-          token,
-        },
+        paymentInput,
       };
       const { data, errors } = await this.client.mutate<
         CreateCheckoutPayment,

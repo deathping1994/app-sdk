@@ -15,13 +15,22 @@ import {
 export const updateCheckoutLineMutation = gql`
   ${checkoutFragment}
   ${checkoutErrorFragment}
-  mutation UpdateCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
-    checkoutLinesUpdate(checkoutId: $checkoutId, lines: $lines) {
+  mutation UpdateCheckoutLineApp(
+    $checkoutId: ID!
+    $lines: [CheckoutLineInput]!
+  ) {
+    checkoutLinesUpdate(
+      checkoutId: $checkoutId
+      lines: $lines
+      isRecalculate: true
+    ) {
       checkout {
         ...Checkout
       }
-      errors: checkoutErrors {
-        ...CheckoutError
+      checkoutErrors {
+        field
+        code
+        message
       }
     }
   }
@@ -285,16 +294,21 @@ export const completeCheckoutMutation = gql`
   }
 `;
 
-export const ADD_CHECKOUT_LINE_MUTATION = gql`
-  ${atcChecckoutFragment}
-  ${checkoutErrorFragment}
+export const addCheckoutLineMutation = gql`
+  ${checkoutFragment}
   mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {
-    checkoutLinesAdd(checkoutId: $checkoutId, lines: $lines) {
+    checkoutLinesAdd(
+      checkoutId: $checkoutId
+      lines: $lines
+      isRecalculate: true
+    ) {
       checkout {
         ...Checkout
       }
-      errors: checkoutErrors {
-        ...CheckoutError
+      checkoutErrors {
+        field
+        code
+        message
       }
     }
   }

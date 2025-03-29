@@ -70,3 +70,12 @@ export const customerCheckouts = gql`
     }
   }
 `;
+
+export const customerCheckoutByToken = gql`
+  ${checkoutFragment}
+  query CustomerCheckoutByTokenApp($token: UUID) {
+    checkout(token: $token) {
+      ...Checkout
+    }
+  }
+`;

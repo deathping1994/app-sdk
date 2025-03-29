@@ -135,9 +135,9 @@ export const checkoutLineFragment = gql`
 export const discountLineFragment = gql`
   fragment DiscountedCheckoutLine on DiscountedCheckoutLine {
     id
-    totalPrice{
+    totalPrice {
       currency
-      gross{
+      gross {
         currency
         amount
       }
@@ -145,7 +145,6 @@ export const discountLineFragment = gql`
     quantity
     variant
   }
-
 `;
 
 export const atcChecckoutFragment = gql`
@@ -174,63 +173,110 @@ export const atcChecckoutFragment = gql`
 `;
 
 export const checkoutFragment = gql`
-  ${checkoutLineFragment}
-  ${checkoutAddressFragment}
-  ${checkoutPriceFragment}
-  ${checkoutShippingMethodFragment}
-  ${paymentGatewayFragment}
   fragment Checkout on Checkout {
-    token
     id
-    totalPrice {
-      ...Price
-    }
-    subtotalPrice {
-      ...Price
-    }
-    billingAddress {
-      ...Address
+    shippingMethod {
+      id
     }
     shippingAddress {
-      ...Address
+      id
     }
-    email
-    note
-    metadata {
-      key
-      value
-    }
-    cashback {
-      amount
-      willAddOn
-    }
-    paymentMethod {
-      cashbackDiscountAmount
-      couponDiscount
-      prepaidDiscountAmount
+    billingAddress {
+      id
     }
     availableShippingMethods {
-      ...ShippingMethod
+      id
+      name
     }
-    shippingMethod {
-      ...ShippingMethod
+    email
+    shippingAddress {
+      cityArea
+      phone
+      country {
+        code
+        country
+      }
     }
-    shippingPrice {
-      ...Price
-    }
+    token
     lines {
-      ...CheckoutLine
+      id
+      quantity
+      totalPrice {
+        gross {
+          currency
+          amount
+        }
+      }
+      variant {
+        id
+        sku
+        name
+        price {
+          currency
+          amount
+        }
+        images {
+          id
+          alt
+          url
+        }
+        product {
+          id
+          name
+          category {
+            id
+          }
+        }
+      }
+      length {
+        unit
+        value
+      }
+      breadth {
+        unit
+        value
+      }
+      numberOfPanels
+      pricePerPanel {
+        currency
+        amount
+      }
+      areaSquare
+      pricePerArea {
+        currency
+        amount
+      }
+      subQuantity
+      weight {
+        unit
+        value
+      }
+      pricePerWeight {
+        currency
+        amount
+      }
+    }
+    totalPrice {
+      gross {
+        amount
+        currency
+      }
+      net {
+        amount
+      }
+    }
+    subtotalPrice {
+      gross {
+        amount
+      }
+      net {
+        amount
+      }
     }
     isShippingRequired
-    discount {
-      currency
-      amount
-    }
-    discountName
-    translatedDiscountName
-    voucherCode
-    availablePaymentGateways {
-      ...PaymentGateway
+    availableShippingMethods {
+      id
+      name
     }
   }
 `;
