@@ -493,10 +493,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   setShippingMethod = async (
     shippingMethodId: string,
+    checkoutId: string,
     isRecalculate = true
   ): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
-
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",

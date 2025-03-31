@@ -418,8 +418,6 @@ class CheckoutJobs extends JobsHandler<{}> {
     shippingMethodId,
     isRecalculate = true,
   }: SetShippingMethodJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = await LocalStorageHandler.getCheckout();
-
     const { data, error } = await this.apolloClientManager.setShippingMethod(
       shippingMethodId,
       checkoutId,
