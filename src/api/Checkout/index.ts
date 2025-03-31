@@ -3,6 +3,7 @@ import { PaymentGateway } from "../../fragments/gqlTypes/PaymentGateway";
 import { ErrorListener } from "../../helpers";
 import {
   ICheckoutModel,
+  ICustomerCheckouts,
   IPaymentModel,
 } from "../../helpers/LocalStorageHandler";
 import { JobsManager } from "../../jobs";
@@ -31,6 +32,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
   loaded: boolean;
 
   checkout?: ICheckout;
+
+  customerCheckouts?: ICustomerCheckouts[];
 
   promoCodeDiscount?: IPromoCodeDiscount;
 
@@ -103,6 +106,14 @@ export class SaleorCheckoutAPI extends ErrorListener {
         };
       }
     );
+
+    this.saleorState.subscribeToChange(
+      StateItems.CUSTOMER_CHECKOUTS,
+      customerCheckouts => {
+        this.customerCheckouts = this.saleorState.customerCheckouts;
+      }
+    );
+
     this.saleorState.subscribeToChange(
       StateItems.PAYMENT,
       (payment: IPaymentModel) => {
@@ -129,6 +140,26 @@ export class SaleorCheckoutAPI extends ErrorListener {
     return checkout;
   };
 
+  getCustomerCheckouts = () => {
+    const { customerCheckouts } = this.saleorState;
+    return customerCheckouts;
+  };
+
+  getCustomerCheckoutByToken = async (token: string) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "getCustomerCheckoutByToken",
+      {
+        token,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
   updateCheckoutMeta = async (metaInput: any) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
@@ -145,31 +176,24 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  createCheckoutNew = async (
-    shippingAddress: IAddress,
-    email: string,
-    variantId: string,
-    quantity: number
-  ): CheckoutResponse => {
-    const alteredLines = [
-      {
-        quantity: quantity,
-        variantId: variantId,
-      },
-    ];
-
-    console.log("sdfkjndsf", alteredLines);
-
+  createCheckoutNew = async (input): CheckoutResponse => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "createCheckout",
       {
-        email,
-        lines: alteredLines ?? [],
-        selectedShippingAddressId: shippingAddress.id,
-        shippingAddress,
+        input,
       }
     );
+
+    if (input?.customerId) {
+      const {
+        data: customerCheckouts,
+        loading,
+        error,
+      } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
+        customerId: input?.customerId,
+      });
+    }
 
     return {
       data,
@@ -178,30 +202,35 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  createCheckoutRest = async (
-    lines,
-    isRecalculate = false,
-    tags?: string[],
-    checkoutMetadataInput?: any
-  ): CheckoutResponse => {
+  checkoutLineUpdate = async (checkoutId, lines) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
-      "createCheckoutRest",
+      "checkoutLineUpdate",
       {
+        checkoutId,
         lines,
-        isRecalculate,
-        tags,
-        checkoutMetadataInput,
       }
     );
-    this.jobsManager.run("cart", "checkoutPaymentsInfo", {
-      checkout: data,
-    });
 
     return {
       data,
       dataError,
-      pending: false,
+    };
+  };
+
+  checkoutLineAdd = async (checkoutId, lines) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineAdd",
+      {
+        checkoutId,
+        lines,
+      }
+    );
+
+    return {
+      data,
+      dataError,
     };
   };
 
@@ -269,9 +298,13 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   fetchLatestCheckout = async (isUserSignedIn = false) => {
-    const { data, dataError } = await this.jobsManager.run("checkout", "provideCheckout", {
-      isUserSignedIn,
-    });
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "provideCheckout",
+      {
+        isUserSignedIn,
+      }
+    );
 
     if (dataError) {
       return {
@@ -426,11 +459,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   updateCheckoutPayment = async (
+    checkoutId: string,
     gatewayId: string,
     useCashback: boolean,
     isRecalculate = true
   ): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
@@ -460,10 +493,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   setShippingMethod = async (
     shippingMethodId: string,
+    checkoutId: string,
     isRecalculate = true
   ): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
-
     if (checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
@@ -555,25 +587,17 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  createPayment = async (input: CreatePaymentInput): CheckoutResponse => {
-    const checkoutId = this.saleorState.checkout?.id;
-    const billingAddress = this.saleorState.checkout?.billingAddress;
-    const amount = this.saleorState.summaryPrices?.totalPrice?.gross.amount;
-
-    if (
-      checkoutId &&
-      billingAddress &&
-      amount !== null &&
-      amount !== undefined
-    ) {
+  createPayment = async (
+    checkoutId,
+    input: CreatePaymentInput
+  ): CheckoutResponse => {
+    if (checkoutId && input) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "createPayment",
         {
-          ...input,
-          amount,
-          billingAddress,
           checkoutId,
+          paymentInput: input,
         }
       );
       return {
@@ -582,45 +606,32 @@ export class SaleorCheckoutAPI extends ErrorListener {
         pending: false,
       };
     }
-    return {
-      functionError: {
-        error: new Error(
-          "You need to set billing address before creating payment."
-        ),
-        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
-      },
-      pending: false,
-    };
   };
 
   completeCheckout = async (
     input?: CompleteCheckoutInput
   ): CheckoutResponse => {
-    const co = this.saleorState.checkout?._W
-      ? this.saleorState.checkout?._W
-      : this.saleorState.checkout;
-    const checkoutId = co?.id;
-    if (checkoutId) {
+    if (input?.checkoutId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "completeCheckout",
-        { ...input, checkoutId }
+        { ...input }
       );
       console.log("xxxxxxxcheckoutcomplete-apicheckout", data);
+      if (input?.customerId) {
+        const {
+          data: customerCheckouts,
+          loading,
+          error,
+        } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
+          customerId: input?.customerId,
+        });
+      }
       return {
         data,
         dataError,
         pending: false,
       };
     }
-    return {
-      functionError: {
-        error: new Error(
-          "You need to set shipping address before creating payment."
-        ),
-        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
-      },
-      pending: false,
-    };
   };
 }

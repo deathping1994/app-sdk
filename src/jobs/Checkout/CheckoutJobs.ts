@@ -93,18 +93,10 @@ class CheckoutJobs extends JobsHandler<{}> {
   };
 
   createCheckout = async ({
-    email,
-    lines,
-    shippingAddress,
-    selectedShippingAddressId,
-    billingAddress,
-    selectedBillingAddressId,
+    input,
   }: CreateCheckoutJobInput): PromiseCheckoutJobRunResponse => {
     const { data, error } = await this.apolloClientManager.createCheckout(
-      email,
-      lines,
-      shippingAddress,
-      billingAddress
+      input
     );
 
     if (error) {
@@ -115,16 +107,104 @@ class CheckoutJobs extends JobsHandler<{}> {
       return {
         dataError: {
           error,
-          type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS,
+          type: DataErrorCheckoutTypes.CREATE_CHECKOUT,
         },
       };
     }
 
-    await this.localStorageHandler.setCheckout({
-      ...data,
-      selectedBillingAddressId,
-      selectedShippingAddressId,
-    });
+    // await this.localStorageHandler.setCheckout({
+    //   ...data,
+    // });
+    return {
+      data,
+    };
+  };
+
+  getCustomerCheckouts = async ({ customerId }: { customerId: string }) => {
+    const { data, error } = await this.apolloClientManager.getCustomerCheckouts(
+      customerId
+    );
+    console.log("getCustomerCheckouts", data);
+    if (data) {
+      await this.localStorageHandler.setCustomerCheckouts(data);
+    }
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+        },
+      };
+    }
+    return {
+      data,
+    };
+  };
+
+  getCustomerCheckoutByToken = async ({ token }: { token: string }) => {
+    const { data, error } =
+      await this.apolloClientManager.getCustomerCheckoutByToken(token);
+    console.log("getCustomerCheckoutByToken", data);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+        },
+      };
+    }
+    return {
+      data,
+    };
+  };
+
+  checkoutLineUpdate = async ({
+    checkoutId,
+    lines,
+  }: {
+    checkoutId: string;
+    lines: any[];
+  }) => {
+    const { data, error } = await this.apolloClientManager.checkoutLineUpdate(
+      checkoutId,
+      lines
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_UPDATE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  checkoutLineAdd = async ({
+    checkoutId,
+    lines,
+  }: {
+    checkoutId: string;
+    lines: any[];
+  }) => {
+    const { data, error } = await this.apolloClientManager.checkoutLineAdd(
+      checkoutId,
+      lines
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_ADD,
+        },
+      };
+    }
+
     return {
       data,
     };
@@ -304,7 +384,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     useCashback,
     isRecalculate,
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = await LocalStorageHandler.getCheckout();
+    // const checkout = await LocalStorageHandler.getCheckout();
 
     const { data, error } =
       await this.apolloClientManager.updateCheckoutPayment(
@@ -323,13 +403,13 @@ class CheckoutJobs extends JobsHandler<{}> {
       };
     }
 
-    await this.localStorageHandler.setCheckout({
-      ...data,
-      promoCodeDiscount: data?.promoCodeDiscount,
-      shippingMethod: data?.shippingMethod,
-      availableShippingMethods: data?.availableShippingMethods,
-      shippingAddress: data?.shippingAddress,
-    });
+    // await this.localStorageHandler.setCheckout({
+    //   ...data,
+    //   promoCodeDiscount: data?.promoCodeDiscount,
+    //   shippingMethod: data?.shippingMethod,
+    //   availableShippingMethods: data?.availableShippingMethods,
+    //   shippingAddress: data?.shippingAddress,
+    // });
     return { data };
   };
 
@@ -338,8 +418,6 @@ class CheckoutJobs extends JobsHandler<{}> {
     shippingMethodId,
     isRecalculate = true,
   }: SetShippingMethodJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = await LocalStorageHandler.getCheckout();
-
     const { data, error } = await this.apolloClientManager.setShippingMethod(
       shippingMethodId,
       checkoutId,
@@ -355,11 +433,11 @@ class CheckoutJobs extends JobsHandler<{}> {
       };
     }
 
-    await this.localStorageHandler.setCheckout({
-      ...data,
-      promoCodeDiscount: data?.promoCodeDiscount,
-      shippingMethod: data?.shippingMethod,
-    });
+    // await this.localStorageHandler.setCheckout({
+    //   ...data,
+    //   promoCodeDiscount: data?.promoCodeDiscount,
+    //   shippingMethod: data?.shippingMethod,
+    // });
     return { data };
   };
 
@@ -425,22 +503,14 @@ class CheckoutJobs extends JobsHandler<{}> {
 
   createPayment = async ({
     checkoutId,
-    amount,
-    gateway,
-    token,
-    billingAddress,
-    creditCard,
-    returnUrl,
-  }: CreatePaymentJobInput): PromiseCheckoutJobRunResponse => {
-    const payment = await LocalStorageHandler.getPayment();
-
+    paymentInput,
+  }: {
+    checkoutId: string;
+    paymentInput: any;
+  }): PromiseCheckoutJobRunResponse => {
     const { data, error } = await this.apolloClientManager.createPayment({
-      amount,
-      billingAddress,
       checkoutId,
-      gateway,
-      returnUrl,
-      token,
+      paymentInput,
     });
 
     if (error) {
@@ -451,15 +521,6 @@ class CheckoutJobs extends JobsHandler<{}> {
         },
       };
     }
-
-    await this.localStorageHandler.setPayment({
-      ...payment,
-      creditCard,
-      gateway: data?.gateway,
-      id: data?.id,
-      token: data?.token,
-      total: data?.total,
-    });
     return { data };
   };
 
@@ -485,10 +546,10 @@ class CheckoutJobs extends JobsHandler<{}> {
       };
     }
 
-    if (!data?.confirmationNeeded) {
-      await this.localStorageHandler.setCheckout({});
-      await this.localStorageHandler.setPayment({});
-    }
+    // if (!data?.confirmationNeeded) {
+    //   await this.localStorageHandler.setCheckout({});
+    //   await this.localStorageHandler.setPayment({});
+    // }
 
     return { data };
   };

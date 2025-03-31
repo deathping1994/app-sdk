@@ -86,6 +86,9 @@ export enum DataErrorCheckoutTypes {
   "COMPLETE_CHECKOUT",
   "GET_CHECKOUT",
   "GET_PAYMENT_GATEWAYS",
+  "CREATE_CHECKOUT",
+  "CHECKOUT_LINE_UPDATE",
+  "CHECKOUT_LINE_ADD",
 }
 
 export interface CreatePaymentInput {
@@ -93,10 +96,13 @@ export interface CreatePaymentInput {
   token?: string;
   creditCard?: ICreditCard;
   returnUrl?: string;
+  amount?: number;
 }
 
 export interface CompleteCheckoutInput {
   paymentData?: object;
   redirectUrl?: string;
   storeSource?: boolean;
+  checkoutId: string;
+  customerId?: string;
 }

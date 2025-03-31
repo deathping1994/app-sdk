@@ -685,4 +685,5 @@ export interface UpdateCheckoutShippingMethod {
 export interface UpdateCheckoutShippingMethodVariables {
   checkoutId: string;
   shippingMethodId: string;
+  isRecalculate?:boolean;
 }

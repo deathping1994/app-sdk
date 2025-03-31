@@ -143,6 +143,7 @@ import {
 } from "../../consts";
 import {
   garmentCategoriesQuery,
+  garmentsQuery,
   servicesQuery,
 } from "src/mutations/launMutations";
 
@@ -777,48 +778,10 @@ export class ApolloClientManager {
     };
   };
 
-  createCheckout = async (
-    email: string,
-    lines: Array<{ variantId: string; quantity: number }>,
-    shippingAddress?: ICheckoutAddress,
-    billingAddress?: ICheckoutAddress
-  ) => {
+  createCheckout = async (input: any) => {
     try {
       const variables = {
-        checkoutInput: {
-          billingAddress: billingAddress && {
-            city: billingAddress.city,
-            companyName: billingAddress.companyName,
-            country:
-              CountryCode[
-                billingAddress?.country?.code as keyof typeof CountryCode
-              ],
-            countryArea: billingAddress.countryArea,
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
-            phone: billingAddress.phone,
-            postalCode: billingAddress.postalCode,
-            streetAddress1: billingAddress.streetAddress1,
-            streetAddress2: billingAddress.streetAddress2,
-          },
-          email,
-          lines,
-          shippingAddress: shippingAddress && {
-            city: shippingAddress.city,
-            companyName: shippingAddress.companyName,
-            country:
-              CountryCode[
-                shippingAddress?.country?.code as keyof typeof CountryCode
-              ],
-            countryArea: shippingAddress.countryArea,
-            firstName: shippingAddress.firstName,
-            lastName: shippingAddress.lastName,
-            phone: shippingAddress.phone,
-            postalCode: shippingAddress.postalCode,
-            streetAddress1: shippingAddress.streetAddress1,
-            streetAddress2: shippingAddress.streetAddress2,
-          },
-        },
+        checkoutInput: input,
       };
       const { data, errors } = await this.client.mutate<
         CreateCheckout,
@@ -840,7 +803,7 @@ export class ApolloClientManager {
       }
       if (data?.checkoutCreate?.checkout) {
         return {
-          data: this.constructCheckoutModel(data.checkoutCreate.checkout),
+          data: data?.checkoutCreate?.checkout,
         };
       }
     } catch (error) {
@@ -849,6 +812,102 @@ export class ApolloClientManager {
       };
     }
     return {};
+  };
+
+  getCustomerCheckouts = async (customerId: string) => {
+    console.log("customerId-getCustomerCheckouts", customerId);
+    if (customerId) {
+      const { data, errors } = await this.client.query<any, any>({
+        fetchPolicy: "network-only",
+        query: CheckoutQueries.customerCheckouts,
+        variables: {
+          first: 1,
+          filter: {
+            customerId: [customerId],
+          },
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.customers?.edges?.[0]?.node?.checkout,
+      };
+    }
+  };
+
+  getCustomerCheckoutByToken = async (token: string) => {
+    console.log("checkoutId-getCustomerCheckoutByToken", token);
+    if (token) {
+      const { data, errors } = await this.client.query<any, any>({
+        fetchPolicy: "network-only",
+        query: CheckoutQueries.customerCheckoutByToken,
+        variables: {
+          token,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.checkout,
+      };
+    }
+  };
+
+  checkoutLineUpdate = async (checkoutId: string, lines: any[]) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.updateCheckoutLineMutation,
+      variables: {
+        checkoutId,
+        lines,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.checkoutLinesUpdate?.checkoutErrors?.length) {
+      return {
+        error: data?.checkoutLinesUpdate?.checkoutErrors,
+      };
+    }
+    return {
+      data: data?.checkoutLinesUpdate?.checkout,
+    };
+  };
+
+  checkoutLineAdd = async (checkoutId: string, lines: any[]) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.addCheckoutLineMutation,
+      variables: {
+        checkoutId,
+        lines,
+      },
+    });
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.checkoutLinesAdd?.checkoutErrors?.length) {
+      return {
+        error: data?.checkoutLinesAdd?.checkoutErrors,
+      };
+    }
+    return {
+      data: data?.checkoutLinesAdd?.checkout,
+    };
   };
 
   createCheckoutRest = async (
@@ -1756,9 +1815,7 @@ export class ApolloClientManager {
       }
       if (data?.checkoutPaymentMethodUpdate?.checkout) {
         return {
-          data: this.constructCheckoutModel(
-            data.checkoutPaymentMethodUpdate.checkout
-          ),
+          data: data.checkoutPaymentMethodUpdate.checkout,
         };
       }
       return {};
@@ -1792,16 +1849,14 @@ export class ApolloClientManager {
           error: errors,
         };
       }
-      if (data?.checkoutShippingMethodUpdate?.errors.length) {
+      if (data?.checkoutShippingMethodUpdate?.errors?.length) {
         return {
           error: data?.checkoutShippingMethodUpdate?.errors,
         };
       }
       if (data?.checkoutShippingMethodUpdate?.checkout) {
         return {
-          data: this.constructCheckoutModel(
-            data.checkoutShippingMethodUpdate.checkout
-          ),
+          data: data.checkoutShippingMethodUpdate.checkout,
         };
       }
       return {};
@@ -1889,37 +1944,16 @@ export class ApolloClientManager {
   };
 
   createPayment = async ({
-    amount,
     checkoutId,
-    gateway,
-    billingAddress,
-    token,
-    returnUrl,
-  }: CreatePaymentInput) => {
+    paymentInput,
+  }: {
+    checkoutId: string;
+    paymentInput: any;
+  }) => {
     try {
       const variables = {
         checkoutId,
-        paymentInput: {
-          amount,
-          billingAddress: {
-            city: billingAddress.city,
-            companyName: billingAddress.companyName,
-            country:
-              CountryCode[
-                billingAddress?.country?.code as keyof typeof CountryCode
-              ],
-            countryArea: billingAddress.countryArea,
-            firstName: billingAddress.firstName,
-            lastName: billingAddress.lastName,
-            phone: billingAddress.phone,
-            postalCode: billingAddress.postalCode,
-            streetAddress1: billingAddress.streetAddress1,
-            streetAddress2: billingAddress.streetAddress2,
-          },
-          gateway,
-          returnUrl,
-          token,
-        },
+        paymentInput,
       };
       const { data, errors } = await this.client.mutate<
         CreateCheckoutPayment,
@@ -2171,6 +2205,18 @@ export class ApolloClientManager {
         error,
       };
     }
+  };
+
+  getGarments = async filter => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: garmentsQuery,
+        fetchPolicy: "network-only",
+        variables: {
+          filter,
+        },
+      });
+    } catch (err) {}
   };
 
   getServices = async filter => {
