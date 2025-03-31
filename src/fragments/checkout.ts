@@ -198,6 +198,26 @@ export const checkoutFragment = gql`
       }
     }
     token
+    service {
+      category {
+        id
+        name
+      }
+      id
+      name
+      serviceCode
+      serviceType
+      parentService {
+        id
+        name
+        serviceCode
+        serviceType
+      }
+      parentServices {
+        id
+        name
+      }
+    }
     lines {
       id
       quantity
