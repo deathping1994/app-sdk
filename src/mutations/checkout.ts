@@ -28,9 +28,7 @@ export const updateCheckoutLineMutation = gql`
         ...Checkout
       }
       checkoutErrors {
-        field
-        code
-        message
+        ...CheckoutError
       }
     }
   }
