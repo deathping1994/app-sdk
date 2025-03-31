@@ -876,13 +876,13 @@ export class ApolloClientManager {
         error: errors,
       };
     }
-    if (data?.checkoutLineUpdate?.checkoutErrors?.length) {
+    if (data?.checkoutLinesUpdate?.checkoutErrors?.length) {
       return {
-        error: data?.checkoutLineUpdate?.checkoutErrors,
+        error: data?.checkoutLinesUpdate?.checkoutErrors,
       };
     }
     return {
-      data: data?.checkoutLineUpdate?.checkout,
+      data: data?.checkoutLinesUpdate?.checkout,
     };
   };
 
