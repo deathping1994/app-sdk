@@ -202,6 +202,7 @@ export const checkoutFragment = gql`
       category {
         id
         name
+        slug
       }
       id
       name

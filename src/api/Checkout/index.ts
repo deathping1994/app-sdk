@@ -202,6 +202,22 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  fetchLatestCustomerCheckouts = async customerId => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "getCustomerCheckouts",
+      {
+        customerId,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
   checkoutLineUpdate = async (checkoutId, lines) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
