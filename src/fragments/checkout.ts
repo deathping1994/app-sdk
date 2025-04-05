@@ -189,6 +189,17 @@ export const checkoutFragment = gql`
       name
     }
     email
+    user {
+      id
+      email
+      phone
+      defaultBillingAddress {
+        id
+      }
+      defaultShippingAddress {
+        id
+      }
+    }
     shippingAddress {
       cityArea
       phone
