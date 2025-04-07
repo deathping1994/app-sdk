@@ -24,6 +24,7 @@ export const checkoutAddressFragment = gql`
     streetAddress2
     city
     postalCode
+    cityArea
     country {
       code
       country
