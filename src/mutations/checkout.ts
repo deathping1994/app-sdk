@@ -11,7 +11,7 @@ import {
   checkoutErrorFragment,
   paymentErrorFragment,
 } from "../fragments/errors";
-import { invoiceFragment } from "src/fragments/invoice";
+import { invoiceFragment } from "../fragments/invoice";
 
 export const updateCheckoutLineMutation = gql`
   ${checkoutFragment}
