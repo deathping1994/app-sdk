@@ -11,6 +11,7 @@ import {
   checkoutErrorFragment,
   paymentErrorFragment,
 } from "../fragments/errors";
+import { invoiceFragment } from "src/fragments/invoice";
 
 export const updateCheckoutLineMutation = gql`
   ${checkoutFragment}
@@ -268,6 +269,7 @@ export const createCheckoutPaymentMutation = gql`
 export const completeCheckoutMutation = gql`
   ${orderDetailFragment}
   ${checkoutErrorFragment}
+  ${invoiceFragment}
   mutation CompleteCheckout(
     $checkoutId: ID!
     $paymentData: JSONString
@@ -285,6 +287,9 @@ export const completeCheckoutMutation = gql`
       }
       order {
         ...OrderDetail
+        invoices {
+          ...InvoiceFragment
+        }
       }
       confirmationNeeded
       confirmationData
