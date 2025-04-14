@@ -240,6 +240,21 @@ export const checkoutFragment = gql`
           amount
         }
       }
+      addOns {
+        id
+        childLine {
+          variant {
+            id
+            name
+            sku
+          }
+          totalPrice {
+            gross {
+              amount
+            }
+          }
+        }
+      }
       variant {
         id
         sku

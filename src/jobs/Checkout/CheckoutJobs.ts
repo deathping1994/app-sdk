@@ -210,6 +210,42 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  checkoutLineAddonCreate = async ({ input }: { input: string }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineAddonCreate(input);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_ADDON_CREATE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  checkoutLineAddonDelete = async ({ id }: { id: string }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineAddonDelete(id);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_ADDON_DELETE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   updateCheckoutMeta = async ({ metaInput }: { metaInput: any }): any => {
     const checkout = await LocalStorageHandler.getCheckout();
     const { data, error } = await this.apolloClientManager.updateCheckoutMeta(

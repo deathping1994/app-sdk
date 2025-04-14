@@ -250,6 +250,35 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  checkoutLineAddonCreate = async (input: any) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineAddonCreate",
+      {
+        input,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+  checkoutLineAddonDelete = async (id: any) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineAddonDelete",
+      {
+        id,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
   setShippingAddress = async (
     shippingAddress: IAddress,
     email: string,

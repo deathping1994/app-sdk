@@ -2075,6 +2075,70 @@ export class ApolloClientManager {
     }
   };
 
+  checkoutLineAddonCreate = async input => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.addOnsLineCreateMutation,
+        variables: {
+          input,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.addOnsLineCreate?.addOnsErrors?.length) {
+        return {
+          error: data.addOnsLineCreate.addOnsErrors,
+        };
+      }
+      if (data?.addOnsLineCreate?.checkout) {
+        return {
+          data: data.addOnsLineCreate.checkout,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  checkoutLineAddonDelete = async (id: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.addOnsLineDelete,
+        variables: {
+          id,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.addOnsLineDelete?.addOnsErrors?.length) {
+        return {
+          error: data.addOnsLineDelete.addOnsErrors,
+        };
+      }
+      if (data?.addOnsLineDelete?.checkout) {
+        return {
+          data: data.addOnsLineDelete.checkout,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   createPickupFrequency = async ({
     isExpress,
     pickupSlot,
