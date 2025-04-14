@@ -3,6 +3,7 @@ import { gql } from "@apollo/client";
 import {
   atcChecckoutFragment,
   checkoutFragment,
+  checkoutLineWithAddOnFragment,
   checkoutPriceFragment,
 } from "../fragments/checkout";
 import { paymentFragment } from "../fragments/payment";
@@ -410,6 +411,44 @@ export const addOnsLineDelete = gql`
         ...Checkout
       }
       addOnsErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const checkoutLineAddExtraData = gql`
+  ${checkoutLineWithAddOnFragment}
+  mutation CheckoutLineAddExtraData(
+    $checkoutLineId: ID!
+    $input: [CheckoutLineExtraDataInput]
+  ) {
+    checkoutLineAddExtraData(checkoutLineId: $checkoutLineId, input: $input) {
+      checkoutLine {
+        ...CheckoutLineWithAddOn
+      }
+      checkoutErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const checkoutLineDeleteExtraData = gql`
+  ${checkoutLineWithAddOnFragment}
+  mutation CheckoutLineDeleteExtraData(
+    $checkoutLineId: ID!
+    $key: [ExtraDataEnum]!
+  ) {
+    checkoutLineDeleteExtraData(checkoutLineId: $checkoutLineId, key: $key) {
+      checkoutLine {
+        ...CheckoutLineWithAddOn
+      }
+      checkoutErrors {
         code
         field
         message

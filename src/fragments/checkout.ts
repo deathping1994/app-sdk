@@ -133,6 +133,87 @@ export const checkoutLineFragment = gql`
   }
 `;
 
+export const checkoutLineWithAddOnFragment = gql`
+  fragment CheckoutLineWithAddOn on CheckoutLine {
+    id
+    quantity
+    totalPrice {
+      gross {
+        currency
+        amount
+      }
+    }
+    extraData {
+      id
+      key
+      value
+    }
+    addOns {
+      id
+      childLine {
+        variant {
+          id
+          name
+          sku
+        }
+        totalPrice {
+          gross {
+            amount
+          }
+        }
+      }
+    }
+    variant {
+      id
+      sku
+      name
+      price {
+        currency
+        amount
+      }
+      images {
+        id
+        alt
+        url
+      }
+      product {
+        id
+        name
+        category {
+          id
+        }
+      }
+    }
+    length {
+      unit
+      value
+    }
+    breadth {
+      unit
+      value
+    }
+    numberOfPanels
+    pricePerPanel {
+      currency
+      amount
+    }
+    areaSquare
+    pricePerArea {
+      currency
+      amount
+    }
+    subQuantity
+    weight {
+      unit
+      value
+    }
+    pricePerWeight {
+      currency
+      amount
+    }
+  }
+`;
+
 export const discountLineFragment = gql`
   fragment DiscountedCheckoutLine on DiscountedCheckoutLine {
     id
@@ -174,6 +255,7 @@ export const atcChecckoutFragment = gql`
 `;
 
 export const checkoutFragment = gql`
+  ${checkoutLineWithAddOnFragment}
   fragment Checkout on Checkout {
     id
     shippingMethod {
@@ -188,6 +270,11 @@ export const checkoutFragment = gql`
     availableShippingMethods {
       id
       name
+    }
+    extraData {
+      id
+      key
+      value
     }
     email
     user {
@@ -232,77 +319,7 @@ export const checkoutFragment = gql`
       }
     }
     lines {
-      id
-      quantity
-      totalPrice {
-        gross {
-          currency
-          amount
-        }
-      }
-      addOns {
-        id
-        childLine {
-          variant {
-            id
-            name
-            sku
-          }
-          totalPrice {
-            gross {
-              amount
-            }
-          }
-        }
-      }
-      variant {
-        id
-        sku
-        name
-        price {
-          currency
-          amount
-        }
-        images {
-          id
-          alt
-          url
-        }
-        product {
-          id
-          name
-          category {
-            id
-          }
-        }
-      }
-      length {
-        unit
-        value
-      }
-      breadth {
-        unit
-        value
-      }
-      numberOfPanels
-      pricePerPanel {
-        currency
-        amount
-      }
-      areaSquare
-      pricePerArea {
-        currency
-        amount
-      }
-      subQuantity
-      weight {
-        unit
-        value
-      }
-      pricePerWeight {
-        currency
-        amount
-      }
+      ...CheckoutLineWithAddOn
     }
     totalPrice {
       gross {
