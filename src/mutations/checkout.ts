@@ -385,3 +385,35 @@ export const updateCheckoutMetaData = gql`
     }
   }
 `;
+
+export const addOnsLineCreateMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutLineAddOnCreate($input: AddOnLinesCreateInput) {
+    addOnsLineCreate(input: $input) {
+      checkout {
+        ...Checkout
+      }
+      addOnsErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const addOnsLineDelete = gql`
+  ${checkoutFragment}
+  mutation AddOnsLineDelete($id: ID) {
+    addOnsLineDelete(id: $id) {
+      checkout {
+        ...Checkout
+      }
+      addOnsErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
