@@ -245,6 +245,59 @@ class CheckoutJobs extends JobsHandler<{}> {
       data,
     };
   };
+  checkoutLineAddExtraData = async ({
+    checkoutLineId,
+    input,
+  }: {
+    checkoutLineId: string;
+    input: any;
+  }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineAddExtraData(
+        checkoutLineId,
+        input
+      );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_ADD_EXTRA_DATA,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  checkoutLineDeleteExtraData = async ({
+    checkoutLineId,
+    key,
+  }: {
+    checkoutLineId: string;
+    key: string[];
+  }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineDeleteExtraData(
+        checkoutLineId,
+        key
+      );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_DELETE_EXTRA_DATA,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
 
   updateCheckoutMeta = async ({ metaInput }: { metaInput: any }): any => {
     const checkout = await LocalStorageHandler.getCheckout();
