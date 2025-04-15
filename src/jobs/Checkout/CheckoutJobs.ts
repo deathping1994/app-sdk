@@ -668,6 +668,32 @@ class CheckoutJobs extends JobsHandler<{}> {
 
     return { data };
   };
+
+  completeCheckoutMultiple = async ({
+    checkoutIds,
+  }: {
+    checkoutIds: string[];
+  }): PromiseCheckoutJobRunResponse => {
+    const { data, error } = await this.apolloClientManager.completeCheckout({
+      checkoutIds,
+    });
+    console.log("xxxxxxxcompleteCheckoutMultiple-checkoutjobs", data);
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.COMPLETE_CHECKOUT_MULTIPLE,
+        },
+      };
+    }
+
+    // if (!data?.confirmationNeeded) {
+    //   await this.localStorageHandler.setCheckout({});
+    //   await this.localStorageHandler.setPayment({});
+    // }
+
+    return { data };
+  };
 }
 
 export default CheckoutJobs;

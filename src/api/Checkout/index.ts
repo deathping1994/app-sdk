@@ -745,4 +745,32 @@ export class SaleorCheckoutAPI extends ErrorListener {
       };
     }
   };
+
+  completeCheckoutMultiple = async (
+    checkoutIds: string[],
+    customerId?: string
+  ): CheckoutResponse => {
+    if (checkoutIds) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "completeCheckoutMultiple",
+        { checkoutIds }
+      );
+      console.log("xxxxxxxcompleteCheckoutMultiple-apicheckout", data);
+      if (customerId) {
+        const {
+          data: customerCheckouts,
+          loading,
+          error,
+        } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
+          customerId: customerId,
+        });
+      }
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+  };
 }
