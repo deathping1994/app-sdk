@@ -298,6 +298,29 @@ export const completeCheckoutMutation = gql`
   }
 `;
 
+export const completeCheckoutMultipleMutation = gql`
+  ${orderDetailFragment}
+  ${checkoutErrorFragment}
+  ${invoiceFragment}
+  mutation CheckoutMultipleComplete(
+    $checkoutIds: [CheckoutCompleteInput]
+  ) {
+    checkoutMultipleComplete(
+      $checkoutIds: $checkoutIds
+    ) {
+      errors: checkoutErrors {
+        ...CheckoutError
+      }
+      orders {
+        ...OrderDetail
+        invoices {
+          ...InvoiceFragment
+        }
+      }
+    }
+  }
+`;
+
 export const addCheckoutLineMutation = gql`
   ${checkoutFragment}
   mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!) {

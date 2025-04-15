@@ -2058,6 +2058,42 @@ export class ApolloClientManager {
     }
   };
 
+  completeCheckoutMultiple = async ({
+    checkoutIds,
+  }: {
+    checkoutIds: string[];
+  }) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.completeCheckoutMultipleMutation,
+        variables: {
+          checkoutIds,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      if (data?.checkoutMultipleComplete?.errors.length) {
+        return {
+          error: data.checkoutMultipleComplete.errors,
+        };
+      }
+      if (data?.checkoutMultipleComplete) {
+        return {
+          data: data.checkoutMultipleComplete,
+        };
+      }
+      return {};
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   // Pick And Drop
   createPickup = async ({
     isExpress,
