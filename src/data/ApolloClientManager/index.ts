@@ -839,6 +839,31 @@ export class ApolloClientManager {
     }
   };
 
+  getCustomerCheckoutsWithDetails = async (customerId: string) => {
+    console.log("customerId-getCustomerCheckoutsWithDetails", customerId);
+    if (customerId) {
+      const { data, errors } = await this.client.query<any, any>({
+        fetchPolicy: "network-only",
+        query: CheckoutQueries.customerCheckoutsWithDetails,
+        variables: {
+          first: 1,
+          filter: {
+            customerId: [customerId],
+          },
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.customers?.edges?.[0]?.node?.checkout,
+      };
+    }
+  };
+
   getCustomerCheckoutByToken = async (token: string) => {
     console.log("checkoutId-getCustomerCheckoutByToken", token);
     if (token) {

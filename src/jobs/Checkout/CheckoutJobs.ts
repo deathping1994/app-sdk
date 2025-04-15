@@ -141,6 +141,32 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  getCustomerCheckoutsWithDetails = async ({
+    customerId,
+  }: {
+    customerId: string;
+  }) => {
+    const { data, error } =
+      await this.apolloClientManager.getCustomerCheckoutsWithDetails(
+        customerId
+      );
+    console.log("getCustomerCheckouts", data);
+    if (data) {
+      await this.localStorageHandler.setCustomerCheckouts(data);
+    }
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+        },
+      };
+    }
+    return {
+      data,
+    };
+  };
+
   getCustomerCheckoutByToken = async ({ token }: { token: string }) => {
     const { data, error } =
       await this.apolloClientManager.getCustomerCheckoutByToken(token);

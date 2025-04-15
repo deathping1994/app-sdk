@@ -71,6 +71,29 @@ export const customerCheckouts = gql`
   }
 `;
 
+export const customerCheckoutsWithDetails = gql`
+  ${checkoutFragment}
+  query Customers($first: Int, $filter: CustomerFilterInput) {
+    customers(filter: $filter, first: $first) {
+      edges {
+        node {
+          id
+          defaultShippingAddress {
+            id
+          }
+          defaultBillingAddress {
+            id
+          }
+          checkout {
+            ...Checkout
+          }
+        }
+        cursor
+      }
+    }
+  }
+`;
+
 export const customerCheckoutByToken = gql`
   ${checkoutFragment}
   query CustomerCheckoutByTokenApp($token: UUID) {
