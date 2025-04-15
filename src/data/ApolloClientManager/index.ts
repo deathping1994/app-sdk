@@ -2061,7 +2061,9 @@ export class ApolloClientManager {
   completeCheckoutMultiple = async ({
     checkoutIds,
   }: {
-    checkoutIds: string[];
+    checkoutIds: {
+      checkoutId: string;
+    }[];
   }) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({

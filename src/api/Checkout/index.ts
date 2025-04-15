@@ -747,7 +747,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   completeCheckoutMultiple = async (
-    checkoutIds: string[],
+    checkoutIds: {
+      checkoutId: string;
+    }[],
     customerId?: string
   ): CheckoutResponse => {
     if (checkoutIds) {
