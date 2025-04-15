@@ -674,9 +674,10 @@ class CheckoutJobs extends JobsHandler<{}> {
   }: {
     checkoutIds: string[];
   }): PromiseCheckoutJobRunResponse => {
-    const { data, error } = await this.apolloClientManager.completeCheckout({
-      checkoutIds,
-    });
+    const { data, error } =
+      await this.apolloClientManager.completeCheckoutMultiple({
+        checkoutIds,
+      });
     console.log("xxxxxxxcompleteCheckoutMultiple-checkoutjobs", data);
     if (error) {
       return {
