@@ -2058,6 +2058,47 @@ export class ApolloClientManager {
     }
   };
 
+  checkoutUpdateData = async ({
+    checkoutId,
+    input,
+  }: {
+    checkoutId: string;
+    input: {
+      deliveryDateTime: any;
+    };
+  }) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutUpdateDataMutation,
+        variables: {
+          checkoutId,
+          input,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      if (data?.checkoutUpdateData?.errors.length) {
+        return {
+          error: data?.checkoutUpdateData?.errors,
+        };
+      }
+      if (data?.checkoutUpdateData?.checkout) {
+        return {
+          data: data.checkoutUpdateData.checkout,
+        };
+      }
+      return {};
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   completeCheckoutMultiple = async ({
     checkoutIds,
   }: {

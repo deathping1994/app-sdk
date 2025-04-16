@@ -669,6 +669,32 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
+  checkoutUpdateData = async ({
+    checkoutId,
+    input,
+  }: {
+    checkoutId: string;
+    input: {
+      deliveryDateTime: any;
+    };
+  }) => {
+    const { data, error } = await this.apolloClientManager.checkoutUpdateData(
+      checkoutId,
+      input
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_UPDATE_DATA,
+        },
+      };
+    }
+
+    return { data };
+  };
+
   completeCheckoutMultiple = async ({
     checkoutIds,
   }: {
