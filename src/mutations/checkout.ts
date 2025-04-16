@@ -475,3 +475,22 @@ export const checkoutLineDeleteExtraData = gql`
     }
   }
 `;
+
+export const checkoutUpdateDataMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutUpdateDataApp(
+    $checkoutId: ID!
+    $input: CheckoutUpdateDataInput!
+  ) {
+    checkoutUpdateData(checkoutId: $checkoutId, input: $input) {
+      checkout {
+        ...Checkout
+      }
+      checkoutErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;

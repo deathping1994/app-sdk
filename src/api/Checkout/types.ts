@@ -94,6 +94,7 @@ export enum DataErrorCheckoutTypes {
   "CHECKOUT_LINE_ADDON_DELETE",
   "CHECKOUT_LINE_ADD_EXTRA_DATA",
   "CHECKOUT_LINE_DELETE_EXTRA_DATA",
+  "CHECKOUT_UPDATE_DATA",
 }
 
 export interface CreatePaymentInput {
