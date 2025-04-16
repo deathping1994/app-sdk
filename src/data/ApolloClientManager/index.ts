@@ -2081,7 +2081,7 @@ export class ApolloClientManager {
           error: errors,
         };
       }
-      if (data?.checkoutUpdateData?.errors.length) {
+      if (data?.checkoutUpdateData?.errors?.length) {
         return {
           error: data?.checkoutUpdateData?.errors,
         };
