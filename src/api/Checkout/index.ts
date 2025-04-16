@@ -719,6 +719,20 @@ export class SaleorCheckoutAPI extends ErrorListener {
     }
   };
 
+  checkoutAddCustomDisount = async (input: any) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutAddCustomDisount",
+      {
+        input,
+      }
+    );
+    return {
+      data,
+      dataError,
+    };
+  };
+
   checkoutUpdateData = async (
     checkoutId: string,
     input: {
