@@ -30,6 +30,7 @@ export const orderDetailFragment = gql`
     statusDisplay
     id
     token
+    deliveryDate
     number
     metadata {
       key

@@ -297,6 +297,7 @@ export const checkoutFragment = gql`
       }
     }
     token
+    deliveryDate
     service {
       category {
         id
