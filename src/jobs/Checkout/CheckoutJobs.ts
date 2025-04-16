@@ -678,10 +678,10 @@ class CheckoutJobs extends JobsHandler<{}> {
       deliveryDateTime: any;
     };
   }) => {
-    const { data, error } = await this.apolloClientManager.checkoutUpdateData(
+    const { data, error } = await this.apolloClientManager.checkoutUpdateData({
       checkoutId,
-      input
-    );
+      input,
+    });
 
     if (error) {
       return {
