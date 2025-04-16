@@ -2058,6 +2058,38 @@ export class ApolloClientManager {
     }
   };
 
+  checkoutAddCustomDisount = async ({ input }: { input: any }) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutCustomDiscountAddMutation,
+        variables: {
+          input,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      if (data?.checkoutCustomDiscountAdd?.errors?.length) {
+        return {
+          error: data?.checkoutCustomDiscountAdd?.errors,
+        };
+      }
+      if (data?.checkoutCustomDiscountAdd?.checkouts) {
+        return {
+          data: data.checkoutCustomDiscountAdd.checkouts,
+        };
+      }
+      return {};
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   checkoutUpdateData = async ({
     checkoutId,
     input,

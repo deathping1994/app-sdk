@@ -669,6 +669,22 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
+  checkoutAddCustomDisount = async ({ input }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutAddCustomDisount({ input });
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_ADD_CUSTOM_DISCOUNT,
+        },
+      };
+    }
+
+    return { data };
+  };
+
   checkoutUpdateData = async ({
     checkoutId,
     input,

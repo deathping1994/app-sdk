@@ -490,6 +490,26 @@ export const checkoutUpdateDataMutation = gql`
         code
         field
         message
+        variants
+      }
+    }
+  }
+`;
+
+export const checkoutCustomDiscountAddMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutCustomDiscountAddMutationApp(
+    $input: [CheckoutCustomDiscountAddInput]!
+  ) {
+    checkoutCustomDiscountAdd(input: $input) {
+      checkouts {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
       }
     }
   }
