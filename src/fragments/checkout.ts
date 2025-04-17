@@ -271,6 +271,10 @@ export const checkoutFragment = gql`
       id
       name
     }
+    discount {
+      amount
+      currency
+    }
     extraData {
       id
       key
