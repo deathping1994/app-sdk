@@ -339,3 +339,143 @@ export const purchaseTrack = async (
       console.log("tr.farziengineer.co/collect error:", err);
     });
 };
+
+let previousURL: string | null;
+let pageViewQueue: {
+  shopMetaData: any;
+  routerAsPath: string | null;
+  tags: string;
+  pageUrl: string;
+}[] = [];
+
+export const pageViewTrack = async (
+  shopMetaData: any,
+  routerAsPath: String | null,
+  tags: string,
+  pageUrl: string
+) => {
+  console.log("pageViewTrack")
+  pageViewQueue.push({
+    shopMetaData,
+    routerAsPath,
+    tags,
+    pageUrl,
+  });
+
+  const processPageViewQueue = async (
+    shopMetaData: any,
+    routerAsPath: String | null,
+    tags: string = '',
+    pageUrl: string | null = ''
+  ) => {
+    console.log('pageViewTrack',shopMetaData, routerAsPath, tags, pageUrl);
+    
+    let visitorId, ip, utm;
+
+    const userAgent = `${DeviceInfo.getBrand()}/${DeviceInfo.getModel()} (${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()}) AppVersion/${DeviceInfo.getVersion()}`;
+    console.log('User-Agent:', userAgent);
+
+
+    if ( await AsyncStorage.getItem("fctrack_visitor_id")) {
+      visitorId = await AsyncStorage.getItem("fctrack_visitor_id");
+    } else {
+      const fp = await DeviceInfo.getUniqueId(); 
+      const visitorProps = fp;
+      visitorId = visitorProps;
+      console.log('visitorProps', visitorProps, visitorId);
+      
+      await AsyncStorage.setItem("fctrack_visitor_id", visitorId);
+      // Cookies.set("fctrack_visitor_id", visitorId);
+    }
+
+    ip = await AsyncStorage.getItem("ip");
+    if (!ip) {
+      try {
+        const res = await fetch("https://tr.farziengineer.co/ip");
+        const data = await res.json();
+        ip = data?.ip;
+        await AsyncStorage.setItem("ip", ip);
+      } catch (err) {
+        console.log("IP Fetch Error:", err);
+      }
+    }
+    
+    //check UTM in code base 
+
+    if (await AsyncStorage.getItem("fctrack")) {
+      // utm =  await AsyncStorage.getItem("fctrack");
+    } else {
+      const queryValue = queryString.parseUrl('https://www.plixlife.com/order-history?utm_source=google&utm_medium=cpc&utm_campaign=spring_sale');
+      console.log('queryValue', queryValue);
+      
+      if (
+        queryValue?.query?.utm_source ||
+        queryValue?.query?.utm_medium ||
+        queryValue?.query?.utm_campaign
+      ) {
+        utm = `us=${queryValue?.query?.utm_source}; um=${queryValue?.query?.utm_medium}; uc=${queryValue?.query?.utm_campaign}`;
+      } else {
+        utm = "";
+      }
+    }
+
+    const FC_TRACKING =
+      shopMetaData &&
+      getMetadataValue(shopMetaData, "fc_session_tracking") &&
+      parseJson(getMetadataValue(shopMetaData, "fc_session_tracking"));
+
+    try {
+      var clientTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch (err) {
+      var clientTimeZone = "Asia/Calcutta";
+      console.log("TimeZone error", err);
+    }
+
+    fetch(FC_TRACKING?.api_uri || "https://t.farziengineer.co/collect", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pu: previousURL,
+        cu: routerAsPath,
+        bi: visitorId,
+        ui: await AsyncStorage.getItem("user_id"),
+        ci: FC_TRACKING?.client_id,
+        ua: userAgent, // user agent see chat gpt
+        uip: ip,
+        utm: utm,
+        tz: clientTimeZone,
+        tags: tags,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        if (res?.data?.ui) {
+          AsyncStorage.setItem("user_id", res?.data?.ui);
+        }
+      })
+      .catch((err) => {
+        console.log("t.farziengineer.co/collect error:", err);
+      })
+      .finally(() => {
+        previousURL = routerAsPath;
+        const nextItem = pageViewQueue.shift();
+        if (nextItem && pageViewQueue?.length > 0) {
+          processPageViewQueue(
+            nextItem.shopMetaData,
+            nextItem.routerAsPath,
+            nextItem.tags,
+            nextItem.pageUrl
+          );
+        }
+      });
+  };
+
+  if (pageViewQueue.length === 1) {
+    processPageViewQueue(shopMetaData, routerAsPath, tags, pageUrl);
+  }
+};
