@@ -2296,9 +2296,9 @@ export class ApolloClientManager {
           error: data.checkoutLineAddExtraData.checkoutErrors,
         };
       }
-      if (data?.checkoutLineAddExtraData?.checkout) {
+      if (data?.checkoutLineAddExtraData?.checkoutLine) {
         return {
-          data: data.checkoutLineAddExtraData.checkout,
+          data: data.checkoutLineAddExtraData.checkoutLine,
         };
       }
     } catch (error) {
@@ -2332,9 +2332,9 @@ export class ApolloClientManager {
           error: data.checkoutLineDeleteExtraData.checkoutErrors,
         };
       }
-      if (data?.checkoutLineDeleteExtraData?.checkout) {
+      if (data?.checkoutLineDeleteExtraData?.checkoutLine) {
         return {
-          data: data.checkoutLineDeleteExtraData.checkout,
+          data: data.checkoutLineDeleteExtraData.checkoutLine,
         };
       }
     } catch (error) {
