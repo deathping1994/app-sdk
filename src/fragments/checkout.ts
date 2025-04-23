@@ -133,7 +133,33 @@ export const checkoutLineFragment = gql`
   }
 `;
 
+export const checkoutSublineFragment = gql`
+  fragment CheckoutSubline on ChildCheckoutLineRelationType {
+    id
+    childLine {
+      id
+      quantity
+      variant {
+        id
+        sku
+        name
+        price {
+          amount
+        }
+        product {
+          id
+          name
+          thumbnail {
+            url
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const checkoutLineWithAddOnFragment = gql`
+  ${checkoutSublineFragment}
   fragment CheckoutLineWithAddOn on CheckoutLine {
     id
     quantity
@@ -196,6 +222,9 @@ export const checkoutLineWithAddOnFragment = gql`
     pricePerPanel {
       currency
       amount
+    }
+    sublines {
+      ...CheckoutSubline
     }
     areaSquare
     pricePerArea {

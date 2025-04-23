@@ -280,6 +280,24 @@ export class SaleorCheckoutAPI extends ErrorListener {
       dataError,
     };
   };
+
+  checkoutSublineUpdate = async (checkoutLineId, sublines, replace = false) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutSublineUpdate",
+      {
+        checkoutLineId,
+        sublines,
+        replace,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
   checkoutLineAddonDelete = async (id: any) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",

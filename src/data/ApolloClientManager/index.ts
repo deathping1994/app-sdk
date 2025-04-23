@@ -2275,6 +2275,43 @@ export class ApolloClientManager {
     }
   };
 
+  checkoutSublineUpdate = async (
+    checkoutLineId: string,
+    sublines: any[],
+    replace: boolean = false
+  ) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutSublineUpdateMutation,
+        variables: {
+          checkoutLineId,
+          replace,
+          sublines,
+        },
+      });
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutSublinesUpdate?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutSublinesUpdate.checkoutErrors,
+        };
+      }
+      if (data?.checkoutSublinesUpdate?.checkout) {
+        return {
+          data: data.checkoutSublinesUpdate.checkout,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   checkoutLineAddExtraData = async (checkoutLineId: string, input: any) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
