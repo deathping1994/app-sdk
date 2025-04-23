@@ -236,6 +236,27 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  checkoutSublineUpdate = async ({ checkoutLineId, sublines, replace }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutSublineUpdate(
+        checkoutLineId,
+        sublines,
+        replace
+      );
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_UPDATE_SUBLINE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   checkoutLineAddonCreate = async ({ input }: { input: string }) => {
     const { data, error } =
       await this.apolloClientManager.checkoutLineAddonCreate(input);

@@ -514,3 +514,28 @@ export const checkoutCustomDiscountAddMutation = gql`
     }
   }
 `;
+
+export const checkoutSublineUpdateMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutSublineUpdate(
+    $checkoutLineId: ID!
+    $replace: Boolean
+    $sublines: [CheckoutLineInput]!
+  ) {
+    checkoutSublinesUpdate(
+      checkoutLineId: $checkoutLineId
+      replace: $replace
+      sublines: $sublines
+    ) {
+      checkout {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
