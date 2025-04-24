@@ -298,6 +298,26 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  checkoutLineImageAudioDelete = async (extraDataId: string, token: string) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineImageAudioDelete",
+      {
+        extraDataId,
+      }
+    );
+
+    const { data: checkoutData, dataError: checkoutDataError } =
+      await this.jobsManager.run("checkout", "getCustomerCheckoutByToken", {
+        token,
+      });
+
+    return {
+      data: checkoutData,
+      dataError,
+    };
+  };
+
   checkoutLineAddonDelete = async (id: any) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",

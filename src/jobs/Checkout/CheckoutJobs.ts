@@ -706,6 +706,24 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
+  checkoutLineImageAudioDelete = async ({ extraDataId }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineImageAudioDelete({
+        extraDataId,
+      });
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_IMAGE_AUDIO_DELETE,
+        },
+      };
+    }
+
+    return { data };
+  };
+
   checkoutUpdateData = async ({
     checkoutId,
     input,
