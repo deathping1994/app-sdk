@@ -2381,6 +2381,38 @@ export class ApolloClientManager {
     }
   };
 
+  checkoutLineImageAudioDelete = async (extraDataId: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutLineImageAudioDeleteMutation,
+        variables: {
+          extraDataId,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutLineImageAudioDelete?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutLineImageAudioDelete.checkoutErrors,
+        };
+      }
+      if (data?.checkoutLineImageAudioDelete?.checkoutLine) {
+        return {
+          data: data.checkoutLineImageAudioDelete.checkoutLine,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   createPickupFrequency = async ({
     isExpress,
     pickupSlot,
