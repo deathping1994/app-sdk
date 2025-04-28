@@ -383,6 +383,20 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  checkoutDeleteExtraData = async extraDataId => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutDeleteExtraData",
+      {
+        extraDataId,
+      }
+    );
+    return {
+      data,
+      dataError,
+    };
+  };
+
   setShippingAddress = async (
     shippingAddress: IAddress,
     email: string,

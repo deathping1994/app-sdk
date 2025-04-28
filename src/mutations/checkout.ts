@@ -557,3 +557,20 @@ export const checkoutLineImageAudioDeleteMutation = gql`
     }
   }
 `;
+
+export const checkoutExtraDataDeleteMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutDeleteExtraDataMutationApp($extraDataId: ID!) {
+    checkoutDeleteExtraData(extraDataId: $extraDataId) {
+      checkout {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
