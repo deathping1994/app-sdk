@@ -54,6 +54,7 @@ export interface PaymentMethodUpdateJobInput {
   useCashback: boolean;
   isRecalculate: boolean;
   cashbackType: CashBackMethodType;
+  restApiUrl?: string;
 }
 export interface SetShippingMethodJobInput {
   checkoutId: string;
@@ -63,11 +64,13 @@ export interface SetShippingMethodJobInput {
 export interface AddPromoCodeJobInput {
   checkoutId: string;
   promoCode: string;
+  restApiUrl?: string;
 }
 
 export interface RemovePromoCodeJobInput {
   checkoutId: string;
   promoCode: string;
+  restApiUrl?: string;
 }
 
 export interface CreatePaymentJobInput {

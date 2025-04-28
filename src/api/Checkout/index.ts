@@ -492,6 +492,37 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  addPromoCodeRest = async (promoCode: string, restApiUrl: string): CheckoutResponse => {
+    const checkoutId = await this.saleorState.checkout?.id;
+
+    if (checkoutId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "addPromoCodeRest",
+        {
+          checkoutId,
+          promoCode,
+          restApiUrl
+        }
+      );
+
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    return {
+      functionError: {
+        error: new Error(
+          "You need to set shipping address before modifying promo code."
+        ),
+        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
+      },
+      pending: false,
+    };
+  };
+
   removePromoCode = async (promoCode: string): CheckoutResponse => {
     const checkoutId = await this.saleorState.checkout?.id;
 
@@ -500,6 +531,33 @@ export class SaleorCheckoutAPI extends ErrorListener {
         "checkout",
         "removePromoCode",
         { checkoutId, promoCode }
+      );
+
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    return {
+      functionError: {
+        error: new Error(
+          "You need to set shipping address before modifying promo code."
+        ),
+        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
+      },
+      pending: false,
+    };
+  };
+
+  removePromoCodeRest = async (promoCode: string, restApiUrl: string): CheckoutResponse => {
+    const checkoutId = await this.saleorState.checkout?.id;
+
+    if (checkoutId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "removePromoCodeRest",
+        { checkoutId, promoCode, restApiUrl }
       );
 
       return {

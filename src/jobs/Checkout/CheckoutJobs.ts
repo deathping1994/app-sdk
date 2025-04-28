@@ -322,6 +322,71 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
+  updateCheckoutPaymentRest = async ({
+    checkoutId,
+    gatewayId,
+    useCashback,
+    isRecalculate,
+    cashbackType,
+    restApiUrl
+  }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = LocalStorageHandler.getCheckout();
+
+    try {
+      const resJson = await fetch(`${restApiUrl}/rest/checkout_payment_method/`,{
+        method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            checkoutId,
+            gatewayId,
+            useCashback,
+            isRecalculate,
+            cashbackType
+          }),
+      });
+      const res = await resJson.json();
+      if(res?.message){
+        return {
+          dataError: {
+            error: [{message: res?.message}],
+            type: DataErrorCheckoutTypes.SET_SHIPPING_METHOD,
+          },
+        };
+      }
+      if(res?.id){
+        const updatedCheckout = {
+          ...checkout,
+          ...res
+        }
+  
+        await this.localStorageHandler.setCheckout({
+          ...updatedCheckout,
+          promoCodeDiscount: res,
+          shippingMethod: res?.shippingMethod,
+          availableShippingMethods: res?.availableShippingMethods,
+          shippingAddress: res?.shippingAddress
+        });
+  
+        return {
+          data:{checkoutPaymentMethodUpdate:{checkout:updatedCheckout}}
+        };
+      }
+      return {data: res};
+      
+    } catch (error) {
+      console.error('error while updating checkout payment method:',error);
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.SET_SHIPPING_METHOD,
+        },
+      };
+    }
+
+  };
+
   setShippingMethod = async ({
     checkoutId,
     shippingMethodId,
@@ -377,6 +442,40 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
+  addPromoCodeRest = async ({
+    checkoutId,
+    promoCode,
+    restApiUrl
+  }: AddPromoCodeJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = await LocalStorageHandler.getCheckout();
+
+    const resData = await fetch(`${restApiUrl}/rest/add_promo_code/`,{
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({checkoutId,promoCode}),
+    });
+    const res = await resData.json();
+
+    if (res?.message) {
+      return {
+        data: {
+          errors: [res?.message],
+        },
+        dataError: {
+          type: DataErrorCheckoutTypes.ADD_PROMO_CODE,
+        },
+      };
+    }
+
+    await this.localStorageHandler.setCheckout({
+      ...(checkout?._W ? checkout?._W : checkout),
+      promoCodeDiscount: res
+    });
+    return { data: res };
+  };
+
   removePromoCode = async ({
     checkoutId,
     promoCode,
@@ -402,6 +501,38 @@ class CheckoutJobs extends JobsHandler<{}> {
       promoCodeDiscount: data?.promoCodeDiscount,
     });
     return { data };
+  };
+
+  removePromoCodeRest = async ({
+    checkoutId,
+    promoCode,
+    restApiUrl
+  }: RemovePromoCodeJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = await LocalStorageHandler.getCheckout();
+
+    const resData = await fetch(`${restApiUrl}/rest/remove_promo_code/`,{
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({checkoutId,promoCode})
+    });
+    const res = await resData.json();
+
+    if (res?.message) {
+      return {
+        dataError: {
+          error:[{message: res?.message}],
+          type: DataErrorCheckoutTypes.REMOVE_PROMO_CODE,
+        },
+      };
+    }
+
+    await this.localStorageHandler.setCheckout({
+      ...(checkout?._W ? checkout?._W : checkout),
+      promoCodeDiscount: res
+    });
+    return { data: res };
   };
 
   createPayment = async ({
