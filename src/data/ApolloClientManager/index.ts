@@ -2396,14 +2396,14 @@ export class ApolloClientManager {
         };
       }
 
-      if (data?.checkoutExtraDataDeleteMutation?.checkoutErrors?.length) {
+      if (data?.checkoutDeleteExtraData?.checkoutErrors?.length) {
         return {
-          error: data.checkoutExtraDataDeleteMutation.checkoutErrors,
+          error: data.checkoutDeleteExtraData.checkoutErrors,
         };
       }
-      if (data?.checkoutExtraDataDeleteMutation?.checkout) {
+      if (data?.checkoutDeleteExtraData?.checkout) {
         return {
-          data: data.checkoutExtraDataDeleteMutation.checkout,
+          data: data.checkoutDeleteExtraData.checkout,
         };
       }
     } catch (error) {

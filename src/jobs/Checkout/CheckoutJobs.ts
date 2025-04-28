@@ -361,6 +361,7 @@ class CheckoutJobs extends JobsHandler<{}> {
 
     return {
       data,
+      error,
     };
   };
 
