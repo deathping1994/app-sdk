@@ -574,3 +574,79 @@ export const checkoutExtraDataDeleteMutation = gql`
     }
   }
 `;
+
+export const checkoutExpressAddMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutExpressAddMutationApp($checkoutIds: [ID]!) {
+    checkoutExpressAdd(checkoutIds: $checkoutIds) {
+      checkouts {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const checkoutExpressRemoveMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutExpressRemoveMutationApp($checkoutIds: [ID]!) {
+    checkoutExpressRemove(checkoutIds: $checkoutIds) {
+      checkouts {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const checkoutLineExpressAddMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutLineExpressAddMutationApp(
+    $checkoutLineId: ID!
+    $price: String!
+    $checkoutIds: [ID]!
+  ) {
+    checkoutLineExpressAdd(
+      checkoutLineId: $checkoutLineId
+      price: $price
+      checkoutIds: $checkoutIds
+    ) {
+      checkouts {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const checkoutLineExpressRemoveMutation = gql`
+  ${checkoutFragment}
+  mutation checkoutLineExpressRemoveMutationApp($checkoutLineId: ID!) {
+    checkoutLineExpressRemove(checkoutLineId: $checkoutLineId) {
+      checkout {
+        ...Checkout
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
