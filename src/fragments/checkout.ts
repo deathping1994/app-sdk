@@ -330,6 +330,7 @@ export const checkoutFragment = gql`
       }
     }
     token
+    isExpress
     deliveryDate
     service {
       category {
