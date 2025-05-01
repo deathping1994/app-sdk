@@ -163,6 +163,7 @@ export const checkoutLineWithAddOnFragment = gql`
   fragment CheckoutLineWithAddOn on CheckoutLine {
     id
     quantity
+    isExpress
     totalPrice {
       gross {
         currency
