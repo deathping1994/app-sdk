@@ -2345,6 +2345,140 @@ export class ApolloClientManager {
     }
   };
 
+  checkoutExpressAdd = async (checkoutIds: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutExpressAddMutation,
+        variables: {
+          checkoutIds,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutExpressAdd?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutExpressAdd.checkoutErrors,
+        };
+      }
+      if (data?.checkoutExpressAdd?.checkouts) {
+        return {
+          data: data.checkoutExpressAdd.checkouts,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  checkoutExpressRemove = async (checkoutIds: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutExpressRemoveMutation,
+        variables: {
+          checkoutIds,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutExpressRemove?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutExpressRemove.checkoutErrors,
+        };
+      }
+      if (data?.checkoutExpressRemove?.checkouts) {
+        return {
+          data: data.checkoutExpressRemove.checkouts,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  checkoutLineExpressAdd = async (
+    checkoutLineId: string,
+    price: string,
+    checkoutIds: string[]
+  ) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutLineExpressAddMutation,
+        variables: {
+          checkoutLineId,
+          price,
+          checkoutIds,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutLineExpressAdd?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutLineExpressAdd.checkoutErrors,
+        };
+      }
+      if (data?.checkoutLineExpressAdd?.checkouts) {
+        return {
+          data: data.checkoutLineExpressAdd.checkouts,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  checkoutLineExpressRemove = async (checkoutLineId: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.checkoutLineExpressRemoveMutation,
+        variables: {
+          checkoutLineId,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutLineExpressRemove?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutLineExpressRemove.checkoutErrors,
+        };
+      }
+      if (data?.checkoutLineExpressRemove?.checkout) {
+        return {
+          data: data.checkoutLineExpressRemove.checkout,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   checkoutLineDeleteExtraData = async (
     checkoutLineId: string,
     key: string[]

@@ -397,6 +397,68 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  checkoutExpressAdd = async (checkoutIds: string[]) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutExpressAdd",
+      {
+        checkoutIds,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
+  checkoutExpressRemove = async (checkoutIds: string[]) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutExpressRemove",
+      {
+        checkoutIds,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
+  checkoutLineExpressAdd = async (checkoutLineId, price, checkoutIds) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineExpressAdd",
+      {
+        checkoutLineId,
+        price,
+        checkoutIds,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
+  checkoutLineExpressRemove = async checkoutLineId => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "checkoutLineExpressRemove",
+      {
+        checkoutLineId,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+    };
+  };
+
   setShippingAddress = async (
     shippingAddress: IAddress,
     email: string,

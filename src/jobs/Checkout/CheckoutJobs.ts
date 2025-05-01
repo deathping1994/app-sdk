@@ -365,6 +365,83 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  checkoutExpressAdd = async ({ checkoutIds }) => {
+    const { data, error } = await this.apolloClientManager.checkoutExpressAdd(
+      checkoutIds
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_EXPRESS_ADD,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  checkoutExpressRemove = async ({ checkoutIds }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutExpressRemove(checkoutIds);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_EXPRESS_REMOVE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  checkoutLineExpressAdd = async ({ checkoutLineId, price, checkoutIds }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineExpressAdd(
+        checkoutLineId,
+        price,
+        checkoutIds
+      );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_EXPRESS_ADD,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  checkoutLineExpressRemove = async ({ checkoutLineId }) => {
+    const { data, error } =
+      await this.apolloClientManager.checkoutLineExpressRemove(checkoutLineId);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CHECKOUT_LINE_EXPRESS_REMOVE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   updateCheckoutMeta = async ({ metaInput }: { metaInput: any }): any => {
     const checkout = await LocalStorageHandler.getCheckout();
     const { data, error } = await this.apolloClientManager.updateCheckoutMeta(
