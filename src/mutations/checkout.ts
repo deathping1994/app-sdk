@@ -496,6 +496,26 @@ export const checkoutUpdateDataMutation = gql`
   }
 `;
 
+export const checkoutLineUpdateDataMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutLineUpdateDataApp(
+    $checkoutLineId: ID!
+    $input: CheckoutUpdateDataInput!
+  ) {
+    checkoutLineUpdateData(checkoutLineId: $checkoutLineId, input: $input) {
+      checkout {
+        ...Checkout
+      }
+      checkoutErrors {
+        code
+        field
+        message
+        variants
+      }
+    }
+  }
+`;
+
 export const checkoutCustomDiscountAddMutation = gql`
   ${checkoutFragment}
   mutation CheckoutCustomDiscountAddMutationApp(
