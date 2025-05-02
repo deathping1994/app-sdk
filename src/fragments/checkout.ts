@@ -190,7 +190,10 @@ export const checkoutLineWithAddOnFragment = gql`
         }
       }
     }
-    linePrice
+    linePrice {
+      amount
+      currency
+    }
     variant {
       id
       sku
