@@ -155,7 +155,6 @@ export const checkoutSublineFragment = gql`
             category {
               id
               name
-              slug
             }
           }
           thumbnail {
