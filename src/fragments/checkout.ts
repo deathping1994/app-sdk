@@ -149,6 +149,11 @@ export const checkoutSublineFragment = gql`
         product {
           id
           name
+          category {
+            id
+            name
+            slug
+          }
           thumbnail {
             url
           }
