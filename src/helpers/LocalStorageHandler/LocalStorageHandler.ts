@@ -69,6 +69,16 @@ export class LocalStorageHandler extends LocalStorageHandlerProxy {
     }
   }
 
+  static async getCart(): Promise<any | null> {
+    try {
+      return await LocalStorageHandlerProxy.retrieveItem(
+        LocalStorageItems.CART
+      );
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async setSignInToken(token: string | null): Promise<void> {
     try {
       return await this.saveItem(LocalStorageItems.TOKEN, token);
@@ -109,6 +119,14 @@ export class LocalStorageHandler extends LocalStorageHandlerProxy {
         LocalStorageItems.CUSTOMER_CHECKOUTS,
         checkouts
       );
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async setCart(cart: any): Promise<void> {
+    try {
+      return await this.saveItem(LocalStorageItems.CART, cart);
     } catch (error) {
       throw new Error(error.message);
     }

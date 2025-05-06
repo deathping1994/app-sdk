@@ -35,6 +35,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   customerCheckouts?: ICustomerCheckouts[];
 
+  cart?: any;
+
   promoCodeDiscount?: IPromoCodeDiscount;
 
   billingAsShipping?: boolean;
@@ -114,6 +116,10 @@ export class SaleorCheckoutAPI extends ErrorListener {
       }
     );
 
+    this.saleorState.subscribeToChange(StateItems.CART, cart => {
+      this.cart = this.saleorState.cart;
+    });
+
     this.saleorState.subscribeToChange(
       StateItems.PAYMENT,
       (payment: IPaymentModel) => {
@@ -143,6 +149,11 @@ export class SaleorCheckoutAPI extends ErrorListener {
   getCustomerCheckouts = () => {
     const { customerCheckouts } = this.saleorState;
     return customerCheckouts;
+  };
+
+  getCart = () => {
+    const { cart } = this.saleorState;
+    return cart;
   };
 
   getCustomerCheckoutByToken = async (token: string) => {
@@ -206,6 +217,22 @@ export class SaleorCheckoutAPI extends ErrorListener {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "getCustomerCheckouts",
+      {
+        customerId,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
+  getCustomerCarts = async customerId => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "getCustomerCarts",
       {
         customerId,
       }
@@ -876,6 +903,22 @@ export class SaleorCheckoutAPI extends ErrorListener {
       {
         checkoutLineId,
         input,
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
+  createCart = async (customerId: string) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "createCart",
+      {
+        customerId,
       }
     );
 

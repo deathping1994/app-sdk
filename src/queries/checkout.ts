@@ -71,6 +71,38 @@ export const customerCheckouts = gql`
   }
 `;
 
+export const customerCarts = gql`
+  ${checkoutFragment}
+  query Customers($first: Int, $filter: CustomerFilterInput) {
+    customers(filter: $filter, first: $first) {
+      edges {
+        node {
+          id
+          defaultShippingAddress {
+            id
+          }
+          defaultBillingAddress {
+            id
+          }
+          cart {
+            id
+            orderCreated
+            client {
+              id
+              clientCode
+              clientName
+            }
+            checkouts {
+              ...Checkout
+            }
+          }
+        }
+        cursor
+      }
+    }
+  }
+`;
+
 export const customerCheckoutsWithDetails = gql`
   ${checkoutFragment}
   query Customers($first: Int, $filter: CustomerFilterInput) {

@@ -839,6 +839,31 @@ export class ApolloClientManager {
     }
   };
 
+  getCustomerCarts = async (customerId: string) => {
+    console.log("customerId-getCustomerCart", customerId);
+    if (customerId) {
+      const { data, errors } = await this.client.query<any, any>({
+        fetchPolicy: "network-only",
+        query: CheckoutQueries.customerCarts,
+        variables: {
+          first: 1,
+          filter: {
+            customerId: [customerId],
+          },
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.customers?.edges?.[0]?.node?.cart,
+      };
+    }
+  };
+
   getCustomerCheckoutsWithDetails = async (customerId: string) => {
     console.log("customerId-getCustomerCheckoutsWithDetails", customerId);
     if (customerId) {
@@ -2201,6 +2226,39 @@ export class ApolloClientManager {
         };
       }
       return {};
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  //Create Cart
+  createCart = async ({ customerId }: { customerId: string }) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.cartCreateMutation,
+        variables: {
+          customerId,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.cartCreate?.errors?.length) {
+        return {
+          error: data?.cartCreate?.errors,
+        };
+      }
+      if (data?.cartCreate) {
+        return {
+          data: data.cartCreate,
+        };
+      }
     } catch (error) {
       return {
         error,
