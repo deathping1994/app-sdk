@@ -188,21 +188,22 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   createCheckoutNew = async (input): CheckoutResponse => {
+    const { customerId, ...createChekoutInput } = input;
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "createCheckout",
       {
-        input,
+        input: createChekoutInput,
       }
     );
 
-    if (input?.customerId) {
+    if (customerId) {
       const {
         data: customerCheckouts,
         loading,
         error,
-      } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
-        customerId: input?.customerId,
+      } = await this.jobsManager.run("checkout", "getCustomerCarts", {
+        customerId: customerId,
       });
     }
 
