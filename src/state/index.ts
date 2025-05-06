@@ -119,6 +119,10 @@ export class SaleorState extends NamedObservable<StateItems> {
       this.onCustomerCheckoutsUpdate
     );
     this.localStorageHandler.subscribeToChange(
+      LocalStorageItems.CART,
+      this.onCustomerCartUpdate
+    );
+    this.localStorageHandler.subscribeToChange(
       LocalStorageItems.PAYMENT,
       this.onPaymentUpdate
     );
@@ -285,6 +289,12 @@ export class SaleorState extends NamedObservable<StateItems> {
     console.log("onCustomerCheckoutsUpdate", customerCheckouts);
     this.customerCheckouts = customerCheckouts;
     this.notifyChange(StateItems.CUSTOMER_CHECKOUTS, this.customerCheckouts);
+  };
+
+  private onCustomerCartUpdate = (cart?: any[]) => {
+    console.log("onCustomerCartUpdate", cart);
+    this.cart = cart;
+    this.notifyChange(StateItems.CART, this.cart);
   };
 
   private onWishlistUpdate = (wishlist?: IWishlistModel) => {
