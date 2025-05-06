@@ -322,6 +322,10 @@ export const checkoutFragment = gql`
       key
       value
     }
+    cart {
+      id
+      orderCreated
+    }
     email
     user {
       id
