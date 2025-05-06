@@ -141,6 +141,27 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  getCustomerCarts = async ({ customerId }: { customerId: string }) => {
+    const { data, error } = await this.apolloClientManager.getCustomerCarts(
+      customerId
+    );
+    console.log("getCustomerCarts", data);
+    if (data) {
+      await this.localStorageHandler.setCart(data);
+    }
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+        },
+      };
+    }
+    return {
+      data,
+    };
+  };
+
   getCustomerCheckoutsWithDetails = async ({
     customerId,
   }: {
@@ -862,6 +883,27 @@ class CheckoutJobs extends JobsHandler<{}> {
         dataError: {
           error,
           type: DataErrorCheckoutTypes.CHECKOUT_LINE_UPDATE_DATA,
+        },
+      };
+    }
+
+    return { data };
+  };
+
+  createCart = async ({ customerId }: { customerId: string }) => {
+    const { data, error } = await this.apolloClientManager.createCart({
+      customerId,
+    });
+    console.log("xxxxxxxcreateCart-checkoutjobs", data);
+    if (data) {
+      await this.localStorageHandler.setCart(data?.cart);
+    }
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CREATE_CART,
         },
       };
     }

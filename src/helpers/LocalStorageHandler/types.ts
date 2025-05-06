@@ -22,6 +22,7 @@ export enum LocalStorageItems {
   RUNNER_PICKUPS = "runner_pickups",
   RUNNER_DROPOFFS = "runner_dropoffs",
   CUSTOMER_CHECKOUTS = "customer_checkouts",
+  CART = "cart",
 }
 export enum LocalStorageEvents {
   CLEAR = "clear",

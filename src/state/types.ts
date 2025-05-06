@@ -15,6 +15,7 @@ export enum StateItems {
   PAYMENT,
   WISHLIST,
   CUSTOMER_CHECKOUTS,
+  CART,
 }
 
 export interface ISaleorStateSummeryPrices {

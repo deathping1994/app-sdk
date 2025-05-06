@@ -670,3 +670,29 @@ export const checkoutLineExpressRemoveMutation = gql`
     }
   }
 `;
+
+export const cartCreateMutation = gql`
+  ${checkoutFragment}
+  mutation CartCreateMutationApp($customerId: ID!) {
+    cartCreate(customerId: $customerId) {
+      cart {
+        checkouts {
+          ...Checkout
+        }
+        client {
+          id
+          clientCode
+          clientName
+        }
+        id
+        orderCreated
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;

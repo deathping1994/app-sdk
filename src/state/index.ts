@@ -50,6 +50,8 @@ export class SaleorState extends NamedObservable<StateItems> {
 
   customerCheckouts?: ICustomerCheckouts[];
 
+  cart?: any;
+
   promoCode?: string;
 
   selectedShippingAddressId?: string;
