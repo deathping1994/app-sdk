@@ -146,11 +146,11 @@ class CheckoutJobs extends JobsHandler<{}> {
       customerId
     );
     console.log("getCustomerCarts", data);
-    if (data) {
-      await this.localStorageHandler.setCart(
-        data?.find(cart => !cart?.orderCreated)
-      );
-    }
+    // if (data) {
+    //   await this.localStorageHandler.setCart(
+    //     data?.find(cart => !cart?.orderCreated)
+    //   );
+    // }
 
     if (error) {
       return {
@@ -897,11 +897,9 @@ class CheckoutJobs extends JobsHandler<{}> {
       customerId,
     });
     console.log("xxxxxxxcreateCart-checkoutjobs", data);
-    if (data) {
-      await this.localStorageHandler.setCart(
-        data?.cart?.find(cart => !cart?.orderCreated)
-      );
-    }
+    // if (data) {
+    //   await this.localStorageHandler.setCart(data?.cart);
+    // }
 
     if (error) {
       return {
