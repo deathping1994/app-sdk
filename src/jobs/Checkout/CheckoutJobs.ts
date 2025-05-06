@@ -147,7 +147,9 @@ class CheckoutJobs extends JobsHandler<{}> {
     );
     console.log("getCustomerCarts", data);
     if (data) {
-      await this.localStorageHandler.setCart(data);
+      await this.localStorageHandler.setCart(
+        data?.find(cart => !cart?.orderCreated)
+      );
     }
 
     if (error) {
@@ -896,7 +898,9 @@ class CheckoutJobs extends JobsHandler<{}> {
     });
     console.log("xxxxxxxcreateCart-checkoutjobs", data);
     if (data) {
-      await this.localStorageHandler.setCart(data?.cart);
+      await this.localStorageHandler.setCart(
+        data?.cart?.find(cart => !cart?.orderCreated)
+      );
     }
 
     if (error) {
