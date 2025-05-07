@@ -10,6 +10,7 @@ export enum ErrorCartTypes {
 interface addToCartProps {
   lines: [{quantity: number, variantId: string}];
   checkoutMetadataInput: {key: string, value: string}[];
+  restApiUrl: string;
 }
 
 export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
@@ -102,7 +103,8 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
   addToCart = async (
     {
       lines,
-      checkoutMetadataInput
+      checkoutMetadataInput,
+      restApiUrl
     }: addToCartProps
   ) => {
     console.log('add_to_cart 4');
@@ -119,7 +121,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       };
   
       try {
-        let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/add_to_cart/',
+        let jsonData = await fetch(`${restApiUrl}/rest/add_to_cart/`,
           {
             method: "POST",
             credentials: "include",
@@ -234,13 +236,13 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     }
   };
 
-  updateCartItem = async ({ variantId, quantity }: { variantId: string, quantity: number }) => {
+  updateCartItem = async ({ variantId, quantity, restApiUrl }: { variantId: string, quantity: number, restApiUrl: string }) => {
     let checkout = await LocalStorageHandler.getCheckout();
 
     if (checkout) {
       console.log("setCartItem job in if", checkout)
 
-      let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/update_cart/',
+      let jsonData = await fetch(`${restApiUrl}/rest/update_cart/`,
           {
             method: "POST",
             credentials: "include",
