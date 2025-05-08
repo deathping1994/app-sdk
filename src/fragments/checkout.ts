@@ -406,3 +406,20 @@ export const checkoutFragment = gql`
     }
   }
 `;
+
+export const cartFragment = gql`
+  ${checkoutFragment}
+  fragment Cart on Cart {
+    id
+    orderCreated
+    isExpress
+    checkouts {
+      ...Checkout
+    }
+    client {
+      id
+      clientCode
+      clientName
+    }
+  }
+`;
