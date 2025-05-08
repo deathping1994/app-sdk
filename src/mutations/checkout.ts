@@ -597,7 +597,7 @@ export const checkoutExtraDataDeleteMutation = gql`
 `;
 
 export const checkoutExpressAddMutation = gql`
-  ${checkoutFragment}
+  ${cartFragment}
   mutation CheckoutExpressAddMutationApp($checkoutIds: [ID]!) {
     checkoutExpressAdd(checkoutIds: $checkoutIds) {
       cart {
@@ -614,7 +614,7 @@ export const checkoutExpressAddMutation = gql`
 `;
 
 export const checkoutExpressRemoveMutation = gql`
-  ${checkoutFragment}
+  ${cartFragment}
   mutation CheckoutExpressRemoveMutationApp($checkoutIds: [ID]!) {
     checkoutExpressRemove(checkoutIds: $checkoutIds) {
       cart {
@@ -631,7 +631,6 @@ export const checkoutExpressRemoveMutation = gql`
 `;
 
 export const checkoutLineExpressAddMutation = gql`
-  ${checkoutFragment}
   ${cartFragment}
   mutation CheckoutLineExpressAddMutationApp(
     $checkoutLineId: ID!
@@ -652,7 +651,6 @@ export const checkoutLineExpressAddMutation = gql`
 `;
 
 export const checkoutLineExpressRemoveMutation = gql`
-  ${checkoutFragment}
   ${cartFragment}
   mutation checkoutLineExpressRemoveMutationApp($checkoutLineId: ID!) {
     checkoutLineExpressRemove(checkoutLineId: $checkoutLineId) {
@@ -670,7 +668,6 @@ export const checkoutLineExpressRemoveMutation = gql`
 `;
 
 export const cartCreateMutation = gql`
-  ${checkoutFragment}
   ${cartFragment}
   mutation CartCreateMutationApp($customerId: ID!) {
     cartCreate(customerId: $customerId) {
@@ -688,7 +685,6 @@ export const cartCreateMutation = gql`
 `;
 
 export const cartExpressAddMutation = gql`
-  ${checkoutFragment}
   ${cartFragment}
   mutation CheckoutExpressOverallAddMutationApp($cartId: ID!) {
     checkoutExpressOverallAdd(cartId: $cartId) {
@@ -706,7 +702,6 @@ export const cartExpressAddMutation = gql`
 `;
 
 export const cartExpressRemoveMutation = gql`
-  ${checkoutFragment}
   ${cartFragment}
   mutation CheckoutExpressOverallRemoveMutationApp($cartId: ID!) {
     checkoutExpressOverallRemove(cartId: $cartId) {
