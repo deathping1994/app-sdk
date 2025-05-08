@@ -634,14 +634,9 @@ export const checkoutLineExpressAddMutation = gql`
   mutation CheckoutLineExpressAddMutationApp(
     $checkoutLineId: ID!
     $price: String!
-    $checkoutIds: [ID]!
   ) {
-    checkoutLineExpressAdd(
-      checkoutLineId: $checkoutLineId
-      price: $price
-      checkoutIds: $checkoutIds
-    ) {
-      checkouts {
+    checkoutLineExpressAdd(checkoutLineId: $checkoutLineId, price: $price) {
+      checkout {
         ...Checkout
       }
       checkoutErrors {
@@ -686,6 +681,48 @@ export const cartCreateMutation = gql`
         }
         id
         orderCreated
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const cartExpressAddMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutExpressOverallAddMutationApp($cartId: ID!) {
+    checkoutExpressOverallAdd(cartId: $cartId) {
+      cart {
+        id
+        orderCreated
+        checkouts {
+          ...Checkout
+        }
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const cartExpressRemoveMutation = gql`
+  ${checkoutFragment}
+  mutation CheckoutExpressOverallRemoveMutationApp($cartId: ID!) {
+    checkoutExpressOverallRemove(cartId: $cartId) {
+      cart {
+        id
+        orderCreated
+        checkouts {
+          ...Checkout
+        }
       }
       checkoutErrors {
         field

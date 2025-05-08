@@ -2506,18 +2506,13 @@ export class ApolloClientManager {
     }
   };
 
-  checkoutLineExpressAdd = async (
-    checkoutLineId: string,
-    price: string,
-    checkoutIds: string[]
-  ) => {
+  checkoutLineExpressAdd = async (checkoutLineId: string, price: string) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.checkoutLineExpressAddMutation,
         variables: {
           checkoutLineId,
           price,
-          checkoutIds,
         },
       });
 
@@ -2532,9 +2527,9 @@ export class ApolloClientManager {
           error: data.checkoutLineExpressAdd.checkoutErrors,
         };
       }
-      if (data?.checkoutLineExpressAdd?.checkouts) {
+      if (data?.checkoutLineExpressAdd?.checkout) {
         return {
-          data: data.checkoutLineExpressAdd.checkouts,
+          data: data.checkoutLineExpressAdd.checkout,
         };
       }
     } catch (error) {
@@ -2567,6 +2562,70 @@ export class ApolloClientManager {
       if (data?.checkoutLineExpressRemove?.checkout) {
         return {
           data: data.checkoutLineExpressRemove.checkout,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  cartExpressAdd = async (cartId: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.cartExpressAddMutation,
+        variables: {
+          cartId,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutExpressOverallAdd?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutExpressOverallAdd.checkoutErrors,
+        };
+      }
+      if (data?.checkoutExpressOverallAdd?.cart) {
+        return {
+          data: data.checkoutExpressOverallAdd.cart,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
+  cartExpressRemove = async (cartId: string) => {
+    try {
+      const { data, errors } = await this.client.mutate<any, any>({
+        mutation: CheckoutMutations.cartExpressRemoveMutation,
+        variables: {
+          cartId,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+
+      if (data?.checkoutExpressOverallRemove?.checkoutErrors?.length) {
+        return {
+          error: data.checkoutExpressOverallRemove.checkoutErrors,
+        };
+      }
+      if (data?.checkoutExpressOverallRemove?.cart) {
+        return {
+          data: data.checkoutExpressOverallRemove.cart,
         };
       }
     } catch (error) {
