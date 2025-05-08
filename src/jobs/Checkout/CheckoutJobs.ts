@@ -20,7 +20,8 @@ import {
   ReOrderJobInput,
 } from "./types";
 import { JobsHandler } from "../JobsHandler";
-import { AddressTypes, getAuthToken } from "src";
+import { AddressTypes } from "src";
+import { getAuthToken } from "../../auth";
 
 export type PromiseCheckoutJobRunResponse = Promise<
   JobRunResponse<DataErrorCheckoutTypes, FunctionErrorCheckoutTypes>
