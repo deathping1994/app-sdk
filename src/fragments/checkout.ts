@@ -171,6 +171,15 @@ export const checkoutLineWithAddOnFragment = gql`
   fragment CheckoutLineWithAddOn on CheckoutLine {
     id
     quantity
+    service {
+      id
+      name
+      category {
+        id
+        name
+        slug
+      }
+    }
     isExpress
     totalPrice {
       gross {
@@ -394,6 +403,23 @@ export const checkoutFragment = gql`
     availableShippingMethods {
       id
       name
+    }
+  }
+`;
+
+export const cartFragment = gql`
+  ${checkoutFragment}
+  fragment Cart on Cart {
+    id
+    orderCreated
+    isExpress
+    checkouts {
+      ...Checkout
+    }
+    client {
+      id
+      clientCode
+      clientName
     }
   }
 `;

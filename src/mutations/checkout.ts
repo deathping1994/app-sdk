@@ -2,6 +2,7 @@ import { gql } from "@apollo/client";
 
 import {
   atcChecckoutFragment,
+  cartFragment,
   checkoutFragment,
   checkoutLineWithAddOnFragment,
   checkoutPriceFragment,
@@ -599,8 +600,8 @@ export const checkoutExpressAddMutation = gql`
   ${checkoutFragment}
   mutation CheckoutExpressAddMutationApp($checkoutIds: [ID]!) {
     checkoutExpressAdd(checkoutIds: $checkoutIds) {
-      checkouts {
-        ...Checkout
+      cart {
+        ...Cart
       }
       checkoutErrors {
         field
@@ -616,8 +617,8 @@ export const checkoutExpressRemoveMutation = gql`
   ${checkoutFragment}
   mutation CheckoutExpressRemoveMutationApp($checkoutIds: [ID]!) {
     checkoutExpressRemove(checkoutIds: $checkoutIds) {
-      checkouts {
-        ...Checkout
+      cart {
+        ...Cart
       }
       checkoutErrors {
         field
@@ -631,18 +632,14 @@ export const checkoutExpressRemoveMutation = gql`
 
 export const checkoutLineExpressAddMutation = gql`
   ${checkoutFragment}
+  ${cartFragment}
   mutation CheckoutLineExpressAddMutationApp(
     $checkoutLineId: ID!
     $price: String!
-    $checkoutIds: [ID]!
   ) {
-    checkoutLineExpressAdd(
-      checkoutLineId: $checkoutLineId
-      price: $price
-      checkoutIds: $checkoutIds
-    ) {
-      checkouts {
-        ...Checkout
+    checkoutLineExpressAdd(checkoutLineId: $checkoutLineId, price: $price) {
+      cart {
+        ...Cart
       }
       checkoutErrors {
         field
@@ -656,10 +653,11 @@ export const checkoutLineExpressAddMutation = gql`
 
 export const checkoutLineExpressRemoveMutation = gql`
   ${checkoutFragment}
+  ${cartFragment}
   mutation checkoutLineExpressRemoveMutationApp($checkoutLineId: ID!) {
     checkoutLineExpressRemove(checkoutLineId: $checkoutLineId) {
-      checkout {
-        ...Checkout
+      cart {
+        ...Cart
       }
       checkoutErrors {
         field
@@ -673,19 +671,47 @@ export const checkoutLineExpressRemoveMutation = gql`
 
 export const cartCreateMutation = gql`
   ${checkoutFragment}
+  ${cartFragment}
   mutation CartCreateMutationApp($customerId: ID!) {
     cartCreate(customerId: $customerId) {
       cart {
-        checkouts {
-          ...Checkout
-        }
-        client {
-          id
-          clientCode
-          clientName
-        }
-        id
-        orderCreated
+        ...Cart
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const cartExpressAddMutation = gql`
+  ${checkoutFragment}
+  ${cartFragment}
+  mutation CheckoutExpressOverallAddMutationApp($cartId: ID!) {
+    checkoutExpressOverallAdd(cartId: $cartId) {
+      cart {
+        ...Cart
+      }
+      checkoutErrors {
+        field
+        message
+        code
+        variants
+      }
+    }
+  }
+`;
+
+export const cartExpressRemoveMutation = gql`
+  ${checkoutFragment}
+  ${cartFragment}
+  mutation CheckoutExpressOverallRemoveMutationApp($cartId: ID!) {
+    checkoutExpressOverallRemove(cartId: $cartId) {
+      cart {
+        ...Cart
       }
       checkoutErrors {
         field

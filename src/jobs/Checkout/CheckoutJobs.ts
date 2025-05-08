@@ -465,6 +465,44 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  cartExpressAdd = async ({ cartId }) => {
+    const { data, error } = await this.apolloClientManager.cartExpressAdd(
+      cartId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CART_EXPRESS_ADD,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  cartExpressRemove = async ({ cartId }) => {
+    const { data, error } = await this.apolloClientManager.cartExpressRemove(
+      cartId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CART_EXPRESS_REMOVE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   updateCheckoutMeta = async ({ metaInput }: { metaInput: any }): any => {
     const checkout = await LocalStorageHandler.getCheckout();
     const { data, error } = await this.apolloClientManager.updateCheckoutMeta(
