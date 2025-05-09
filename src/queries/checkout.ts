@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 
 import {
+  cartFragment,
   checkoutFragment,
   checkoutProductVariantFragment,
 } from "../fragments/checkout";
@@ -72,7 +73,7 @@ export const customerCheckouts = gql`
 `;
 
 export const customerCarts = gql`
-  ${checkoutFragment}
+  ${cartFragment}
   query Customers($first: Int, $filter: CustomerFilterInput) {
     customers(filter: $filter, first: $first) {
       edges {
@@ -85,16 +86,7 @@ export const customerCarts = gql`
             id
           }
           cart {
-            id
-            orderCreated
-            client {
-              id
-              clientCode
-              clientName
-            }
-            checkouts {
-              ...Checkout
-            }
+            ...Cart
           }
         }
         cursor
