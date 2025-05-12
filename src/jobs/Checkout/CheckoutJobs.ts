@@ -250,41 +250,37 @@ class CheckoutJobs extends JobsHandler<{}> {
 
       const authToken = await getAuthToken();
       console.log('checkout create updatedCheckout 2',{token:(authToken ? `JWT ${JSON.parse(authToken!).item}` : null),email,restApiUrl});
-
-      await fetch(`${restApiUrl}/rest/address_update/`,{
+      let headers: any = {
+        "Content-Type": "application/json"
+      }
+      if (authToken) {
+        headers = {...headers, "Authorization": `JWT ${JSON.parse(authToken!).item}`};
+      }
+      const dataJson = await fetch(`${restApiUrl}/rest/address_update/`,{
         method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": authToken ? `JWT ${JSON.parse(authToken!).item}` : null,
-          },
+          headers,
           body: JSON.stringify(variables),
       })
-      .then((res) => res.json())
-      .then(async (data) => {
+      const data = await dataJson.json();
 
-        console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
-        if (data?.id) {
-          await this.localStorageHandler.setCheckout({
-            ...(checkout?._W ? checkout?._W : checkout),
-            availableShippingMethods: data?.availableShippingMethods,
-            billingAsShipping: false,
-            email: data?.email,
-            selectedShippingAddressId,
-            shippingAddress: data?.shippingAddress,
-          });
-        }
-        return {
-          data,
-          dataError: data?.message ? {error:[{"message":data?.message,"field":data?.field,"code":data?.code}]} : null
-        };
-      })
-      .catch((error) => {
-        console.error('Error: setShippingAddressRest', error);
-        return {
-          data: null,
-          dataError: {error}
-        };
-      });
+      console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
+      if (data?.id) {
+        await this.localStorageHandler.setCheckout({
+          ...(checkout?._W ? checkout?._W : checkout),
+          availableShippingMethods: data?.availableShippingMethods,
+          billingAsShipping: false,
+          email: data?.email,
+          selectedShippingAddressId,
+          shippingAddress: data?.shippingAddress,
+        });
+      }
+      return {
+        data,
+        dataError: data?.message ? {
+          error:[{"message":data?.message,"field":data?.field,"code":data?.code}],
+          type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS
+        } : undefined
+      };
     }
     console.error('Error: setShippingAddressRest checkout not found');
     return {
