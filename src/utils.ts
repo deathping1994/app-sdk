@@ -340,21 +340,20 @@ export const purchaseTrack = async (
     });
 };
 
-let previousURL: string | null;
+let previousURL: String | null = "";
 let pageViewQueue: {
   shopMetaData: any;
-  routerAsPath: string | null;
-  tags: string;
-  pageUrl: string;
+  routerAsPath: String | null;
+  tags?: string;
+  pageUrl?: string;
 }[] = [];
 
 export const pageViewTrack = async (
   shopMetaData: any,
   routerAsPath: String | null,
-  tags: string,
-  pageUrl: string
+  tags?: string,
+  pageUrl?: string
 ) => {
-  console.log("pageViewTrack")
   pageViewQueue.push({
     shopMetaData,
     routerAsPath,
@@ -365,25 +364,19 @@ export const pageViewTrack = async (
   const processPageViewQueue = async (
     shopMetaData: any,
     routerAsPath: String | null,
-    tags: string = '',
-    pageUrl: string | null = ''
+    tags?: string,
+    pageUrl?: string | null
   ) => {
-    console.log('pageViewTrack',shopMetaData, routerAsPath, tags, pageUrl);
     
     let visitorId, ip, utm;
-
     const userAgent = `${DeviceInfo.getBrand()}/${DeviceInfo.getModel()} (${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()}) AppVersion/${DeviceInfo.getVersion()}`;
-    console.log('User-Agent:', userAgent);
-
-
+    
     if ( await AsyncStorage.getItem("fctrack_visitor_id")) {
       visitorId = await AsyncStorage.getItem("fctrack_visitor_id");
     } else {
       const fp = await DeviceInfo.getUniqueId(); 
       const visitorProps = fp;
-      visitorId = visitorProps;
-      console.log('visitorProps', visitorProps, visitorId);
-      
+      visitorId = visitorProps; 
       await AsyncStorage.setItem("fctrack_visitor_id", visitorId);
       // Cookies.set("fctrack_visitor_id", visitorId);
     }
@@ -399,14 +392,11 @@ export const pageViewTrack = async (
         console.log("IP Fetch Error:", err);
       }
     }
-    
-    //check UTM in code base 
 
     if (await AsyncStorage.getItem("fctrack")) {
-      // utm =  await AsyncStorage.getItem("fctrack");
+      utm =  await AsyncStorage.getItem("fctrack");
     } else {
-      const queryValue = queryString.parseUrl('https://www.plixlife.com/order-history?utm_source=google&utm_medium=cpc&utm_campaign=spring_sale');
-      console.log('queryValue', queryValue);
+      const queryValue = queryString?.parseUrl(pageUrl);
       
       if (
         queryValue?.query?.utm_source ||
