@@ -246,6 +246,18 @@ class CheckoutJobs extends JobsHandler<{}> {
           streetAddress1: shippingAddress.streetAddress1,
           streetAddress2: shippingAddress.streetAddress2,
         },
+        billingAddress: {
+          city: shippingAddress.city,
+          companyName: shippingAddress.companyName,
+          country: shippingAddress?.country?.code,
+          countryArea: shippingAddress.countryArea,
+          firstName: shippingAddress.firstName,
+          lastName: shippingAddress.lastName,
+          phone: shippingAddress.phone,
+          postalCode: shippingAddress.postalCode,
+          streetAddress1: shippingAddress.streetAddress1,
+          streetAddress2: shippingAddress.streetAddress2,
+        },
       };
 
       const authToken = await getAuthToken();
