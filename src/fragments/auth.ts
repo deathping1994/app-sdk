@@ -11,6 +11,10 @@ export const userFragment = gql`
     lastName
     isStaff
     phone
+    extraData {
+      key
+      value
+    }
     client {
       clientCode
       id

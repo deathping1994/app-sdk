@@ -600,6 +600,79 @@ export class ApolloClientManager {
     }
   };
 
+  userExtraDataCreate = async (input: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: LaundreeeMutations.createUserExtraDataMutation,
+      variables: {
+        input,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.userExtraDataCreate?.UserExtraDataErrors.length) {
+      return {
+        error: data.userExtraDataCreate.UserExtraDataErrors,
+      };
+    }
+    return {
+      data: data?.userExtraDataCreate?.userExtraData,
+    };
+  };
+
+  userExtraDataUpdate = async (id: string, input: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: LaundreeeMutations.updateUserExtraDataMutation,
+      variables: {
+        id,
+        input,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.userExtraDataUpdate?.UserExtraDataErrors.length) {
+      return {
+        error: data.userExtraDataUpdate.UserExtraDataErrors,
+      };
+    }
+    return {
+      data: data?.userExtraDataUpdate?.userExtraData,
+    };
+  };
+
+  userExtraDataDelete = async (id: string) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: LaundreeeMutations.deleteUserExtraDataMutation,
+      variables: {
+        id,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.userExtraDataDelete?.UserExtraDataErrors.length) {
+      return {
+        error: data.userExtraDataDelete.UserExtraDataErrors,
+      };
+    }
+    return {
+      data: data?.userExtraDataDelete?.userExtraData,
+    };
+  };
+
   getCheckout = async (
     isUserSignedIn: boolean,
     checkoutToken: string | null
