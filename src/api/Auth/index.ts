@@ -224,6 +224,88 @@ export class AuthAPI extends ErrorListener {
     };
   };
 
+  userExtraDataCreate = async input => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "userExtraDataCreate",
+      {
+        input,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+
+    return {
+      data: userData,
+      error: userDataError,
+      pending: false,
+    };
+  };
+
+  userExtraDataUpdate = async (id: string, input: any) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "userExtraDataUpdate",
+      {
+        id,
+        input,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+
+    return {
+      data: userData,
+      error: userDataError,
+      pending: false,
+    };
+  };
+
+  userExtraDataDelete = async (id: string) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "userExtraDataDelete",
+      {
+        id,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+
+    return {
+      data: userData,
+      error: userDataError,
+      pending: false,
+    };
+  };
+
   accountUpdate = async (
     input: any
     // autoSignIn: boolean

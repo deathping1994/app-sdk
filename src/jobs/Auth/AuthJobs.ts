@@ -215,6 +215,64 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  userExtraDataCreate = async ({ input }: { input: any }) => {
+    const { data, error } = await this.apolloClientManager.userExtraDataCreate(
+      input
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.CREATE_EXTRA_DATA,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  userExtraDataUpdate = async ({ id, input }: { id: string; input: any }) => {
+    const { data, error } = await this.apolloClientManager.userExtraDataUpdate(
+      id,
+      input
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.UPDATE_EXTRA_DATA,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  userExtraDataDelete = async ({ id }: { id: string }) => {
+    const { data, error } = await this.apolloClientManager.userExtraDataDelete(
+      id
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.DELETE_EXTRA_DATA,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   signOut = async (): PromiseAuthJobRunResponse => {
     await this.localStorageHandler.clear();
 

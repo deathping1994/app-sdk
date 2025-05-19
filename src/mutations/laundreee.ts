@@ -54,3 +54,54 @@ export const dropoffUpdate = gql`
     }
   }
 `;
+
+export const createUserExtraDataMutation = gql`
+  mutation UserExtraDataCreateApp($input: UserExtraDataInput!) {
+    userExtraDataCreate(input: $input) {
+      userExtraData {
+        id
+        key
+        value
+      }
+      UserExtraDataErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const updateUserExtraDataMutation = gql`
+  mutation UserExtraDataUpdateApp($id: ID!, $input: UserExtraDataInput!) {
+    userExtraDataUpdate(id: $id, input: $input) {
+      userExtraData {
+        id
+        key
+        value
+      }
+      UserExtraDataErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const deleteUserExtraDataMutation = gql`
+  mutation UserExtraDataDelete($id: ID!) {
+    userExtraDataDelete(id: $id) {
+      userExtraData {
+        id
+        key
+        value
+      }
+      UserExtraDataErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
