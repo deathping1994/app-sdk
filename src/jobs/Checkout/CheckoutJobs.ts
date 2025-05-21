@@ -531,16 +531,16 @@ class CheckoutJobs extends JobsHandler<{}> {
 
   confirmPackageOnCart = async ({
     otp,
-    packageId,
+    cartId,
     skipOtp = false,
   }: {
     otp: any;
-    packageId: string;
+    cartId: string;
     skipOtp: boolean;
   }) => {
     const { data, error } = await this.apolloClientManager.confirmPackageOnCart(
       otp,
-      packageId,
+      cartId,
       skipOtp
     );
 

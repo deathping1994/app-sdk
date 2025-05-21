@@ -1058,13 +1058,13 @@ export class ApolloClientManager {
     };
   };
 
-  confirmPackageOnCart = async (otp: any, packageId: any, skipOtp = false) => {
+  confirmPackageOnCart = async (otp: any, cartId: any, skipOtp = false) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
       mutation: CheckoutMutations.confirmPackageOnCartMutation,
       variables: {
         otp,
-        packageId,
+        cartId,
         skipOtp,
       },
     });
