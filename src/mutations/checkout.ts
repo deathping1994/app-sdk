@@ -739,7 +739,7 @@ export const confirmPackageOnCartMutation = gql`
     $cartId: ID
     $skipOtp: Boolean
   ) {
-    confirmPackageOnOrder(otp: $opt, cartId: $cartId, skipOtp: $skipOtp) {
+    confirmPackageOnOrder(otp: $otp, cartId: $cartId, skipOtp: $skipOtp) {
       packageCustomer {
         id
         created
