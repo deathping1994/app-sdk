@@ -774,6 +774,97 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  addPackageOnCart = async (cartId: string, packageId: string) => {
+    if (cartId && packageId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "addPackageOnCart",
+        {
+          cartId,
+          packageId,
+        }
+      );
+
+      return {
+        data,
+        dataError,
+      };
+    }
+  };
+
+  confirmPackageOnCart = async (
+    otp: string,
+    packageId: string,
+    skipOtp = false
+  ) => {
+    if (otp && packageId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "confirmPackageOnCart",
+        {
+          otp,
+          packageId,
+          skipOtp,
+        }
+      );
+
+      return {
+        data,
+        dataError,
+      };
+    }
+    return {
+      error: new Error("otp or packageId not provided"),
+    };
+  };
+
+  rechargePackage = async (packageId: string, customerId: string) => {
+    if (packageId && customerId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "rechargePackage",
+        {
+          packageId,
+          customerId,
+        }
+      );
+
+      return {
+        data,
+        dataError,
+      };
+    }
+    return {
+      error: new Error("packageId or customerId not provided"),
+    };
+  };
+
+  createPackageCustomer = async (
+    packageId: string,
+    customerId: string,
+    cartId = ""
+  ) => {
+    if (packageId && customerId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "createPackageCustomer",
+        {
+          packageId,
+          customerId,
+          cartId,
+        }
+      );
+
+      return {
+        data,
+        dataError,
+      };
+    }
+    return {
+      error: new Error("packageId or customerId not provided"),
+    };
+  };
+
   setShippingMethod = async (
     shippingMethodId: string,
     checkoutId: string,

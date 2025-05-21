@@ -503,6 +503,117 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  addPackageOnCart = async ({
+    cartId,
+    packageId,
+  }: {
+    cartId: string;
+    packageId: string;
+  }) => {
+    const { data, error } = await this.apolloClientManager.addPackageOnCart(
+      cartId,
+      packageId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.ADD_PACKAGE_ON_CART,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  confirmPackageOnCart = async ({
+    otp,
+    packageId,
+    skipOtp = false,
+  }: {
+    otp: any;
+    packageId: string;
+    skipOtp: boolean;
+  }) => {
+    const { data, error } = await this.apolloClientManager.confirmPackageOnCart(
+      otp,
+      packageId,
+      skipOtp
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CONFIRM_PACKAGE_ON_CART,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  createPackageCustomer = async ({
+    customerId,
+    packageId,
+    cartId = "",
+  }: {
+    customerId: string;
+    packageId: string;
+    cartId: string;
+  }) => {
+    const { data, error } =
+      await this.apolloClientManager.createPackageCustomer(
+        customerId,
+        packageId,
+        cartId
+      );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CREATE_PACKAGE_CUSTOMER,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  rechargePackage = async ({
+    customerId,
+    packageId,
+  }: {
+    customerId: string;
+    packageId: string;
+  }) => {
+    const { data, error } = await this.apolloClientManager.rechargePackage(
+      customerId,
+      packageId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.RECHARGE_PACKAGE,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   updateCheckoutMeta = async ({ metaInput }: { metaInput: any }): any => {
     const checkout = await LocalStorageHandler.getCheckout();
     const { data, error } = await this.apolloClientManager.updateCheckoutMeta(
