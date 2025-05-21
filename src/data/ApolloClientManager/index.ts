@@ -1033,6 +1033,112 @@ export class ApolloClientManager {
     };
   };
 
+  addPackageOnCart = async (cartId: any, packageId: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.addPackageToCartMutation,
+      variables: {
+        cartId,
+        packageId,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.addPackageToCheckout?.packageErrors?.length) {
+      return {
+        error: data?.addPackageToCheckout?.packageErrors,
+      };
+    }
+    return {
+      data: data?.addPackageToCheckout?.packageOrder,
+    };
+  };
+
+  confirmPackageOnCart = async (otp: any, packageId: any, skipOtp = false) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.confirmPackageOnCartMutation,
+      variables: {
+        otp,
+        packageId,
+        skipOtp,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.confirmPackageOnOrder?.packageErrors?.length) {
+      return {
+        error: data?.confirmPackageOnOrder?.packageErrors,
+      };
+    }
+    return {
+      data: data?.confirmPackageOnOrder?.packageCustomer,
+    };
+  };
+
+  createPackageCustomer = async (
+    customerId: string,
+    packageId: string,
+    cartId = ""
+  ) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.packageCustomerCreate,
+      variables: {
+        customerId,
+        packageId,
+        ...(cartId ? { cartId } : {}),
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.packageCustomerCreate?.packageErrors?.length) {
+      return {
+        error: data?.packageCustomerCreate?.packageErrors,
+      };
+    }
+    return {
+      data: data?.packageCustomerCreate?.packageCustomer,
+    };
+  };
+
+  rechargePackage = async (customerId: string, packageId: string) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.packageCustomerAddAmountApp,
+      variables: {
+        customerId,
+        packageId,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.packageCustomerAddAmount?.packageErrors?.length) {
+      return {
+        error: data?.packageCustomerAddAmount?.packageErrors,
+      };
+    }
+    return {
+      data: data?.packageCustomerAddAmount?.packageCustomer,
+    };
+  };
+
   createCheckoutRest = async (
     lines?: any,
     isRecalculate: boolean,

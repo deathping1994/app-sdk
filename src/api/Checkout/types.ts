@@ -107,6 +107,10 @@ export enum DataErrorCheckoutTypes {
   "CREATE_CART",
   "CART_EXPRESS_ADD",
   "CART_EXPRESS_REMOVE",
+  "ADD_PACKAGE_ON_CART",
+  "CONFIRM_PACKAGE_ON_CART",
+  "RECHARGE_PACKAGE",
+  "CREATE_PACKAGE_CUSTOMER",
 }
 
 export interface CreatePaymentInput {

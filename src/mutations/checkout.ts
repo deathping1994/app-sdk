@@ -717,3 +717,96 @@ export const cartExpressRemoveMutation = gql`
     }
   }
 `;
+
+export const addPackageToCartMutation = gql`
+  mutation addPackageToCheckoutApp($cartId: ID!, $packageId: ID!) {
+    addPackageToCheckout(cartId: $cartId, packageId: $packageId) {
+      packageErrors {
+        field
+        message
+        code
+      }
+      packageOrder {
+        id
+      }
+    }
+  }
+`;
+
+export const confirmPackageOnCartMutation = gql`
+  mutation confirmPackageOnCartApp($opt: String!, $cartId: String!, skipOtp: Boolean) {
+    confirmPackageOnOrder(otp: $opt, cartId: $cartId, skipOtp: $skipOtp) {
+      packageCustomer {
+        id
+        created
+        balanceAmount
+        invoices {
+          url
+        }
+        totalSaved
+        totalUsage
+        utilizedAmount
+      }
+      packageErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const packageCustomerAddAmountApp = gql`
+  mutation packageCustomerAddAmountApp($customerId: ID!, $packageId: ID!) {
+    packageCustomerAddAmount(customerId: $customerId, packageId: $packageId) {
+      packageCustomer {
+        id
+        balanceAmount
+        expiryDate
+        package {
+          name
+          __typename
+        }
+        validityDays
+        utilizedAmount
+        __typename
+      }
+      packageErrors {
+        field
+        message
+        code
+        __typename
+      }
+      __typename
+    }
+  }
+`;
+
+export const packageCustomerCreate = gql`
+  mutation packageCustomerCreateApp(
+    $customerId: ID!
+    $packageId: ID!
+    $cartId: ID
+  ) {
+    packageCustomerCreate(
+      customerId: $customerId
+      packageId: $packageId
+      cartId: $cartId
+    ) {
+      packageCustomer {
+        id
+        created
+        invoices {
+          url
+          id
+          rawInvoice
+        }
+      }
+      packageErrors {
+        field
+        message
+        code
+      }
+    }
+  }
+`;
