@@ -794,16 +794,16 @@ export class SaleorCheckoutAPI extends ErrorListener {
 
   confirmPackageOnCart = async (
     otp: string,
-    packageId: string,
+    cartId: string,
     skipOtp = false
   ) => {
-    if (otp && packageId) {
+    if (otp && cartId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "confirmPackageOnCart",
         {
           otp,
-          packageId,
+          cartId,
           skipOtp,
         }
       );
