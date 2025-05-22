@@ -12,6 +12,7 @@ export const userFragment = gql`
     isStaff
     phone
     extraData {
+      id
       key
       value
     }
