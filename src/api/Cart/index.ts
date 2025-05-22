@@ -21,6 +21,7 @@ interface addToCartProps {
   lines: [{quantity: number, variantId: string}];
   checkoutMetadataInput: {key: string, value: string}[];
   restApiUrl: string;
+  checkoutId: string;
 }
 export class SaleorCartAPI extends ErrorListener {
   loaded: boolean;
@@ -258,7 +259,7 @@ export class SaleorCartAPI extends ErrorListener {
       pending: false,
     };
   };
-  updateItem = async (variantId: string, quantity: number, restApiUrl: string) => {
+  updateItem = async (variantId: string, quantity: number, restApiUrl: string, checkoutId: string) => {
     // 1. save in local storage
     // this.localStorageManager.updateItemInCart(variantId, quantity);
     // 2. save online if possible (if checkout id available)
@@ -280,7 +281,7 @@ export class SaleorCartAPI extends ErrorListener {
     // }
     if (this.saleorState.checkout?._W?.id || this.saleorState.checkout?.id) {
       console.log("in updateItem if")
-      const { data, error } = await this.jobsManager.run("cart", "updateCartItem",{variantId,quantity,restApiUrl});
+      const { data, error } = await this.jobsManager.run("cart", "updateCartItem",{variantId,quantity,restApiUrl,checkoutId});
       console.log("updateItem",data,error)
       if (error) {
         // this.localStorageManager.updateItemInCart(variantId, quantity - 1);
@@ -334,7 +335,8 @@ export class SaleorCartAPI extends ErrorListener {
   addToCart = async ({
     lines,
     checkoutMetadataInput,
-    restApiUrl
+    restApiUrl,
+    checkoutId
   }: addToCartProps) => {
     
     // this.localStorageManager.addItemsToCart(variantArray);
@@ -342,7 +344,7 @@ export class SaleorCartAPI extends ErrorListener {
       console.log('add_to_cart 3');
       const { data, error } = await  this.jobsManager.run(
         "cart",
-        "addToCart", {lines, checkoutMetadataInput, restApiUrl}
+        "addToCart", {lines, checkoutMetadataInput, restApiUrl, checkoutId}
       );
 
       if (error) {
