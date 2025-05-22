@@ -767,6 +767,11 @@ export const packageCustomerAddAmountApp = gql`
         id
         balanceAmount
         expiryDate
+        invoices {
+          id
+          url
+          rawInvoice
+        }
         package {
           name
           __typename
