@@ -64,7 +64,6 @@ export const createUserExtraDataMutation = gql`
         value
       }
       UserExtraDataErrors {
-        code
         field
         message
       }
@@ -81,7 +80,6 @@ export const updateUserExtraDataMutation = gql`
         value
       }
       UserExtraDataErrors {
-        code
         field
         message
       }
@@ -98,7 +96,6 @@ export const deleteUserExtraDataMutation = gql`
         value
       }
       UserExtraDataErrors {
-        code
         field
         message
       }
