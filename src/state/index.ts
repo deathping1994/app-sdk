@@ -285,7 +285,11 @@ export class SaleorState extends NamedObservable<StateItems> {
     checkout?: ICheckoutModel
   ): ISaleorStateSummeryPrices {
     const items = checkout?.lines;
-    const shippingMethod = checkout?.shippingMethod;
+    const shippingMethod = checkout?.shippingPrice ? {
+      price: {
+        ...checkout?.shippingPrice?.gross
+      }
+    } : checkout?.shippingMethod;
     const promoCodeDiscount = checkout?.promoCodeDiscount?.discount;
 
     if (items && items.length) {

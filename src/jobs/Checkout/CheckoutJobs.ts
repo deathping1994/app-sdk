@@ -546,7 +546,6 @@ class CheckoutJobs extends JobsHandler<{}> {
     cashbackType,
     restApiUrl
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = LocalStorageHandler.getCheckout();
 
     try {
       const resJson = await fetch(`${restApiUrl}/rest/checkout_payment_method/`,{
@@ -572,6 +571,8 @@ class CheckoutJobs extends JobsHandler<{}> {
         };
       }
       if(res?.id){
+        setTimeout(async () => {
+          const checkout = LocalStorageHandler.getCheckout();
         const updatedCheckout = {
           ...checkout,
           ...res
@@ -584,6 +585,7 @@ class CheckoutJobs extends JobsHandler<{}> {
           availableShippingMethods: res?.availableShippingMethods,
           shippingAddress: res?.shippingAddress
         });
+        },0);
   
         return {
           data:{checkoutPaymentMethodUpdate:{checkout:updatedCheckout}}
