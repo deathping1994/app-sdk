@@ -344,15 +344,15 @@ let previousURL: String | null = "";
 let pageViewQueue: {
   shopMetaData: any;
   routerAsPath: String | null;
-  tags?: string;
-  pageUrl?: string;
+  tags: string;
+  pageUrl: string;
 }[] = [];
 
 export const pageViewTrack = async (
   shopMetaData: any,
   routerAsPath: String | null,
-  tags?: string,
-  pageUrl?: string
+  tags: string,
+  pageUrl: string
 ) => {
   pageViewQueue.push({
     shopMetaData,
@@ -364,8 +364,8 @@ export const pageViewTrack = async (
   const processPageViewQueue = async (
     shopMetaData: any,
     routerAsPath: String | null,
-    tags?: string,
-    pageUrl?: string | null
+    tags: string,
+    pageUrl: string | null
   ) => {
     
     let visitorId, ip, utm;
@@ -393,20 +393,27 @@ export const pageViewTrack = async (
       }
     }
 
-    if (await AsyncStorage.getItem("fctrack")) {
-      utm =  await AsyncStorage.getItem("fctrack");
-    } else {
-      const queryValue = queryString?.parseUrl(pageUrl);
-      
-      if (
-        queryValue?.query?.utm_source ||
-        queryValue?.query?.utm_medium ||
-        queryValue?.query?.utm_campaign
-      ) {
-        utm = `us=${queryValue?.query?.utm_source}; um=${queryValue?.query?.utm_medium}; uc=${queryValue?.query?.utm_campaign}`;
+
+    try {
+      if (await AsyncStorage.getItem("fctrack")) {
+        utm =  await AsyncStorage.getItem("fctrack");
+      } else if (pageUrl) {
+        const queryValue = queryString?.parseUrl(pageUrl);
+        
+        if (
+          queryValue?.query?.utm_source ||
+          queryValue?.query?.utm_medium ||
+          queryValue?.query?.utm_campaign
+        ) {
+          utm = `us=${queryValue?.query?.utm_source}; um=${queryValue?.query?.utm_medium}; uc=${queryValue?.query?.utm_campaign}`;
+        } else {
+          utm = "";
+        }
       } else {
         utm = "";
       }
+    } catch (error) {
+        console.log('error in pageview', error);
     }
 
     const FC_TRACKING =
