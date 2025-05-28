@@ -138,14 +138,9 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
           setTimeout(async () => {
             let checkout = await LocalStorageHandler.getCheckout();
             let obj = {
-              ...(checkout?._W ? checkout?._W : checkout),
-              availablePaymentGateways: data?.availablePaymentGateways,
-              availableShippingMethods: data?.availableShippingMethods,
-              promoCodeDiscount: data?.promoCodeDiscount,
-              shippingMethod: data?.shippingMethod,
-              lines: data?.lines
+              ...(checkout ? checkout : {}),
+              ...(data?.token ? data : {})
             };
-      
             await this.localStorageHandler?.setCheckout(obj);
           },0);
         }
@@ -273,7 +268,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
           console.log("setCartItem job in data", data);
           let checkout = await LocalStorageHandler.getCheckout();
           let obj = typeof data=="object" && data.token ? {
-            ...(checkout?._W ? checkout?._W : checkout),
+            ...(checkout ? checkout : {}),
             ...data
           } : {...checkout};
 

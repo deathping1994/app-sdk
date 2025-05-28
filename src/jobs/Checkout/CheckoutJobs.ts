@@ -278,12 +278,8 @@ class CheckoutJobs extends JobsHandler<{}> {
       console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
       if (data?.id) {
         await this.localStorageHandler.setCheckout({
-          ...(checkout?._W ? checkout?._W : checkout),
-          availableShippingMethods: data?.availableShippingMethods,
-          billingAsShipping: false,
-          email: data?.email,
-          selectedShippingAddressId,
-          shippingAddress: data?.shippingAddress,
+          ...(checkout? checkout : {}),
+          ...(data?.token ? data : {})
         });
       }
       return {
@@ -370,9 +366,8 @@ class CheckoutJobs extends JobsHandler<{}> {
         console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
         if (data?.id) {
           await this.localStorageHandler.setCheckout({
-            ...(checkout?._W ? checkout?._W : checkout),
-            availablePaymentGateways: data?.availablePaymentGateways,
-            billingAddress: data?.billingAddress,
+            ...(checkout ? checkout : {}),
+            ...(data?.token ? data : {}),
             billingAsShipping: !!billingAsShipping,
             selectedBillingAddressId,
           });
@@ -676,6 +671,8 @@ class CheckoutJobs extends JobsHandler<{}> {
     });
     const res = await resData.json();
 
+    console.log('addPromoCodeRest response:', res);
+
     if (res?.message) {
       return {
         data: {
@@ -688,8 +685,8 @@ class CheckoutJobs extends JobsHandler<{}> {
     }
 
     await this.localStorageHandler.setCheckout({
-      ...(checkout?._W ? checkout?._W : checkout),
-      promoCodeDiscount: res
+      ...(checkout ? checkout : {}),
+      ...(res?.token ? res : {}),
     });
     return { data: res };
   };
@@ -747,8 +744,8 @@ class CheckoutJobs extends JobsHandler<{}> {
     }
 
     await this.localStorageHandler.setCheckout({
-      ...(checkout?._W ? checkout?._W : checkout),
-      promoCodeDiscount: res
+      ...(checkout ? checkout : {}),
+      ...(res?.token ? res : {}),
     });
     return { data: res };
   };
