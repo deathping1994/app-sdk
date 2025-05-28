@@ -1637,31 +1637,12 @@ export class ApolloClientManager {
     }
   };
 
-  private constructCheckoutModel = ({
-    id,
-    token,
-    email,
-    shippingAddress,
-    billingAddress,
-    discount,
-    discountName,
-    voucherCode,
-    lines,
-    availablePaymentGateways,
-    availableShippingMethods,
-    shippingMethod,
-    note,
-    metadata
-  }: Checkout): ICheckoutModel => ({
-    availablePaymentGateways,
-    availableShippingMethods: availableShippingMethods
-      ? availableShippingMethods.filter(filterNotEmptyArrayItems)
+  private constructCheckoutModel = (checkout: Checkout): ICheckoutModel => ({
+    ...checkout,
+    availableShippingMethods: checkout.availableShippingMethods
+      ? checkout.availableShippingMethods.filter(filterNotEmptyArrayItems)
       : [],
-    billingAddress,
-    email,
-    note,
-    id,
-    lines: lines
+    lines: checkout.lines
       ?.filter(item => item?.quantity && item.variant.id)
       .map(item => {
         const itemVariant = item?.variant;
@@ -1688,14 +1669,10 @@ export class ApolloClientManager {
         };
       }),
     promoCodeDiscount: {
-      discount,
-      discountName,
-      voucherCode,
+      discount: checkout.discount,
+      discountName: checkout.discountName,
+      voucherCode: checkout.voucherCode,
     },
-    shippingAddress,
-    shippingMethod,
-    token,
-    metadata
   });
 
   private constructPaymentModel = ({

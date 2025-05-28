@@ -131,7 +131,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
     shippingAddress: IAddress,
     email: string,
     checkoutMetadataInput: Array<{ key: string; value: string}>,
-    lines: []
+    lines: Array<{ variantId: string; quantity: number }> | [],
+    restApiUrl: string
   ) : CheckoutResponse => {
     try {
       
@@ -143,7 +144,8 @@ export class SaleorCheckoutAPI extends ErrorListener {
           checkoutMetadataInput,
           selectedShippingAddressId: shippingAddress?.id,
           selectedBillingAddressId: shippingAddress?.id,
-          lines
+          lines,
+          restApiUrl
         }
       );
       
@@ -155,7 +157,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
     } catch (error) {
       console.error('error', error);
       return {
-        dataError: error,
+        dataError: {
+          error
+        },
         pending: false
       }
     }
@@ -222,6 +226,60 @@ export class SaleorCheckoutAPI extends ErrorListener {
         lines: alteredLines ?? [],
         selectedShippingAddressId: shippingAddress.id,
         shippingAddress,
+        checkoutMetadataInput:[],
+        restApiUrl:'https://cambaytigerhapi.farziengineer.co'
+      }
+    );
+
+    return {
+      data,
+      dataError,
+      pending: false,
+    };
+  };
+
+  setShippingAddressRest = async (
+    shippingAddress: IAddress,
+    email: string,
+    isRecalculate = true,
+    restApiUrl: string
+  ): CheckoutResponse => {
+    const co = this.saleorState.checkout?._W ? this.saleorState.checkout?._W : this.saleorState.checkout;
+    const checkoutId = co?.id;
+    const alteredLines = co?.lines?.map(item => ({
+      quantity: item?.quantity,
+      variantId: item?.variant?.id,
+    }));
+    if (alteredLines && checkoutId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "setShippingAddressRest",
+        {
+          checkoutId,
+          email,
+          selectedShippingAddressId: shippingAddress.id,
+          shippingAddress,
+          isRecalculate,
+          restApiUrl
+        }
+      );
+
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    const { data, dataError } = await this.jobsManager.run(
+      "checkout",
+      "createCheckout",
+      {
+        email,
+        lines: alteredLines ?? [],
+        selectedShippingAddressId: shippingAddress.id,
+        shippingAddress,
+        checkoutMetadataInput: [],
+        restApiUrl
       }
     );
 
@@ -365,6 +423,116 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
+  setBillingAddressRest = async (
+    billingAddress: IAddress,
+    restApiUrl: string,
+    email?: string,
+  ): CheckoutResponse => {
+    const co = this.saleorState.checkout?._W ? this.saleorState.checkout?._W : this.saleorState.checkout;
+    const checkoutId = co?.id;
+    const isShippingRequiredForProducts = co?.lines
+      ?.filter(line => line.quantity > 0)
+      .some(({ variant }) => variant.product?.productType.isShippingRequired);
+    const alteredLines = co?.lines?.map(item => ({
+      quantity: item!.quantity,
+      variantId: item?.variant!.id,
+    }));
+
+    if (
+      isShippingRequiredForProducts &&
+      checkoutId &&
+      this.checkout?.shippingAddress
+    ) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "setBillingAddressRest",
+        {
+          billingAddress,
+          billingAsShipping: false,
+          checkoutId,
+          selectedBillingAddressId: billingAddress.id,
+          restApiUrl
+        }
+      );
+
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    if (isShippingRequiredForProducts) {
+      return {
+        functionError: {
+          error: new Error(
+            "You need to set shipping address before setting billing address."
+          ),
+          type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
+        },
+        pending: false,
+      };
+    }
+    if (!isShippingRequiredForProducts && email && checkoutId && alteredLines) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "setBillingAddressWithEmailRest",
+        {
+          billingAddress,
+          checkoutId,
+          email,
+          selectedBillingAddressId: billingAddress.id,
+          restApiUrl
+        }
+      );
+
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    if (!isShippingRequiredForProducts && email && alteredLines) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "createCheckout",
+        {
+          billingAddress,
+          email,
+          lines: alteredLines,
+          selectedBillingAddressId: billingAddress.id,
+          checkoutMetadataInput:[],
+          restApiUrl
+        }
+      );
+
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+    if (!isShippingRequiredForProducts && !email) {
+      return {
+        functionError: {
+          error: new Error(
+            "You need to provide email when products do not require shipping before setting billing address."
+          ),
+          type: FunctionErrorCheckoutTypes.EMAIL_NOT_SET,
+        },
+        pending: false,
+      };
+    }
+    return {
+      functionError: {
+        error: new Error(
+          "You need to add items to cart before setting billing address."
+        ),
+        type: FunctionErrorCheckoutTypes.ITEMS_NOT_ADDED_TO_CART,
+      },
+      pending: false,
+    };
+  };
+
   setBillingAsShippingAddress = async (): PromiseRunResponse<
     DataErrorCheckoutTypes,
     FunctionErrorCheckoutTypes
@@ -412,6 +580,40 @@ export class SaleorCheckoutAPI extends ErrorListener {
           useCashback: useCashback,
           isRecalculate: isRecalculate,
           cashbackType: cashbackType
+        }
+      );
+      console.log('dsfb', checkoutId, gatewayId, data)
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    return {
+      functionError: {
+        error: new Error(
+          "payment not updated"
+        ),
+      },
+      pending: false,
+    };
+
+  }
+
+  updateCheckoutPaymentRest = async (gatewayId: string, useCashback: boolean, isRecalculate: boolean, cashbackType: CashBackMethodType, restApiUrl: string): CheckoutResponse => {
+    const checkoutId = this.saleorState.checkout?.id;    
+    if (checkoutId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "updateCheckoutPaymentRest",
+        {
+          checkoutId: checkoutId,
+          gatewayId: gatewayId,
+          useCashback: useCashback,
+          isRecalculate: isRecalculate,
+          cashbackType: cashbackType,
+          restApiUrl
         }
       );
       console.log('dsfb', checkoutId, gatewayId, data)

@@ -10,6 +10,8 @@ export enum ErrorCartTypes {
 interface addToCartProps {
   lines: [{quantity: number, variantId: string}];
   checkoutMetadataInput: {key: string, value: string}[];
+  restApiUrl: string;
+  checkoutId: string;
 }
 
 export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
@@ -102,24 +104,25 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
   addToCart = async (
     {
       lines,
-      checkoutMetadataInput
+      checkoutMetadataInput,
+      restApiUrl,
+      checkoutId
     }: addToCartProps
   ) => {
     console.log('add_to_cart 4');
     // const userId = await AsyncStorage.getItem("user_id");
-    let checkout = await LocalStorageHandler.getCheckout();
   
-    if (checkout) {
-      console.log("add_to_cart job in if", checkout);
+    if (checkoutId) {
+      console.log("add_to_cart job in if", checkoutId);
       let obj = {
-        checkoutId: checkout?.id,
+        checkoutId,
         lines: lines,
         checkoutMetadataInput: checkoutMetadataInput,
         isRecalculate: true
       };
   
       try {
-        let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/add_to_cart/',
+        let jsonData = await fetch(`${restApiUrl}/rest/add_to_cart/`,
           {
             method: "POST",
             credentials: "include",
@@ -132,17 +135,19 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         let data =  await jsonData.json();
 
         if(jsonData?.ok){
-          let obj = {
-            ...(checkout?._W ? checkout?._W : checkout),
-            availablePaymentGateways: data?.availablePaymentGateways,
-            availableShippingMethods: data?.availableShippingMethods,
-            promoCodeDiscount: data?.promoCodeDiscount,
-            shippingMethod: data?.shippingMethod,
-            lines: data?.lines
-          };
-    
-          await this.localStorageHandler?.setCheckout(obj);
-
+          setTimeout(async () => {
+            let checkout = await LocalStorageHandler.getCheckout();
+            let obj = {
+              ...(checkout?._W ? checkout?._W : checkout),
+              availablePaymentGateways: data?.availablePaymentGateways,
+              availableShippingMethods: data?.availableShippingMethods,
+              promoCodeDiscount: data?.promoCodeDiscount,
+              shippingMethod: data?.shippingMethod,
+              lines: data?.lines
+            };
+      
+            await this.localStorageHandler?.setCheckout(obj);
+          },0);
         }
         data={...data,ok:jsonData?.ok};
         console.log("add_to_cart job in data", data);
@@ -234,13 +239,12 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     }
   };
 
-  updateCartItem = async ({ variantId, quantity }: { variantId: string, quantity: number }) => {
-    let checkout = await LocalStorageHandler.getCheckout();
+  updateCartItem = async ({ variantId, quantity, restApiUrl, checkoutId }: { variantId: string, quantity: number, restApiUrl: string, checkoutId: string }) => {
 
-    if (checkout) {
-      console.log("setCartItem job in if", checkout)
+    if (checkoutId) {
+      console.log("setCartItem job in if", checkoutId)
 
-      let jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/update_cart/',
+      let jsonData = await fetch(`${restApiUrl}/rest/update_cart/`,
           {
             method: "POST",
             credentials: "include",
@@ -248,7 +252,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              checkoutId: checkout?.id,
+              checkoutId,
               lines: [{
                 quantity: quantity,
                 variantId: variantId
@@ -265,15 +269,17 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         return { jsonData };
 
       } else if (data) {
-        console.log("setCartItem job in data", data);
+        setTimeout(async () => {
+          console.log("setCartItem job in data", data);
+          let checkout = await LocalStorageHandler.getCheckout();
+          let obj = typeof data=="object" && data.token ? {
+            ...(checkout?._W ? checkout?._W : checkout),
+            ...data
+          } : {...checkout};
 
-        let obj = typeof data=="object" && data.token ? {
-          ...(checkout?._W ? checkout?._W : checkout),
-          ...data
-        } : {...checkout};
-
-        await this.localStorageHandler.setCheckout(obj);
-        console.log("setCartItem job in data", data)
+          await this.localStorageHandler.setCheckout(obj);
+          console.log("setCartItem job in data", data);
+        },0);
 
         return { data };
       }

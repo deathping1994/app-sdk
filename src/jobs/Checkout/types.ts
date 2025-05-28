@@ -13,6 +13,7 @@ export interface CreateCheckoutJobInput {
   selectedBillingAddressId?: string;
   checkoutMetadataInput: Array<{ key: string; value: string}>;
   lines: Array<{ variantId: string; quantity: number }> | [];
+  restApiUrl: string;
 }
 
 export interface ReOrderJobInput {
@@ -27,6 +28,7 @@ export interface SetShippingAddressJobInput {
   email: string;
   selectedShippingAddressId?: string;
   isRecalculate?:boolean;
+  restApiUrl?: string;
 }
 
 export interface SetBillingAddressJobInput {
@@ -34,6 +36,7 @@ export interface SetBillingAddressJobInput {
   billingAddress: ICheckoutAddress;
   billingAsShipping?: boolean;
   selectedBillingAddressId?: string;
+  restApiUrl?: string;
 }
 
 export interface SetBillingAddressWithEmailJobInput {
@@ -41,6 +44,7 @@ export interface SetBillingAddressWithEmailJobInput {
   email: string;
   billingAddress: ICheckoutAddress;
   selectedBillingAddressId?: string;
+  restApiUrl?: string;
 }
 
 export type CashBackMethodType =

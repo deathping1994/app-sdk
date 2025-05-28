@@ -130,7 +130,8 @@ export interface ICheckoutModel {
   availablePaymentGateways?: Checkout_availablePaymentGateways[];
   shippingMethod?: ICheckoutModelShippingMethod | null;
   note?: string;
-  metadata?: any
+  metadata?: any;
+  shippingPrice?: any;
 }
 
 export interface IPaymentModel {

@@ -21,6 +21,7 @@ import {
 } from "./types";
 import { JobsHandler } from "../JobsHandler";
 import { AddressTypes } from "src";
+import { getAuthToken } from "../../auth";
 
 export type PromiseCheckoutJobRunResponse = Promise<
   JobRunResponse<DataErrorCheckoutTypes, FunctionErrorCheckoutTypes>
@@ -132,13 +133,14 @@ class CheckoutJobs extends JobsHandler<{}> {
     checkoutMetadataInput,
     selectedShippingAddressId,
     selectedBillingAddressId,
-    lines
+    lines,
+    restApiUrl
   }: CreateCheckoutJobInput): PromiseCheckoutJobRunResponse => {
     
     
     try {
       console.log('in chekcoutJob',checkoutMetadataInput);
-      const jsonData = await fetch('https://cambaytigerhapi.farziengineer.co/rest/create_checkout/',
+      const jsonData = await fetch(`${restApiUrl}/rest/create_checkout/`,
         {
           method: "POST",
           credentials: "include",
@@ -217,6 +219,91 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
+  setShippingAddressRest = async ({
+    checkoutId,
+    shippingAddress,
+    email,
+    selectedShippingAddressId,
+    restApiUrl,
+    isRecalculate = true
+  }: SetShippingAddressJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    console.log('checkout create updatedCheckout 1',{checkout,checkoutId,email,restApiUrl});
+
+    if (checkout && checkoutId) {
+      const variables = {
+        checkoutId: checkoutId,
+        // email,
+        shippingAddress: {
+          city: shippingAddress.city,
+          companyName: shippingAddress.companyName,
+          country: shippingAddress?.country?.code,
+          countryArea: shippingAddress.countryArea,
+          firstName: shippingAddress.firstName,
+          lastName: shippingAddress.lastName,
+          phone: shippingAddress.phone,
+          postalCode: shippingAddress.postalCode,
+          streetAddress1: shippingAddress.streetAddress1,
+          streetAddress2: shippingAddress.streetAddress2,
+        },
+        billingAddress: {
+          city: shippingAddress.city,
+          companyName: shippingAddress.companyName,
+          country: shippingAddress?.country?.code,
+          countryArea: shippingAddress.countryArea,
+          firstName: shippingAddress.firstName,
+          lastName: shippingAddress.lastName,
+          phone: shippingAddress.phone,
+          postalCode: shippingAddress.postalCode,
+          streetAddress1: shippingAddress.streetAddress1,
+          streetAddress2: shippingAddress.streetAddress2,
+        },
+      };
+
+      const authToken = await getAuthToken();
+      console.log('checkout create updatedCheckout 2',{token:(authToken ? `JWT ${JSON.parse(authToken!).item}` : null),email,restApiUrl});
+      let headers: any = {
+        "Content-Type": "application/json"
+      }
+      if (authToken) {
+        headers = {...headers, "Authorization": `JWT ${JSON.parse(authToken!).item}`};
+      }
+      const dataJson = await fetch(`${restApiUrl}/rest/address_update/`,{
+        method: "POST",
+          headers,
+          body: JSON.stringify(variables),
+      })
+      const data = await dataJson.json();
+
+      console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
+      if (data?.id) {
+        await this.localStorageHandler.setCheckout({
+          ...(checkout?._W ? checkout?._W : checkout),
+          availableShippingMethods: data?.availableShippingMethods,
+          billingAsShipping: false,
+          email: data?.email,
+          selectedShippingAddressId,
+          shippingAddress: data?.shippingAddress,
+        });
+      }
+      return {
+        data,
+        dataError: data?.message ? {
+          error:[{"message":data?.message,"field":data?.field,"code":data?.code}],
+          type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS
+        } : undefined
+      };
+    }
+    console.error('Error: setShippingAddressRest checkout not found');
+    return {
+      data: null,
+      dataError: {
+        error: [{'message':'checkout not found'}],
+        type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS
+      }
+    };
+  };
+
   setBillingAddress = async ({
     checkoutId,
     billingAddress,
@@ -247,6 +334,70 @@ class CheckoutJobs extends JobsHandler<{}> {
       selectedBillingAddressId,
     });
     return { data };
+  };
+
+  setBillingAddressRest = async ({
+    checkoutId,
+    billingAddress,
+    billingAsShipping,
+    selectedBillingAddressId,
+    restApiUrl
+  }: SetBillingAddressJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    console.log('checkout create updatedCheckout 1',{checkout,checkoutId,email,restApiUrl});
+
+    if (checkout && checkoutId) {
+      const variables = {
+        checkoutId,
+        // email,
+        billingAddress
+      };
+
+      const authToken = await getAuthToken();
+      console.log('checkout create updatedCheckout 2',{token:(authToken ? `JWT ${JSON.parse(authToken!).item}` : null),email,restApiUrl});
+
+      await fetch(`${restApiUrl}/rest/address_update/`,{
+        method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": authToken ? `JWT ${JSON.parse(authToken!).item}` : null,
+          },
+          body: JSON.stringify(variables),
+      })
+      .then((res) => res.json())
+      .then(async (data) => {
+
+        console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
+        if (data?.id) {
+          await this.localStorageHandler.setCheckout({
+            ...(checkout?._W ? checkout?._W : checkout),
+            availablePaymentGateways: data?.availablePaymentGateways,
+            billingAddress: data?.billingAddress,
+            billingAsShipping: !!billingAsShipping,
+            selectedBillingAddressId,
+          });
+        }
+        return {
+          data,
+          dataError: data?.message ? {error:[{"message":data?.message,"field":data?.field,"code":data?.code}]} : null
+        };
+      })
+      .catch((error) => {
+        console.error('Error: setBillingAddressRest', error);
+        return {
+          data: null,
+          dataError: {error}
+        };
+      });
+    }
+    console.error('Error: setBillingAddressRest checkout not found');
+    return {
+      data: null,
+      dataError: {
+        error: [{'message':'checkout not found'}],
+        type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS
+      }
+    };
   };
 
   setBillingAddressWithEmail = async ({
@@ -284,6 +435,71 @@ class CheckoutJobs extends JobsHandler<{}> {
       selectedBillingAddressId,
     });
     return { data };
+  };
+
+  setBillingAddressWithEmailRest = async ({
+    checkoutId,
+    billingAddress,
+    email,
+    selectedBillingAddressId,
+    restApiUrl
+  }: SetBillingAddressWithEmailJobInput): PromiseCheckoutJobRunResponse => {
+    const checkout = await LocalStorageHandler.getCheckout();
+    console.log('checkout create updatedCheckout 1',{checkout,checkoutId,email,restApiUrl});
+
+    if (checkout && checkoutId) {
+      const variables = {
+        checkoutId,
+        // email,
+        billingAddress
+      };
+
+      const authToken = await getAuthToken();
+      console.log('checkout create updatedCheckout 2',{token:(authToken ? `JWT ${JSON.parse(authToken!).item}` : null),email,restApiUrl});
+
+      await fetch(`${restApiUrl}/rest/address_update/`,{
+        method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": authToken ? `JWT ${JSON.parse(authToken!).item}` : null,
+          },
+          body: JSON.stringify(variables),
+      })
+      .then((res) => res.json())
+      .then(async (data) => {
+
+        console.log('checkout create updatedCheckout 3',{data,email,restApiUrl});
+        if (data?.id) {
+          await this.localStorageHandler.setCheckout({
+            ...checkout,
+            availablePaymentGateways: data?.availablePaymentGateways,
+            billingAddress: data?.billingAddress,
+            billingAsShipping: false,
+            email: data?.email,
+            selectedBillingAddressId,
+          });
+        }
+        return {
+          data,
+          dataError: data?.message ? {error:[{"message":data?.message,"field":data?.field,"code":data?.code}]} : null
+        };
+      })
+      .catch((error) => {
+        console.error('Error: setBillingAddressRest', error);
+        return {
+          data: null,
+          dataError: {error}
+        };
+      });
+    }
+    console.error('Error: setBillingAddressRest checkout not found');
+    return {
+      data: null,
+      dataError: {
+        error: [{'message':'checkout not found'}],
+        type: DataErrorCheckoutTypes.SET_SHIPPING_ADDRESS
+      }
+    };
   };
 
   updateCheckoutPayment = async ({
@@ -330,7 +546,6 @@ class CheckoutJobs extends JobsHandler<{}> {
     cashbackType,
     restApiUrl
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
-    const checkout = LocalStorageHandler.getCheckout();
 
     try {
       const resJson = await fetch(`${restApiUrl}/rest/checkout_payment_method/`,{
@@ -356,6 +571,8 @@ class CheckoutJobs extends JobsHandler<{}> {
         };
       }
       if(res?.id){
+        setTimeout(async () => {
+          const checkout = LocalStorageHandler.getCheckout();
         const updatedCheckout = {
           ...checkout,
           ...res
@@ -368,6 +585,7 @@ class CheckoutJobs extends JobsHandler<{}> {
           availableShippingMethods: res?.availableShippingMethods,
           shippingAddress: res?.shippingAddress
         });
+        },0);
   
         return {
           data:{checkoutPaymentMethodUpdate:{checkout:updatedCheckout}}
