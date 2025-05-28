@@ -291,10 +291,10 @@ export const purchaseTrack = async (
     });
 };
 
-let previousURL: string | null;
+let previousURL: String | null = "";
 let pageViewQueue: {
   shopMetaData: any;
-  routerAsPath: string | null;
+  routerAsPath: String | null;
   tags: string;
   pageUrl: string;
 }[] = [];
@@ -305,7 +305,6 @@ export const pageViewTrack = async (
   tags: string,
   pageUrl: string
 ) => {
-  console.log("pageViewTrack")
   pageViewQueue.push({
     shopMetaData,
     routerAsPath,
@@ -316,22 +315,19 @@ export const pageViewTrack = async (
   const processPageViewQueue = async (
     shopMetaData: any,
     routerAsPath: String | null,
-    tags: string = '',
-    pageUrl: string | null = ''
+    tags: string,
+    pageUrl: string | null
   ) => {
     
     let visitorId, ip, utm;
-
     const userAgent = `${DeviceInfo.getBrand()}/${DeviceInfo.getModel()} (${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()}) AppVersion/${DeviceInfo.getVersion()}`;
-
+    
     if ( await AsyncStorage.getItem("fctrack_visitor_id")) {
       visitorId = await AsyncStorage.getItem("fctrack_visitor_id");
     } else {
       const fp = await DeviceInfo.getUniqueId(); 
       const visitorProps = fp;
-      visitorId = visitorProps;
-      console.log('visitorProps', visitorProps, visitorId);
-      
+      visitorId = visitorProps; 
       await AsyncStorage.setItem("fctrack_visitor_id", visitorId);
       // Cookies.set("fctrack_visitor_id", visitorId);
     }
@@ -347,24 +343,28 @@ export const pageViewTrack = async (
         console.log("IP Fetch Error:", err);
       }
     }
-    
-    //check UTM in code base 
 
-    if (await AsyncStorage.getItem("fctrack")) {
-      // utm =  await AsyncStorage.getItem("fctrack");
-    } else {
-      const queryValue = queryString.parseUrl('https://www.plixlife.com/order-history?utm_source=google&utm_medium=cpc&utm_campaign=spring_sale');
-      console.log('queryValue', queryValue);
-      
-      if (
-        queryValue?.query?.utm_source ||
-        queryValue?.query?.utm_medium ||
-        queryValue?.query?.utm_campaign
-      ) {
-        utm = `us=${queryValue?.query?.utm_source}; um=${queryValue?.query?.utm_medium}; uc=${queryValue?.query?.utm_campaign}`;
+
+    try {
+      if (await AsyncStorage.getItem("fctrack")) {
+        utm =  await AsyncStorage.getItem("fctrack");
+      } else if (pageUrl) {
+        const queryValue = queryString?.parseUrl(pageUrl);
+        
+        if (
+          queryValue?.query?.utm_source ||
+          queryValue?.query?.utm_medium ||
+          queryValue?.query?.utm_campaign
+        ) {
+          utm = `us=${queryValue?.query?.utm_source}; um=${queryValue?.query?.utm_medium}; uc=${queryValue?.query?.utm_campaign}`;
+        } else {
+          utm = "";
+        }
       } else {
         utm = "";
       }
+    } catch (error) {
+        console.log('error in pageview', error);
     }
 
     const FC_TRACKING =
@@ -391,7 +391,7 @@ export const pageViewTrack = async (
         bi: visitorId,
         ui: await AsyncStorage.getItem("user_id"),
         ci: FC_TRACKING?.client_id,
-        ua: userAgent, // user agent see chat gpt
+        ua: userAgent, 
         uip: ip,
         utm: utm,
         tz: clientTimeZone,
