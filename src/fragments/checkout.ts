@@ -193,7 +193,7 @@ export const checkoutFragment = gql`
     }
     paymentMethod {
       cashbackDiscountAmount
-      couponDiscountAmount
+      couponDiscount
       prepaidDiscountAmount
     }
     metadata {
