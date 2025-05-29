@@ -75,7 +75,9 @@ export class SaleorCheckoutAPI extends ErrorListener {
           availableShippingMethods,
           shippingMethod,
           promoCodeDiscount,
-          metadata
+          metadata,
+          paymentMethod,
+          voucherCode
         } = checkout || {};
         this.checkout = {
           billingAddress,
@@ -97,7 +99,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
         this.promoCodeDiscount = {
           discount: promoCodeDiscount?.discount,
           discountName: promoCodeDiscount?.discountName,
-          voucherCode: promoCodeDiscount?.voucherCode,
+          voucherCode: voucherCode || promoCodeDiscount?.voucherCode,
         };
       }
     );
