@@ -191,6 +191,11 @@ export const checkoutFragment = gql`
     lines {
       ...CheckoutLine
     }
+    paymentMethod {
+      cashbackDiscountAmount
+      couponDiscountAmount
+      prepaidDiscountAmount
+    }
     metadata {
       key
       value
