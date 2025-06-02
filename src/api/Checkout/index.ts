@@ -1079,27 +1079,30 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   completeCheckoutMultiple = async (
-    checkoutIds: {
-      checkoutId: string;
-    }[],
-    customerId?: string
+    cartId: string,
+    advanceAmount?: any,
+    advanceAmountMethod?: string
   ): CheckoutResponse => {
-    if (checkoutIds) {
+    if (cartId) {
       const { data, dataError } = await this.jobsManager.run(
         "checkout",
         "completeCheckoutMultiple",
-        { checkoutIds }
+        {
+          cartId,
+          advanceAmount,
+          advanceAmountMethod,
+        }
       );
       console.log("xxxxxxxcompleteCheckoutMultiple-apicheckout", data);
-      if (customerId) {
-        const {
-          data: customerCheckouts,
-          loading,
-          error,
-        } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
-          customerId: customerId,
-        });
-      }
+      // if (customerId) {
+      //   const {
+      //     data: customerCheckouts,
+      //     loading,
+      //     error,
+      //   } = await this.jobsManager.run("checkout", "getCustomerCheckouts", {
+      //     customerId: customerId,
+      //   });
+      // }
       return {
         data,
         dataError,

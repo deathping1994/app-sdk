@@ -1063,15 +1063,19 @@ class CheckoutJobs extends JobsHandler<{}> {
   };
 
   completeCheckoutMultiple = async ({
-    checkoutIds,
+    cartId,
+    advanceAmount,
+    advanceAmountMethod,
   }: {
-    checkoutIds: {
-      checkoutId: string;
-    }[];
+    cartId: string;
+    advanceAmount: any;
+    advanceAmountMethod: string;
   }): PromiseCheckoutJobRunResponse => {
     const { data, error } =
       await this.apolloClientManager.completeCheckoutMultiple({
-        checkoutIds,
+        cartId,
+        advanceAmount,
+        advanceAmountMethod,
       });
     console.log("xxxxxxxcompleteCheckoutMultiple-checkoutjobs", data);
     if (error) {
