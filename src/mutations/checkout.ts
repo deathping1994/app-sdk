@@ -303,10 +303,16 @@ export const completeCheckoutMultipleMutation = gql`
   ${orderDetailFragment}
   ${checkoutErrorFragment}
   ${invoiceFragment}
-  mutation CheckoutMultipleComplete($cartId: ID!, $advanceAmount: Decimal, advanceAmountMethod: String) {
-    checkoutMultipleComplete(cartId: $cartId, 
-    advanceAmount: $advanceAmount, 
-    advanceAmountMethod: $advanceAmountMethod) {
+  mutation CheckoutMultipleComplete(
+    $cartId: ID!
+    $advanceAmount: Decimal
+    $advanceAmountMethod: String
+  ) {
+    checkoutMultipleComplete(
+      cartId: $cartId
+      advanceAmount: $advanceAmount
+      advanceAmountMethod: $advanceAmountMethod
+    ) {
       errors: checkoutErrors {
         ...CheckoutError
       }
