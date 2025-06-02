@@ -2375,17 +2375,21 @@ export class ApolloClientManager {
   };
 
   completeCheckoutMultiple = async ({
-    checkoutIds,
+    cartId,
+    advanceAmount,
+    advanceAmountMethod,
   }: {
-    checkoutIds: {
-      checkoutId: string;
-    }[];
+    cartId: string;
+    advanceAmount: any;
+    advanceAmountMethod: string;
   }) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.completeCheckoutMultipleMutation,
         variables: {
-          checkoutIds,
+          cartId,
+          advanceAmount,
+          advanceAmountMethod,
         },
       });
 
