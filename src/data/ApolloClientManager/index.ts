@@ -448,6 +448,14 @@ export class ApolloClientManager {
         otp,
         phone,
       },
+      update: (cache, { data }) => {
+        if (data?.CreateTokenOTP?.user) {
+          cache.writeQuery({
+            query: UserQueries.getUserDetailsQuery,
+            data: { me: data.CreateTokenOTP.user },
+          });
+        }
+      },
     });
 
     if (errors?.length) {
