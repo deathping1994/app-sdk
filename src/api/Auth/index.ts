@@ -332,12 +332,12 @@ export class AuthAPI extends ErrorListener {
       };
     }
 
-    const {
-      data: userData,
-      dataError: userDataError,
-    } = await this.jobsManager.run("auth", "provideUser", undefined);
+    // const {
+    //   data: userData,
+    //   dataError: userDataError,
+    // } = await this.jobsManager.run("auth", "provideUser", undefined);
     if (this.config.loadOnStart.checkout) {
-      await this.jobsManager.run("checkout", "provideCheckout", {
+      this.jobsManager.run("checkout", "provideCheckout", {
         isUserSignedIn: !!data?.user,
       });
     }
@@ -346,8 +346,8 @@ export class AuthAPI extends ErrorListener {
     // }
 
     return {
-      data: userData,
-      dataError: userDataError,
+      data: data?.user,
+      dataError: dataError,
       pending: false,
     };
   };
