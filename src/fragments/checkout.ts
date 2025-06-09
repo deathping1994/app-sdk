@@ -357,6 +357,7 @@ export const checkoutFragment = gql`
     }
     token
     isExpress
+    expressCharge
     deliveryDate
     service {
       category {
