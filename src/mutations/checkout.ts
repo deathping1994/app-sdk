@@ -734,7 +734,7 @@ export const addPackageToCartMutation = gql`
         message
         code
       }
-      packageOrder {
+      packageOrders {
         id
       }
     }

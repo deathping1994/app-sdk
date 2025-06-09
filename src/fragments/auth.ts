@@ -1,9 +1,34 @@
 import { gql } from "@apollo/client";
 
-import { checkoutAddressFragment } from "./checkout";
+export const userAddressFragment = gql`
+  fragment Address on Address {
+    id
+    firstName
+    lastName
+    companyName
+    streetAddress1
+    streetAddress2
+    city
+    postalCode
+    cityArea
+    country {
+      code
+      country
+    }
+    countryArea
+    phone
+    isDefaultBillingAddress
+    isDefaultShippingAddress
+    type {
+      id
+      type
+      created
+    }
+  }
+`;
 
 export const userFragment = gql`
-  ${checkoutAddressFragment}
+  ${userAddressFragment}
   fragment User on User {
     id
     email
