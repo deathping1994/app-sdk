@@ -261,7 +261,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       if (!jsonData?.ok) {
         console.log("setCartItem job in error", jsonData)
         // this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
-        return { jsonData };
+        return { jsonData, error: [{message: data?.message}] };
 
       } else if (data) {
         setTimeout(async () => {
