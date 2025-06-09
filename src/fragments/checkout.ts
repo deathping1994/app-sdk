@@ -357,7 +357,16 @@ export const checkoutFragment = gql`
     }
     token
     isExpress
-    expressCharge
+    expressCharge {
+      gross {
+        amount
+        currency
+      }
+      net {
+        amount
+        currency
+      }
+    }
     deliveryDate
     service {
       category {
