@@ -1054,7 +1054,7 @@ export class ApolloClientManager {
       };
     }
     return {
-      data: data?.addPackageToCheckout?.packageOrder,
+      data: data?.addPackageToCheckout?.packageOrders,
     };
   };
 
