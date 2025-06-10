@@ -30,6 +30,7 @@ export const updateCheckoutLineMutation = gql`
       checkout {
         ...Checkout
       }
+      message
       checkoutErrors {
         ...CheckoutError
       }
