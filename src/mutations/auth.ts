@@ -348,3 +348,21 @@ export const attachStoreToCustomerMutation = gql`
     }
   }
 `;
+
+export const AUTH_TOKEN_CREATE_V2 = gql`
+  ${userFragment}
+  mutation tokenCreateV2App($id: ID!, $token: String!) {
+    tokenCreateV2(id: $id, token: $token) {
+      token
+      refreshToken
+      csrfToken
+      user {
+        ...User
+      }
+      accountErrors {
+        field
+        message
+      }
+    }
+  }
+`;

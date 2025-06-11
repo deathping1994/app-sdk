@@ -209,17 +209,37 @@ export class AuthAPI extends ErrorListener {
       };
     }
 
-    const { data: userData, dataError: userDataError } =
-      await this.jobsManager.run("auth", "provideUser", undefined);
-    if (this.config.loadOnStart.checkout) {
-      await this.jobsManager.run("checkout", "provideCheckout", {
-        isUserSignedIn: !!data?.user,
-      });
-    }
+    // const { data: userData, dataError: userDataError } =
+    //   await this.jobsManager.run("auth", "provideUser", undefined);
+    // if (this.config.loadOnStart.checkout) {
+    //   await this.jobsManager.run("checkout", "provideCheckout", {
+    //     isUserSignedIn: !!data?.user,
+    //   });
+    // }
 
     return {
-      data: userData,
-      dataError: userDataError,
+      data: data?.user,
+      dataError,
+      pending: false,
+    };
+  };
+
+  authTokenCreateV2 = async (
+    userId: string,
+    token: string
+  ): PromiseRunResponse<DataErrorAuthTypes> => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "authTokenCreateV2",
+      {
+        id: userId,
+        token,
+      }
+    );
+
+    return {
+      data: data?.user,
+      dataError,
       pending: false,
     };
   };

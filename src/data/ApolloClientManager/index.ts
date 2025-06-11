@@ -351,6 +351,15 @@ export class ApolloClientManager {
         otp,
         phone,
       },
+      // Update the cache with the new user data
+      update: (cache, { data }) => {
+        if (data?.confirmAccountV2?.user) {
+          cache.writeQuery({
+            query: UserQueries.getUserDetailsQuery,
+            data: { me: data.confirmAccountV2.user },
+          });
+        }
+      },
     });
 
     if (errors?.length) {
@@ -374,6 +383,36 @@ export class ApolloClientManager {
         token: data?.confirmAccountV2?.token,
         refreshToken: data?.confirmAccountV2?.refreshToken,
         user: data?.confirmAccountV2?.user,
+      },
+    };
+  };
+
+  authtokenCreateV2 = async (id: string, token: string) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: AuthMutations.AUTH_TOKEN_CREATE_V2,
+      variables: {
+        id,
+        token,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.tokenCreateV2?.accountErrors?.length) {
+      return {
+        error: data.tokenCreateV2.accountErrors,
+      };
+    }
+    return {
+      data: {
+        csrfToken: data?.tokenCreateV2?.csrfToken,
+        token: data?.tokenCreateV2?.token,
+        refreshToken: data?.tokenCreateV2?.refreshToken,
+        user: data?.tokenCreateV2?.user,
       },
     };
   };
