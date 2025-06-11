@@ -214,10 +214,8 @@ class CheckoutJobs extends JobsHandler<{}> {
     checkoutId: string;
     lines: any[];
   }) => {
-    const { data, error } = await this.apolloClientManager.checkoutLineUpdate(
-      checkoutId,
-      lines
-    );
+    const { data, error, message } =
+      await this.apolloClientManager.checkoutLineUpdate(checkoutId, lines);
 
     if (error) {
       return {
@@ -225,11 +223,13 @@ class CheckoutJobs extends JobsHandler<{}> {
           error,
           type: DataErrorCheckoutTypes.CHECKOUT_LINE_UPDATE,
         },
+        message,
       };
     }
 
     return {
       data,
+      message,
     };
   };
 

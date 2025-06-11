@@ -997,15 +997,18 @@ export class ApolloClientManager {
     if (errors?.length) {
       return {
         error: errors,
+        message: data?.checkoutLinesUpdate?.message,
       };
     }
     if (data?.checkoutLinesUpdate?.checkoutErrors?.length) {
       return {
         error: data?.checkoutLinesUpdate?.checkoutErrors,
+        message: data?.checkoutLinesUpdate?.message,
       };
     }
     return {
       data: data?.checkoutLinesUpdate?.checkout,
+      message: data?.checkoutLinesUpdate?.message,
     };
   };
 
