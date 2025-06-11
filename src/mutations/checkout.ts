@@ -728,8 +728,8 @@ export const cartExpressRemoveMutation = gql`
 `;
 
 export const addPackageToCartMutation = gql`
-  mutation addPackageToCheckoutApp($cartId: ID!, $packageId: ID!) {
-    addPackageToCheckout(cartId: $cartId, packageId: $packageId) {
+  mutation addPackageToCartApp($cartId: ID!, $packageId: ID!) {
+    addPackageToCart(cartId: $cartId, packageId: $packageId) {
       packageErrors {
         field
         message
@@ -748,7 +748,7 @@ export const confirmPackageOnCartMutation = gql`
     $cartId: ID
     $skipOtp: Boolean
   ) {
-    confirmPackageOnOrder(otp: $otp, cartId: $cartId, skipOtp: $skipOtp) {
+    confirmPackageOnCart(otp: $otp, cartId: $cartId, skipOtp: $skipOtp) {
       packageCustomer {
         id
         created
