@@ -194,6 +194,36 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  authTokenCreateV2 = async ({
+    id,
+    token,
+  }: {
+    id: string;
+    token: string;
+  }): PromiseAuthJobRunResponse => {
+    const { data, error } = await this.apolloClientManager.authtokenCreateV2(
+      id,
+      token
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.SIGN_IN,
+        },
+      };
+    }
+
+    this.localStorageHandler.setSignInToken(data?.token || null);
+    this.localStorageHandler.setCsrfToken(data?.csrfToken || null);
+    this.localStorageHandler.setRefreshToken(data?.refreshToken || null);
+
+    return {
+      data,
+    };
+  };
+
   accountUpdate = async ({
     input,
   }: {
