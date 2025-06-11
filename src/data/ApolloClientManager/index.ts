@@ -1051,13 +1051,13 @@ export class ApolloClientManager {
         error: errors,
       };
     }
-    if (data?.addPackageToCheckout?.packageErrors?.length) {
+    if (data?.addPackageToCart?.packageErrors?.length) {
       return {
-        error: data?.addPackageToCheckout?.packageErrors,
+        error: data?.addPackageToCart?.packageErrors,
       };
     }
     return {
-      data: data?.addPackageToCheckout?.packageOrders,
+      data: data?.addPackageToCart?.packageOrders,
     };
   };
 
@@ -1077,13 +1077,13 @@ export class ApolloClientManager {
         error: errors,
       };
     }
-    if (data?.confirmPackageOnOrder?.packageErrors?.length) {
+    if (data?.confirmPackageOnCart?.packageErrors?.length) {
       return {
-        error: data?.confirmPackageOnOrder?.packageErrors,
+        error: data?.confirmPackageOnCart?.packageErrors,
       };
     }
     return {
-      data: data?.confirmPackageOnOrder?.packageCustomer,
+      data: data?.confirmPackageOnCart?.packageCustomer,
     };
   };
 
