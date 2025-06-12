@@ -118,14 +118,17 @@ export async function axiosRequest(
     };
   }
 
+  const finalHeaders = { ...userSpecificHeaders, ...customRequestHeaders };
+
   if (url && method) {
     try {
+      const { headers: optionsHeaders, ...restOptions } = options;
       const response = await axios({
         url,
         method,
         data,
-        headers: { ...userSpecificHeaders, ...customRequestHeaders },
-        ...options,
+        headers: finalHeaders,
+        ...restOptions,
       });
 
       return response;

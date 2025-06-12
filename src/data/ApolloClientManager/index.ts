@@ -138,6 +138,7 @@ import {
   dummyCheckoutFields,
   getDBIdFromGraphqlId,
 } from "../../consts";
+import { Platform } from "react-native";
 
 export class ApolloClientManager {
   private client: ApolloClient<any>;
@@ -779,10 +780,16 @@ export class ApolloClientManager {
             : {}),
         },
       };
+      const options = {
+        headers: {
+          appplatform: Platform.OS
+        }
+      };
       const res = await axiosRequest(
         fullUrl,
         REST_API_METHODS_TYPES.POST,
-        createCheckoutInput
+        createCheckoutInput,
+        options
       );
       if (res?.axiosError) {
         return {
@@ -942,10 +949,16 @@ export class ApolloClientManager {
             : {}),
         };
         const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.ADD_TO_CART}`;
+        const options = {
+          headers: {
+            appplatform: Platform.OS
+          }
+        };
         const res = await axiosRequest(
           fullUrl,
           REST_API_METHODS_TYPES.POST,
-          input
+          input,
+          options
         );
         if (res?.axiosError) {
           return {
@@ -1045,10 +1058,16 @@ export class ApolloClientManager {
               : {}),
           };
           const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.UPDATE_CART}`;
+          const options = {
+            headers: {
+              appplatform: Platform.OS
+            }
+          };
           const res = await axiosRequest(
             fullUrl,
             REST_API_METHODS_TYPES.POST,
-            input
+            input,
+            options
           );
           if (res?.axiosError) {
             return {
@@ -1146,10 +1165,16 @@ export class ApolloClientManager {
           };
 
           const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.UPDATE_CART}`;
+          const options = {
+            headers: {
+              appplatform: Platform.OS
+            }
+          };
           const res = await axiosRequest(
             fullUrl,
             REST_API_METHODS_TYPES.POST,
-            input
+            input,
+            options
           );
           if (res?.axiosError) {
             return {
@@ -1248,10 +1273,16 @@ export class ApolloClientManager {
               : {}),
           };
           const fullUrl = `${BASE_URL_REST}${REST_API_ENDPOINTS.UPDATE_CART}`;
+          const options = {
+            headers: {
+              appplatform: Platform.OS
+            }
+          };
           const res = await axiosRequest(
             fullUrl,
             REST_API_METHODS_TYPES.POST,
-            input
+            input,
+            options
           );
           if (res?.axiosError) {
             return {
