@@ -395,6 +395,14 @@ export class ApolloClientManager {
         id,
         token,
       },
+       update: (cache, { data }) => {
+        if (data?.tokenCreateV2?.user) {
+          cache.writeQuery({
+            query: UserQueries.getUserDetailsQuery,
+            data: { me: data.tokenCreateV2.user },
+          });
+        }
+      },
     });
 
     if (errors?.length) {
