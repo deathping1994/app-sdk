@@ -583,7 +583,7 @@ class CheckoutJobs extends JobsHandler<{}> {
         },0);
   
         return {
-          data:{checkoutPaymentMethodUpdate:{checkout:updatedCheckout}}
+          data:{checkoutPaymentMethodUpdate:{checkout:res}}
         };
       }
       return {data: res};
