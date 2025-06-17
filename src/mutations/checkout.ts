@@ -744,8 +744,8 @@ export const addPackageToCartMutation = gql`
 
 export const confirmPackageOnCartMutation = gql`
   mutation confirmPackageOnCartApp(
-    $otp: String!
-    $cartId: ID
+    $otp: String
+    $cartId: ID!
     $skipOtp: Boolean
   ) {
     confirmPackageOnCart(otp: $otp, cartId: $cartId, skipOtp: $skipOtp) {
