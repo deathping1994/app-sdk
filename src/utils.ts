@@ -4,6 +4,7 @@ import { REST_API_METHODS_TYPES } from "./consts";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DeviceInfo from "react-native-device-info";
 import queryString from "query-string";
+import { Platform } from "react-native";
 
 // errors are nested in data as it currently stands in the API
 // this helper extracts all errors present
@@ -107,22 +108,17 @@ export async function axiosRequest(
       ...userSpecificHeaders,
       Authorization: `JWT ${userToken}`,
     };
-  }
+  }  
 
-  let customRequestHeaders = {};
-
-  if (options?.headers) {
-    customRequestHeaders = {
-      ...customRequestHeaders,
-      ...options.headers,
-    };
-  }
-
-  const finalHeaders = { ...userSpecificHeaders, ...customRequestHeaders };
+  const finalHeaders = {
+    appplatform: Platform.OS,
+    ...userSpecificHeaders,
+    ...(options?.headers || {}),
+  };
 
   if (url && method) {
     try {
-      const { headers: optionsHeaders, ...restOptions } = options;
+      const { headers: _, ...restOptions } = options;
       const response = await axios({
         url,
         method,
@@ -130,7 +126,7 @@ export async function axiosRequest(
         headers: finalHeaders,
         ...restOptions,
       });
-
+     
       return response;
     } catch (error) {
       console.log("Error occurred in axiosRequest", error);
