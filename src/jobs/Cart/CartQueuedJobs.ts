@@ -170,11 +170,11 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         variantArray,
         checkout
       );
-      if (error && this.onErrorListener) {
+      if (error) {
         console.log("setCartItem job in error", error)
 
 
-        this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
+        // this.onErrorListener(error, ErrorCartTypes.SET_CART_ITEM);
         return { error };
 
       } else if (data) {
