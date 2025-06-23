@@ -395,7 +395,7 @@ export class ApolloClientManager {
         id,
         token,
       },
-       update: (cache, { data }) => {
+      update: (cache, { data }) => {
         if (data?.tokenCreateV2?.user) {
           cache.writeQuery({
             query: UserQueries.getUserDetailsQuery,
@@ -1108,14 +1108,14 @@ export class ApolloClientManager {
     };
   };
 
-  confirmPackageOnCart = async (otp: any, cartId: any, skipOtp = false) => {
+  confirmPackageOnCart = async (cartId: any, skipOtp = false, otp: any) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
       mutation: CheckoutMutations.confirmPackageOnCartMutation,
       variables: {
-        otp,
         cartId,
         skipOtp,
+        otp,
       },
     });
 
