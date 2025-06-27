@@ -245,6 +245,24 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
     };
   };
 
+  getCustomerDetailsWithId = async ({ id }) => {
+    const { data, error } =
+      await this.apolloClientManager.getCustomerDetailsWithId(id);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.CUSTOMER_DETAILS_FETCH,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   userExtraDataCreate = async ({ input }: { input: any }) => {
     const { data, error } = await this.apolloClientManager.userExtraDataCreate(
       input

@@ -3137,6 +3137,31 @@ export class ApolloClientManager {
     }
   };
 
+  getCustomerDetailsWithId = async id => {
+    try {
+      const { data, errors } = await this.client.query<any, any>({
+        query: UserQueries.getUserDetailsWithId,
+        fetchPolicy: "network-only",
+        variables: {
+          id,
+        },
+      });
+
+      if (errors?.length) {
+        return {
+          error: errors,
+        };
+      }
+      return {
+        data: data?.user,
+      };
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  };
+
   // Pick And Drop
   updatePickup = async ({ id, input }) => {
     try {
