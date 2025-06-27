@@ -36,6 +36,7 @@ export const userFragment = gql`
     lastName
     isStaff
     phone
+    isNewCustomer
     extraData {
       id
       key
