@@ -10,3 +10,12 @@ export const getUserDetailsQuery = gql`
     }
   }
 `;
+
+export const getUserDetailsWithId = gql`
+  ${userFragment}
+  query CustomerDetailsWithIdApp($id: ID!) {
+    user(id: $id) {
+      ...User
+    }
+  }
+`;

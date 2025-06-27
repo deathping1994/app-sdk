@@ -451,6 +451,30 @@ export class AuthAPI extends ErrorListener {
     };
   };
 
+  getCustomerDetailsWithId = async (id: string) => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "getCustomerDetailsWithId",
+      {
+        id,
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    return {
+      data: data,
+      dataError: dataError,
+      pending: false,
+    };
+  };
+
   /**
    * Tries to refresh user token to keep previously signed in user authenticated.
    * @param refreshToken Refresh token. Required when refreshToken is not provided as a cookie.

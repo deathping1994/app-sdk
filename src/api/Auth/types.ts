@@ -9,6 +9,7 @@ export enum DataErrorAuthTypes {
   "CREATE_EXTRA_DATA",
   "UPDATE_EXTRA_DATA",
   "DELETE_EXTRA_DATA",
+  "CUSTOMER_DETAILS_FETCH",
 }
 
 export enum DataErrorPickUpTypes {
