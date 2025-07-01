@@ -140,13 +140,19 @@ class CheckoutJobs extends JobsHandler<{}> {
     
     try {
       console.log('in chekcoutJob',checkoutMetadataInput);
+      let header:any = {
+        "Content-Type": "application/json",
+      };
+      const token = getAuthToken();
+      if(token) header={
+        ...header,
+        "Authorization": `JWT ${token}`
+      }
       const jsonData = await fetch(`${restApiUrl}/rest/create_checkout/`,
         {
           method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: header,
           body: JSON.stringify({
             checkoutInput:{
               email: email,
