@@ -215,6 +215,7 @@ export const checkoutFragment = gql`
       cashbackDiscountAmount
       couponDiscount
       prepaidDiscountAmount
+      platformChargeAmount
     }
     availableShippingMethods {
       ...ShippingMethod

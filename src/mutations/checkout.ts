@@ -348,6 +348,7 @@ export const CHECKOUT_PAYMENTS = gql`
         cashbackDiscountAmount
         couponDiscount
         prepaidDiscountAmount
+        platformChargeAmount
       }
       subtotalPrice {
         ...Price
