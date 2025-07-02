@@ -143,10 +143,10 @@ class CheckoutJobs extends JobsHandler<{}> {
       let header:any = {
         "Content-Type": "application/json",
       };
-      const token = getAuthToken();
+      const token = await getAuthToken();
       if(token) header={
         ...header,
-        "Authorization": `JWT ${token}`
+        "Authorization": `JWT ${JSON.parse(token!).item}`
       }
       const jsonData = await fetch(`${restApiUrl}/rest/create_checkout/`,
         {
