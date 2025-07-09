@@ -1108,6 +1108,31 @@ export class ApolloClientManager {
     };
   };
 
+  addPackageOnOrder = async (orderId: any, packageId: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.addPackageToOrderMutation,
+      variables: {
+        orderId,
+        packageId,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.addPackageToOrder?.packageErrors?.length) {
+      return {
+        error: data?.addPackageToOrder?.packageErrors,
+      };
+    }
+    return {
+      data: data?.addPackageToOrder?.packageOrder,
+    };
+  };
+
   confirmPackageOnCart = async (cartId: any, skipOtp = false, otp: any) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
@@ -1131,6 +1156,32 @@ export class ApolloClientManager {
     }
     return {
       data: data?.confirmPackageOnCart?.packageCustomer,
+    };
+  };
+
+  confirmPackageOnOrder = async (orderId: any, skipOtp = false, otp: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: CheckoutMutations.confirmPackageOnOrderMutation,
+      variables: {
+        orderId,
+        skipOtp,
+        otp,
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+    if (data?.confirmPackageOnOrder?.packageErrors?.length) {
+      return {
+        error: data?.confirmPackageOnOrder?.packageErrors,
+      };
+    }
+    return {
+      data: data?.confirmPackageOnOrder,
     };
   };
 

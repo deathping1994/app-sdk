@@ -529,6 +529,32 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
+  addPackageOnOrder = async ({
+    orderId,
+    packageId,
+  }: {
+    orderId: string;
+    packageId: string;
+  }) => {
+    const { data, error } = await this.apolloClientManager.addPackageOnOrder(
+      orderId,
+      packageId
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.ADD_PACKAGE_ON_ORDER,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
   confirmPackageOnCart = async ({
     cartId,
     skipOtp = false,
@@ -549,6 +575,36 @@ class CheckoutJobs extends JobsHandler<{}> {
         dataError: {
           error,
           type: DataErrorCheckoutTypes.CONFIRM_PACKAGE_ON_CART,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
+
+  confirmPackageOnOrder = async ({
+    orderId,
+    skipOtp = false,
+    otp,
+  }: {
+    otp: any;
+    orderId: string;
+    skipOtp: boolean;
+  }) => {
+    const { data, error } =
+      await this.apolloClientManager.confirmPackageOnOrder(
+        orderId,
+        skipOtp,
+        otp
+      );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorCheckoutTypes.CONFIRM_PACKAGE_ON_ORDER,
         },
       };
     }

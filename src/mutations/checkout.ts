@@ -742,6 +742,20 @@ export const addPackageToCartMutation = gql`
   }
 `;
 
+export const addPackageToOrderMutation = gql`
+  mutation addPackageToOrderApp($orderId: ID!, $packageId: ID!) {
+    addPackageToOrder(orderId: $orderId, packageId: $packageId) {
+      packageErrors {
+        field
+        message
+        code
+      }
+      packageOrder {
+        id
+      }
+    }
+  }
+`;
 export const confirmPackageOnCartMutation = gql`
   mutation confirmPackageOnCartApp(
     $otp: String
@@ -759,6 +773,40 @@ export const confirmPackageOnCartMutation = gql`
         totalSaved
         totalUsage
         utilizedAmount
+      }
+      packageErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const confirmPackageOnOrderMutation = gql`
+  mutation confirmPackageOnOrderApp(
+    $orderId: ID!
+    $otp: String
+    $skipOtp: Boolean
+  ) {
+    confirmPackageOnOrder(orderId: $orderId, otp: $otp, skipOtp: $skipOtp) {
+      packageCustomer {
+        id
+        created
+        balanceAmount
+        invoices {
+          url
+        }
+        totalSaved
+        totalUsage
+        utilizedAmount
+      }
+      order {
+        id
+        invoices {
+          url
+        }
+        invoiceTemplate
       }
       packageErrors {
         code

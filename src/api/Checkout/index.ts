@@ -793,6 +793,24 @@ export class SaleorCheckoutAPI extends ErrorListener {
     }
   };
 
+  addPackageOnOrder = async (orderId: string, packageId: string) => {
+    if (orderId && packageId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "addPackageOnOrder",
+        {
+          orderId,
+          packageId,
+        }
+      );
+
+      return {
+        data,
+        dataError,
+      };
+    }
+  };
+
   confirmPackageOnCart = async (
     cartId: string,
     skipOtp = false,
@@ -804,6 +822,32 @@ export class SaleorCheckoutAPI extends ErrorListener {
         "confirmPackageOnCart",
         {
           cartId,
+          skipOtp,
+          otp,
+        }
+      );
+
+      return {
+        data,
+        dataError,
+      };
+    }
+    return {
+      error: new Error("otp or packageId not provided"),
+    };
+  };
+
+  confirmPackageOnOrder = async (
+    orderId: string,
+    skipOtp = false,
+    otp?: string
+  ) => {
+    if (orderId) {
+      const { data, dataError } = await this.jobsManager.run(
+        "checkout",
+        "confirmPackageOnOrder",
+        {
+          orderId,
           skipOtp,
           otp,
         }
