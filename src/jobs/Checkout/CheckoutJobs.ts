@@ -549,11 +549,17 @@ class CheckoutJobs extends JobsHandler<{}> {
   }: PaymentMethodUpdateJobInput): PromiseCheckoutJobRunResponse => {
 
     try {
+      let header:any = {
+        "Content-Type": "application/json",
+      };
+      const token = await getAuthToken();
+      if(token) header={
+        ...header,
+        "Authorization": `JWT ${JSON.parse(token!).item}`
+      }
       const resJson = await fetch(`${restApiUrl}/rest/checkout_payment_method/`,{
         method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: header,
           body: JSON.stringify({
             checkoutId,
             gatewayId,
