@@ -1,3 +1,4 @@
+import { getAuthToken } from "src/auth";
 import { ApolloClientManager } from "../../data/ApolloClientManager";
 import { LocalStorageHandler } from "../../helpers/LocalStorageHandler";
 
@@ -120,15 +121,21 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         checkoutMetadataInput: checkoutMetadataInput,
         isRecalculate: true
       };
+      let header:any = {
+        "Content-Type": "application/json",
+      };
+      const token = await getAuthToken();
+      if(token) header={
+        ...header,
+        "Authorization": `JWT ${JSON.parse(token!).item}`
+      }
   
       try {
         let jsonData = await fetch(`${restApiUrl}/rest/add_to_cart/`,
           {
             method: "POST",
             credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: header,
             body: JSON.stringify(obj),
           }
         );
@@ -238,14 +245,20 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
 
     if (checkoutId) {
       console.log("setCartItem job in if", checkoutId)
+      let header:any = {
+        "Content-Type": "application/json",
+      };
+      const token = await getAuthToken();
+      if(token) header={
+        ...header,
+        "Authorization": `JWT ${JSON.parse(token!).item}`
+      }
 
       let jsonData = await fetch(`${restApiUrl}/rest/update_cart/`,
           {
             method: "POST",
             credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: header,
             body: JSON.stringify({
               checkoutId,
               lines: [{

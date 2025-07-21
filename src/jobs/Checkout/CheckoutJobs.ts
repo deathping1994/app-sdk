@@ -673,12 +673,18 @@ class CheckoutJobs extends JobsHandler<{}> {
     restApiUrl
   }: AddPromoCodeJobInput): PromiseCheckoutJobRunResponse => {
     const checkout = await LocalStorageHandler.getCheckout();
+    let header:any = {
+      "Content-Type": "application/json",
+    };
+    const token = await getAuthToken();
+    if(token) header={
+      ...header,
+      "Authorization": `JWT ${JSON.parse(token!).item}`
+    }
 
     const resData = await fetch(`${restApiUrl}/rest/add_promo_code/`,{
       method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: header,
         body: JSON.stringify({checkoutId,promoCode}),
     });
     const res = await resData.json();
@@ -736,12 +742,18 @@ class CheckoutJobs extends JobsHandler<{}> {
     restApiUrl
   }: RemovePromoCodeJobInput): PromiseCheckoutJobRunResponse => {
     const checkout = await LocalStorageHandler.getCheckout();
+    let header:any = {
+      "Content-Type": "application/json",
+    };
+    const token = await getAuthToken();
+    if(token) header={
+      ...header,
+      "Authorization": `JWT ${JSON.parse(token!).item}`
+    }
 
     const resData = await fetch(`${restApiUrl}/rest/remove_promo_code/`,{
       method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: header,
         body: JSON.stringify({checkoutId,promoCode})
     });
     const res = await resData.json();
