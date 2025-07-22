@@ -48,7 +48,7 @@
     "@wry/equality": "^0.5.7",
     "apollo3-cache-persist": "^0.15.0",
     "dayjs": "^1.10.4",
-    "extract-files": "^13.0.0",
+    "extract-files": "11.0.0",
     "graphql": "^16.11.0",
     "lodash": "^4.17.15",
     "lodash-es": "^4.17.15"
