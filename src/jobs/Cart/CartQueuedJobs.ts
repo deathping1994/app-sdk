@@ -1,4 +1,4 @@
-import { getAuthToken } from "src/auth";
+import { getAuthToken } from "../../auth";
 import { ApolloClientManager } from "../../data/ApolloClientManager";
 import { LocalStorageHandler } from "../../helpers/LocalStorageHandler";
 
