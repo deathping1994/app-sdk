@@ -158,7 +158,19 @@ class CheckoutJobs extends JobsHandler<{}> {
               email: email,
               lines: lines,
               checkoutMetadataInput: checkoutMetadataInput,
-              isRecalculate: true
+              isRecalculate: true,
+              shippingAddress: {
+                "city": "delhi",
+                "companyName": "dummy",
+                "country": "IN",
+                "countryArea": "Delhi",
+                "firstName": "dummy",
+                "lastName": "dummy",
+                "phone": "7894561230",
+                "postalCode": "110006",
+                "streetAddress1": "dummy",
+                "streetAddress2": "dummy"
+              }
           }}),
         }
       );
