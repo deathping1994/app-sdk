@@ -57,9 +57,12 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
           availableShippingMethods: data.availableShippingMethods,
           promoCodeDiscount: data.promoCodeDiscount,
           shippingMethod: data.shippingMethod,
-          lines: data.lines
+          lines: data.lines,
+          shippingPrice: data.shippingPrice,
+          subtotalPrice: data?.subtotalPrice ? data.subtotalPrice : checkout?.subtotalPrice,
+          totalPrice: data?.totalPrice ? data.totalPrice : chekcout?.totalPrice
         };
-
+        console.log("321 set cartItem",{data,obj,checkout});
         await this.localStorageHandler.setCheckout(obj);
         console.log("setCartItem job in data", data)
 
