@@ -112,6 +112,7 @@ export async function axiosRequest(
 
   const finalHeaders = {
     appplatform: Platform.OS,
+    "x-client-id" :  "59fb351b-4506-4ccb-9bf9-22b595a1228b",
     ...userSpecificHeaders,
     ...(options?.headers || {}),
   };
