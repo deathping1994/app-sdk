@@ -5,7 +5,7 @@ export const LOCAL_STORAGE_EXISTS = WINDOW_EXISTS && !!window.localStorage;
 export const CREDENTIAL_API_EXISTS =
   WINDOW_EXISTS && !!window.PasswordCredential;
 
-export const BASE_URL_REST = "https://plixlifehapi.farziengineer.co/rest/";
+export const BASE_URL_REST = "https://plixlifefcstagehapi.farziengineer.co/rest/";
 
 export enum REST_API_METHODS_TYPES {
   GET = "GET",
