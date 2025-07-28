@@ -852,8 +852,6 @@ export class ApolloClientManager {
     warehouseId: String,
     checkout: any,
     ) => {
-    const checkoutId = checkout?.id;
-    if (checkoutId) {
 
       try {
         const { data, errors } = await this.client.mutate<
@@ -890,8 +888,6 @@ export class ApolloClientManager {
           error,
         };
       }
-    }
-    return {};
   };
 
   setCartItemsTwo = async (
