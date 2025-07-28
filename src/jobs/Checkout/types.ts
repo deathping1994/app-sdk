@@ -19,7 +19,7 @@ export interface CreateCheckoutJobInput {
 export interface ReOrderJobInput {
   orderId: String;
   skipLines: boolean;
-  warehouseId: String;
+  warehouseId: string;
 }
 
 export interface SetShippingAddressJobInput {
