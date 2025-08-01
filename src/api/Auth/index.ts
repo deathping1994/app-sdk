@@ -588,13 +588,14 @@ export class AuthAPI extends ErrorListener {
   };
 
   // Pickup Create
-  createPickup = async (isExpress = false, pickupSlot) => {
+  createPickup = async (isExpress = false, pickupSlot,source) => {
     const { data, dataError } = await this.jobsManager.run(
       "auth",
       "createPickup",
       {
         isExpress,
         pickupSlot,
+        source,
         customer: this?.user?.id,
       }
     );

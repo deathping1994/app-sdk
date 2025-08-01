@@ -2553,6 +2553,7 @@ export class ApolloClientManager {
   // Pick And Drop
   createPickup = async ({
     isExpress,
+    source,
     pickupSlot,
     customer,
   }: CreatePickupInput) => {
@@ -2564,6 +2565,7 @@ export class ApolloClientManager {
             status: "SCHEDULED",
             customer,
             isExpress,
+            source,
             slot: pickupSlot,
           },
         },
