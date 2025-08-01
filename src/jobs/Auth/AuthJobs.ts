@@ -460,10 +460,12 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
 
   createPickup = async ({
     isExpress,
+    source,
     pickupSlot,
     customer,
   }: {
     isExpress: boolean;
+    source?: string;
     pickupSlot: {
       date: any;
       startTime: any;
@@ -473,6 +475,7 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
   }) => {
     const { data, error } = await this.apolloClientManager.createPickup({
       isExpress,
+      source,
       pickupSlot,
       customer,
     });

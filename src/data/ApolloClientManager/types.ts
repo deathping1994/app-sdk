@@ -47,6 +47,7 @@ export interface CompleteCheckoutInput {
 
 export interface CreatePickupInput {
   isExpress?: boolean;
+  source?: string;
   pickupSlot: {
     date: any;
     startTime: any;

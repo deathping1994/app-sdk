@@ -146,6 +146,7 @@ export const pickupCreateMutation = gql`
         updatedAt
         status
         isExpress
+        source
         frequency {
           daysOfWeek
           endDate
