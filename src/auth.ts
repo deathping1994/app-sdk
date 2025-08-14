@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { LocalStorageItems } from "./helpers";
 import { findValueInEnum } from "./utils";
+import { UUID_EXPORT } from "./consts";
 
 
 export enum JWTError {
@@ -75,7 +76,7 @@ export const authLink = setContext(async (_, context) => {
       // return the headers to the context so httpLink can read them
       headers: {
         ...context.headers,
-        "x-client-uuid": "1442cc74-ab51-4a9f-8589-ddde721c6d35",
+        "x-client-uuid": UUID_EXPORT['x-client-uuid'],
         authorization: authToken ? `JWT ${JSON.parse(authToken!).item}` : null,
       },
     };
