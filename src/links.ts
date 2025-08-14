@@ -5,6 +5,7 @@ import { extractFiles } from 'extract-files';
 import { createUploadLink } from 'apollo-upload-client';
 import { authLink, invalidTokenLinkWithTokenHandler } from "./auth";
 import { setContext } from "@apollo/client/link/context";
+import { UUID_EXPORT } from "./consts";
 
 interface SaleorLinksConfig {
   /**
@@ -48,7 +49,8 @@ export const createSaleorLinks = ({
       headers: {
         ...context.headers,
         appVersion: appversion,
-        appPlatform: appplatform
+        appPlatform: appplatform,
+        "x-client-uuid": UUID_EXPORT['x-client-uuid']
       }
     }
   });

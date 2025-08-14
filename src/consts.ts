@@ -12,6 +12,11 @@ export enum REST_API_METHODS_TYPES {
   POST = "POST",
 }
 
+// UUID HEADER EXPORT 
+  export const UUID_EXPORT = {
+    "x-client-uuid": "1442cc74-ab51-4a9f-8589-ddde721c6d35"
+  }
+
 export const REST_API_ENDPOINTS = {
   ADD_TO_CART: "add_to_cart/",
   UPDATE_CART: "update_cart/",
