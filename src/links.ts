@@ -48,7 +48,8 @@ export const createSaleorLinks = ({
       headers: {
         ...context.headers,
         appVersion: appversion,
-        appPlatform: appplatform
+        appPlatform: appplatform,
+        "x-client-uuid": "1442cc74-ab51-4a9f-8589-ddde721c6d35"
       }
     }
   });

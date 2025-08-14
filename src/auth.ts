@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LocalStorageItems } from "./helpers";
 import { findValueInEnum } from "./utils";
 
+
 export enum JWTError {
   invalid = "InvalidTokenError",
   invalidSignature = "InvalidSignatureError",
@@ -74,6 +75,7 @@ export const authLink = setContext(async (_, context) => {
       // return the headers to the context so httpLink can read them
       headers: {
         ...context.headers,
+        "x-client-uuid": "1442cc74-ab51-4a9f-8589-ddde721c6d35",
         authorization: authToken ? `JWT ${JSON.parse(authToken!).item}` : null,
       },
     };
