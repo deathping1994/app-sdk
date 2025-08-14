@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DeviceInfo from "react-native-device-info";
 import queryString from "query-string";
 import { Platform } from "react-native";
+import { UUID_EXPORT } from "./consts";
 
 // errors are nested in data as it currently stands in the API
 // this helper extracts all errors present
@@ -112,7 +113,8 @@ export async function axiosRequest(
 
   const finalHeaders = {
     appplatform: Platform.OS,
-    "x-client-id" :  "59fb351b-4506-4ccb-9bf9-22b595a1228b",
+    // "x-client-id" :  "59fb351b-4506-4ccb-9bf9-22b595a1228b",
+    "x-client-uuid": UUID_EXPORT['x-client-uuid'],
     ...userSpecificHeaders,
     ...(options?.headers || {}),
   };
