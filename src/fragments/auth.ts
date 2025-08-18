@@ -17,24 +17,6 @@ export const userFragment = gql`
     tags {
       name
     }
-    membershipHistory {
-      id
-      metadata {
-        key
-        value
-      }
-      isActive
-      membershipPurchase
-      membershipExpiry
-      membershipCashbackAmount
-      membershipCashbackDiscount
-      membershipFreeShipping
-      createdAt
-      updatedAt
-      membershipAmount
-      membershipDiscount
-      usedVouchers
-    }
     metadata {
       key
       value
