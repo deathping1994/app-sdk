@@ -39,6 +39,7 @@ export const orderDetailFragment = gql`
       ...Address
     }
     lines {
+      data
       productName
       quantity
       variant {
