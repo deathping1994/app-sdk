@@ -52,38 +52,60 @@ export const tokenRefreshMutation = gql`
 `;
 
 export const createOTPTokeMutation = gql`
-  mutation OTPAuthentication($phone: String!, $otp: String!, $checkoutId: ID) {
-    CreateTokenOTP: otpTokenCreate(
-      otp: $otp
-      phone: $phone
-      checkoutId: $checkoutId
-    ) {
-      token
-      refreshToken
-      csrfToken
-      user {
-        id
-        email
-        firstName
-        lastName
-        metadata {
-          key
-          value
-        }
-      }
-      otpErrors {
-        code
-        field
-        message
+  # mutation OTPAuthentication($phone: String!, $otp: String!, $checkoutId: ID) {
+  #   CreateTokenOTP: otpTokenCreate(
+  #     otp: $otp
+  #     phone: $phone
+  #     checkoutId: $checkoutId
+  #   ) {
+  #     token
+  #     refreshToken
+  #     csrfToken
+  #     user {
+  #       id
+  #       email
+  #       firstName
+  #       lastName
+  #       metadata {
+  #         key
+  #         value
+  #       }
+  #     }
+  #     otpErrors {
+  #       code
+  #       field
+  #       message
+  #     }
+  #   }
+  # }
+  mutation OTPAuthentication($phone: String!, $otp: String!, $checkoutId: ID, $additionalUserType: String) {
+  CreateTokenOTP: otpTokenCreate(otp: $otp, phone: $phone, checkoutId: $checkoutId, additionalUserType:$additionalUserType) {
+    token
+    refreshToken
+    csrfToken
+    user {
+      id
+      email
+      firstName
+      lastName
+      metadata {
+        key
+        value
       }
     }
+    otpErrors {
+      code
+      field
+      message
+    }
   }
+}
 `;
 
 export const CONFIRM_ACCOUNT = gql`
   ${userFragment}
-  mutation ConfirmAccountV2($otp: String!, $phone: String!) {
-    confirmAccountV2(otp: $otp, phone: $phone) {
+  mutation ConfirmAccountV2($otp: String!, $phone: String!,  $additionalUserType: String) {
+    confirmAccountV2(otp: $otp, phone: $phone,  additionalUserType: additionalUserType) {
       token
       refreshToken
       csrfToken

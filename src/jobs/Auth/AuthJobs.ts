@@ -184,13 +184,16 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
   confirmAccountV2 = async ({
     otp,
     phone,
+    additionalUserType
   }: {
     otp: string;
     phone: string;
+    additionalUserType:string
   }): PromiseAuthJobRunResponse => {
     const { data, error } = await this.apolloClientManager.confirmAccountV2(
       otp,
-      phone
+      phone,
+      additionalUserType
     );
 
     if (error) {

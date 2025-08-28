@@ -189,15 +189,18 @@ export class AuthAPI extends ErrorListener {
 
   signUpMobile = async (
     otp: string,
-    phone: string
+    phone: string,
+    additionalUserType: string
     // autoSignIn: boolean
   ): PromiseRunResponse<DataErrorAuthTypes> => {
+    console.log('signUpMobile',otp,phone,additionalUserType);
     const { data, dataError } = await this.jobsManager.run(
       "auth",
       "confirmAccountV2",
       {
         otp,
         phone,
+        additionalUserType
       }
     );
 
