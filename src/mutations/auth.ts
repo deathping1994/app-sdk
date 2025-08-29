@@ -79,7 +79,7 @@ export const createOTPTokeMutation = gql`
 export const CONFIRM_ACCOUNT = gql`
   ${userFragment}
   mutation ConfirmAccountV2($otp: String!, $phone: String!,  $additionalUserType: String) {
-    confirmAccountV2(otp: $otp, phone: $phone,  additionalUserType: additionalUserType) {
+    confirmAccountV2(otp: $otp, phone: $phone,  additionalUserType: $additionalUserType) {
       token
       refreshToken
       csrfToken
