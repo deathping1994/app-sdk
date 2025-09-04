@@ -34,6 +34,16 @@ export const updateCheckoutForWarehouse = gql`
       checkout{
         created
         lastChange
+        subtotalPrice{
+          gross{
+            amount
+            currency
+          }
+          net{
+            amount
+            currency
+          }
+        }
         lines{
           id
           variant{
