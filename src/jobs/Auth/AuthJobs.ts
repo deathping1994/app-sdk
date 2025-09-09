@@ -323,6 +323,8 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
 
   signOut = async (): PromiseAuthJobRunResponse => {
     await this.localStorageHandler.clear();
+    // Persist the onboarding status on sign out
+    await AsyncStorage.setItem('ONBOARDING_STATUS', 'true')
 
     await this.apolloClientManager.signOut();
 
