@@ -332,7 +332,8 @@ export class ApolloClientManager {
     };
   };
 
-  confirmAccountV2 = async (otp: string, phone: string) => {
+  confirmAccountV2 = async (otp: string, phone: string, additionalUserType:string) => {
+     console.log('confirmAccountV2-apollo',otp,phone,additionalUserType);
     const { data, errors } = await this.client.mutate<
       ConfirmAccountV2,
       ConfirmAccountV2Variables
@@ -342,6 +343,7 @@ export class ApolloClientManager {
       variables: {
         otp,
         phone,
+        additionalUserType
       },
     });
 
