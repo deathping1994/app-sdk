@@ -30,5 +30,11 @@ export const userFragment = gql`
     addresses {
       ...Address
     }
+     userExtraInfo {
+    dateOfBirth
+    timeOfBirth
+    gender
+    placeOfBirth
+  }
   }
 `;
