@@ -88,7 +88,7 @@ export class SaleorWishlistAPI extends ErrorListener {
     );
 
     this.localStorageManager.addItemInWishlist(
-      data ? data[0]?.wishlist.items.edges.map(edge => edge.node.product) : []
+      data ? data?.map((item: any) => item.product) : []
     );
   };
 }

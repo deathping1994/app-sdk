@@ -8,7 +8,6 @@ export const getWishlist = gql`
         edges {
           node {
             id
-
             product {
               id
               name
@@ -31,11 +30,6 @@ export const getWishlist = gql`
                   }
                 }
                 quantityAvailable(countryCode: IN)
-                images {
-                  id
-                  url
-                  alt
-                }
                 pricing {
                   onSale
                   priceUndiscounted {
@@ -70,12 +64,6 @@ export const getWishlist = gql`
               thumbnail {
                 url
               }
-              images {
-                id
-                url
-                alt
-              }
-
               pricing {
                 priceRangeUndiscounted {
                   start {
