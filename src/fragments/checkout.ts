@@ -171,6 +171,8 @@ export const checkoutLineWithAddOnFragment = gql`
   fragment CheckoutLineWithAddOn on CheckoutLine {
     id
     quantity
+    groupId
+    totalCount
     service {
       id
       name
@@ -390,6 +392,9 @@ export const checkoutFragment = gql`
       }
     }
     lines {
+      ...CheckoutLineWithAddOn
+    }
+    linesByGroup{
       ...CheckoutLineWithAddOn
     }
     totalPrice {
