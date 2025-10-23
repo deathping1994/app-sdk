@@ -1188,7 +1188,6 @@ export class ApolloClientManager {
   createPackageCustomer = async (
     customerId: string,
     packageId: string,
-    cartId = ""
   ) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
@@ -1196,7 +1195,6 @@ export class ApolloClientManager {
       variables: {
         customerId,
         packageId,
-        ...(cartId ? { cartId } : {}),
       },
     });
 

@@ -887,7 +887,6 @@ export class SaleorCheckoutAPI extends ErrorListener {
   createPackageCustomer = async (
     packageId: string,
     customerId: string,
-    cartId = ""
   ) => {
     if (packageId && customerId) {
       const { data, dataError } = await this.jobsManager.run(
@@ -896,7 +895,6 @@ export class SaleorCheckoutAPI extends ErrorListener {
         {
           packageId,
           customerId,
-          cartId,
         }
       );
 

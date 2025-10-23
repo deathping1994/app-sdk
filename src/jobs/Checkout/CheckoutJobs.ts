@@ -617,17 +617,14 @@ class CheckoutJobs extends JobsHandler<{}> {
   createPackageCustomer = async ({
     customerId,
     packageId,
-    cartId = "",
   }: {
     customerId: string;
     packageId: string;
-    cartId: string;
   }) => {
     const { data, error } =
       await this.apolloClientManager.createPackageCustomer(
         customerId,
         packageId,
-        cartId
       );
 
     if (error) {

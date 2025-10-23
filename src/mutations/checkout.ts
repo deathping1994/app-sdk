@@ -852,12 +852,10 @@ export const packageCustomerCreate = gql`
   mutation packageCustomerCreateApp(
     $customerId: ID!
     $packageId: ID!
-    $cartId: ID
   ) {
     packageCustomerCreate(
       customerId: $customerId
       packageId: $packageId
-      cartId: $cartId
     ) {
       packageCustomer {
         id
