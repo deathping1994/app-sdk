@@ -859,12 +859,9 @@ export const packageCustomerCreate = gql`
     ) {
       packageCustomer {
         id
-        created
-        invoices {
-          url
-          id
-          rawInvoice
-        }
+      }
+      packageCustomerSubscription {
+        id
       }
       packageErrors {
         field
