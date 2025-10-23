@@ -1209,7 +1209,7 @@ export class ApolloClientManager {
       };
     }
     return {
-      data: data?.packageCustomerCreate?.packageCustomer,
+      data: data?.packageCustomerCreate,
     };
   };
 
