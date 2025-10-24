@@ -1234,7 +1234,7 @@ export class ApolloClientManager {
       };
     }
     return {
-      data: data?.packageCustomerAddAmount?.packageCustomer,
+      data: data?.packageCustomerAddAmount,
     };
   };
 
