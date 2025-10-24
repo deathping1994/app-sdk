@@ -829,6 +829,10 @@ export const packageCustomerAddAmountApp = gql`
         utilizedAmount
         __typename
       }
+      packageCustomerSubscription {
+        id
+        __typename
+      }
       packageErrors {
         field
         message
