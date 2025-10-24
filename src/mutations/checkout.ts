@@ -767,9 +767,6 @@ export const confirmPackageOnCartMutation = gql`
         id
         created
         balanceAmount
-        invoices {
-          url
-        }
         totalSaved
         totalUsage
         utilizedAmount
