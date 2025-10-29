@@ -609,9 +609,11 @@ export const checkoutExpressAddMutation = gql`
   ${cartFragment}
   mutation CheckoutExpressAddMutationApp($checkoutIds: [ID]!) {
     checkoutExpressAdd(checkoutIds: $checkoutIds) {
+    checkouts{
       cart {
         ...Cart
       }
+     }
       checkoutErrors {
         field
         message
@@ -626,8 +628,10 @@ export const checkoutExpressRemoveMutation = gql`
   ${cartFragment}
   mutation CheckoutExpressRemoveMutationApp($checkoutIds: [ID]!) {
     checkoutExpressRemove(checkoutIds: $checkoutIds) {
+    checkouts{
       cart {
         ...Cart
+      }
       }
       checkoutErrors {
         field

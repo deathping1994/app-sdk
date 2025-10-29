@@ -2746,9 +2746,9 @@ export class ApolloClientManager {
           error: data.checkoutExpressAdd.checkoutErrors,
         };
       }
-      if (data?.checkoutExpressAdd?.cart) {
+      if (data?.checkoutExpressAdd?.checkouts) {
         return {
-          data: data.checkoutExpressAdd.cart,
+          data: data.checkoutExpressAdd.checkouts,
         };
       }
     } catch (error) {
@@ -2778,9 +2778,9 @@ export class ApolloClientManager {
           error: data.checkoutExpressRemove.checkoutErrors,
         };
       }
-      if (data?.checkoutExpressRemove?.cart) {
+      if (data?.checkoutExpressRemove?.checkouts) {
         return {
-          data: data.checkoutExpressRemove.cart,
+          data: data.checkoutExpressRemove.checkouts,
         };
       }
     } catch (error) {
