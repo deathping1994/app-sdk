@@ -509,10 +509,11 @@ export const checkoutUpdateDataMutation = gql`
 export const checkoutLineUpdateDataMutation = gql`
   ${checkoutFragment}
   mutation CheckoutLineUpdateDataApp(
-    $checkoutLineId: ID!
+    $checkoutId : ID!
+    $checkoutLineGroupId: Int
     $input: CheckoutLinesUpdateDataInput!
   ) {
-    checkoutLineUpdateData(checkoutLineId: $checkoutLineId, input: $input) {
+    checkoutLineUpdateData(checkoutId:$checkoutId,checkoutLineGroupId: $checkoutLineGroupId, input: $input) {
       checkout {
         ...Checkout
       }
