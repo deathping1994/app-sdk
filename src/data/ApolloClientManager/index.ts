@@ -2435,17 +2435,20 @@ export class ApolloClientManager {
   };
 
   checkoutLineUpdateData = async ({
-    checkoutLineId,
+    checkoutId,
+    checkoutLineGroupId,
     input,
   }: {
-    checkoutLineId: string;
+    checkoutId: string;
+    checkoutLineGroupId: string;
     input: any;
   }) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.checkoutLineUpdateDataMutation,
         variables: {
-          checkoutLineId,
+          checkoutId,
+          checkoutLineGroupId,
           input,
         },
       });
