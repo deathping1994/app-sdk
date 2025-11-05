@@ -451,12 +451,15 @@ export const addOnsLineDelete = gql`
 export const checkoutLineAddExtraData = gql`
   ${checkoutLineWithAddOnFragment}
   mutation CheckoutLineAddExtraData(
-    $checkoutLineId: ID!
+    $checkoutId: ID!
+    $groupId: ID
     $input: [CheckoutLineExtraDataInput]
   ) {
-    checkoutLineAddExtraData(checkoutLineId: $checkoutLineId, input: $input) {
-      checkoutLine {
+    checkoutLineAddExtraData(checkoutId:$checkoutId, groupId: $groupId, input: $input) {
+      checkout {
+      linesByGroup{
         ...CheckoutLineWithAddOn
+      }
       }
       checkoutErrors {
         code
