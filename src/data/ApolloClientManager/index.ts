@@ -2696,12 +2696,13 @@ export class ApolloClientManager {
     }
   };
 
-  checkoutLineAddExtraData = async (checkoutLineId: string, input: any) => {
+  checkoutLineAddExtraData = async (checkoutId: any, groupId: any, input: any) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.checkoutLineAddExtraData,
         variables: {
-          checkoutLineId,
+          checkoutId,
+          groupId,
           input,
         },
       });
@@ -2717,9 +2718,9 @@ export class ApolloClientManager {
           error: data.checkoutLineAddExtraData.checkoutErrors,
         };
       }
-      if (data?.checkoutLineAddExtraData?.checkoutLine) {
+       if (data?.checkoutLineAddExtraData?.checkout?.linesByGroup) {
         return {
-          data: data.checkoutLineAddExtraData.checkoutLine,
+          data: data.checkoutLineAddExtraData?.checkout?.linesByGroup,
         };
       }
     } catch (error) {

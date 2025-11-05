@@ -363,15 +363,17 @@ export class SaleorCheckoutAPI extends ErrorListener {
   };
 
   checkoutLineAddExtraData = async (
-    token: string,
-    checkoutLineId: string,
+    token:any,
+    checkoutId: any,
+    groupId: any,
     input: any
   ) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "checkoutLineAddExtraData",
       {
-        checkoutLineId,
+        checkoutId,
+        groupId,
         input,
       }
     );
