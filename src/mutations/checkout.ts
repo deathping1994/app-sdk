@@ -434,8 +434,8 @@ export const addOnsLineCreateMutation = gql`
 
 export const addOnsLineDelete = gql`
   ${checkoutFragment}
-  mutation AddOnsLineDelete($id: ID) {
-    addOnsLineDelete(id: $id) {
+  mutation AddOnsLineDelete($id: [ID]) {
+    addOnsLineDelete(ids: $id) {
       checkout {
         ...Checkout
       }
