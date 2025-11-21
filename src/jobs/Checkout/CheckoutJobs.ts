@@ -298,9 +298,9 @@ class CheckoutJobs extends JobsHandler<{}> {
     };
   };
 
-  checkoutLineAddonDelete = async ({ id }: { id: string }) => {
+  checkoutLineAddonDelete = async ({ checkoutId, groupId, addOns }: { checkoutId: string; groupId: string; addOns: any }) => {
     const { data, error } =
-      await this.apolloClientManager.checkoutLineAddonDelete(id);
+      await this.apolloClientManager.checkoutLineAddonDelete(checkoutId, groupId, addOns);
 
     if (error) {
       return {

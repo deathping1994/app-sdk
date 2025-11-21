@@ -347,12 +347,14 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  checkoutLineAddonDelete = async (id: any) => {
+  checkoutLineAddonDelete = async (checkoutId: any, groupId: any, addOns:any) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "checkoutLineAddonDelete",
       {
-        id,
+        checkoutId,
+        groupId,
+        addOns,
       }
     );
 
