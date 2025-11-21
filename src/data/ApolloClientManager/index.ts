@@ -1317,35 +1317,32 @@ export class ApolloClientManager {
     return {};
   };
 
-  checkoutPaymentsInfo = async (checkout: ICheckoutModel) => {
-    const checkoutId = checkout.id;
-    if (checkoutId) {
-      try {
-        const { data, errors } = await this.client.query<any, any>({
-          query: CheckoutMutations.CHECKOUT_PAYMENTS,
-          fetchPolicy: "no-cache",
-          variables: {
-            token: checkout?.token,
-          },
-        });
-        console.log("resssssssssssscheckoutPaymentsInfo", data);
-        if (data?.checkout?.token) {
-          const updatedCheckoutDetails = {
-            ...checkout,
-            ...data.checkout,
-          };
-          return {
-            data: this.constructCheckoutModel(updatedCheckoutDetails),
-          };
-        }
-        if (errors) {
-          return { errors };
-        }
-      } catch (error) {}
+  checkoutPaymentsInfo = async (
+    checkout: ICheckoutModel,
+    setRunning?: (running: boolean) => void
+  ) => {
+    if (!checkout?.id) return {};
+
+    try {
+      setRunning?.(true); 
+      const { data } = await this.client.query<any, any>({
+        query: CheckoutMutations.CHECKOUT_PAYMENTS,
+        fetchPolicy: "no-cache",
+        variables: { token: checkout?.token },
+      });
+
+      if (data?.checkout?.token) {
+        const updatedCheckoutDetails = { ...checkout, ...data.checkout };
+        return { data: this.constructCheckoutModel(updatedCheckoutDetails) };
+      }
+    } catch (error) {
+      return { error };
+    } finally {
+      setRunning?.(false); 
     }
     return {};
   };
-
+  
   removeCartTwo = async (variantId: string, checkout: ICheckoutModel) => {
     const checkoutId = checkout.id;
     const { lines } = checkout;

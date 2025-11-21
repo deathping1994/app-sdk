@@ -49,6 +49,8 @@ export class SaleorState extends NamedObservable<StateItems> {
 
   promoCode?: string;
 
+  setCheckoutPaymentRunning: boolean;
+
   selectedShippingAddressId?: string;
 
   selectedBillingAddressId?: string;
@@ -225,6 +227,10 @@ export class SaleorState extends NamedObservable<StateItems> {
     this.onCheckoutUpdate();
     this.onPaymentUpdate();
   };
+
+  checkoutpaymentsverifying(running: boolean) {
+    this.notifyChange(StateItems.CHECKOUT_PAYMENT_RUNNING, running);
+  }
 
   private onSignInTokenUpdate = (token: string | null) => {
     this.signInToken = token;
