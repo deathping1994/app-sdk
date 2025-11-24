@@ -2627,12 +2627,14 @@ export class ApolloClientManager {
     }
   };
 
-  checkoutLineAddonDelete = async (id: string) => {
+  checkoutLineAddonDelete = async (checkoutId: string, groupId: number, addOns: any) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.addOnsLineDelete,
         variables: {
-          id,
+          checkoutId,
+          groupId,
+          addOns,
         },
       });
 
