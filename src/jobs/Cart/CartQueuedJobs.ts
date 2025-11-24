@@ -241,8 +241,16 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     }
   };
 
-  checkoutPaymentsInfo = async ({ checkout }: { checkout: any }) => {
-    if (checkout?.token) {
+  checkoutPaymentsInfo = async ({
+    checkout,
+    setRunning,
+  }: {
+    checkout: any;
+    setRunning?: (running: boolean) => void;
+  }) => {
+    if (!checkout?.token) return {};
+    try {
+      setRunning?.(true);
       const { data, error } =
         await this.apolloClientManager.checkoutPaymentsInfo(checkout);
       if (data) {
@@ -254,6 +262,11 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         console.log("Error in checkoutPaymentsInfo", error);
         return { error };
       }
+    } catch (error) {
+      console.log("Exception in checkoutPaymentsInfo:", error);
+      return { error };
+    } finally {
+      setRunning?.(false);
     }
   };
 
