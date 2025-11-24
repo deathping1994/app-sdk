@@ -2634,7 +2634,7 @@ export class ApolloClientManager {
         variables: {
           checkoutId,
           groupId,
-          addOns : [addOns],
+          addOns,
         },
       });
 
