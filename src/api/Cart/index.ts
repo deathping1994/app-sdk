@@ -27,6 +27,7 @@ export class SaleorCartAPI extends ErrorListener {
   private jobsManager: JobsManager;
   private localStorageManager: LocalStorageManager;
   private saleorState: SaleorState;
+  checkoutPaymentRunning: boolean;
   constructor(
     localStorageManager: LocalStorageManager,
     apolloClientManager: ApolloClientManager,
@@ -39,6 +40,7 @@ export class SaleorCartAPI extends ErrorListener {
     this.apolloClientManager = apolloClientManager;
     this.jobsManager = jobsManager;
     this.loaded = false;
+    this.checkoutPaymentRunning = false;
     this.jobsManager.attachErrorListener("cart", this.fireError);
 
     this.items = saleorState?.checkout?.lines?.filter(
@@ -96,7 +98,15 @@ export class SaleorCartAPI extends ErrorListener {
         this.loaded = loaded.checkout && loaded.summaryPrices;
       }
     );
+    this.saleorState.subscribeToChange(
+      StateItems.CHECKOUT_PAYMENT_RUNNING,
+      (running: boolean) => {
+        console.log("Received checkout payment running change:", running);
+        this.checkoutPaymentRunning = running;
+      }
+    );
   }
+
   getItems = () => {
     const { checkout } = this.saleorState;
     if (checkout?.lines) {
@@ -258,6 +268,17 @@ export class SaleorCartAPI extends ErrorListener {
     }
   };
 
+  setCheckoutPaymentRunning = (running: boolean) => {
+    this.checkoutPaymentRunning = running;
+    this.saleorState.checkoutpaymentsverifying(running); 
+    console.log("checkoutPaymentRunning updated:", running);
+  };
+
+  getCheckoutPaymentRunning = () => {
+    console.log("checkoutPaymentRunning get:", this.checkoutPaymentRunning);
+    return this.checkoutPaymentRunning;
+  };
+
   updateItemRest = async (
     variantId: string,
     quantity: number,
@@ -281,6 +302,7 @@ export class SaleorCartAPI extends ErrorListener {
         console.log("res-updateItemRest", res);
         this.jobsManager.run("cart", "checkoutPaymentsInfo", {
           checkout: data,
+          setRunning: this.setCheckoutPaymentRunning,
         });
         if (data) {
           return {

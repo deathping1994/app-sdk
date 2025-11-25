@@ -494,7 +494,7 @@ class CheckoutJobs extends JobsHandler<{}> {
   };
 
   clearCheckout = async ({
-   
+
   }: CompleteCheckoutJobInput): PromiseCheckoutJobRunResponse => {
       await this.localStorageHandler.setCheckout({});
       await this.localStorageHandler.setPayment({});

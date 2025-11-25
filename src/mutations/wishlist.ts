@@ -1,130 +1,122 @@
 import gql from "graphql-tag";
 export const WishlistAddProduct = gql`
   mutation wishlistAddProduct($productId: ID!) {
-    WishlistAddProduct: wishlistAddProduct(productId: $productId) {
-      wishlist {
+  WishlistAddProduct: wishlistAddProduct(productId: $productId) {
+    wishlist {
+      id
+      product {
         id
-        wishlist {
+        name
+        slug
+        isAvailableForPurchase
+        isPublished
+        metadata {
+          key
+          value
+        }
+        defaultVariant {
+          profitMarginPercentage
           id
-          createdAt
-          items(first: 20) {
-            edges {
-              node {
-                id
-                product {
-                  id
-                  name
-                  isPublished
-                  slug
-                  isAvailableForPurchase
-                  metadata {
-                    key
-                    value
-                  }
-                  thumbnail {
-                    url
-                  }
-                  defaultVariant {
-                    id
-                    sku
-                    name
-                    metadata {
-                      key
-                      value
-                    }
-                    attributes {
-                      attribute {
-                        name
-                      }
-                      values {
-                        name
-                      }
-                    }
-                    quantityAvailable(countryCode: IN)
-                    images {
-                      id
-                      url
-                      alt
-                    }
-                    pricing {
-                      onSale
-                      priceUndiscounted {
-                        gross {
-                          amount
-                          currency
-                        }
-                        net {
-                          amount
-                          currency
-                        }
-                      }
-                      price {
-                        gross {
-                          amount
-                          currency
-                        }
-                        net {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                  }
-                  images {
-                    id
-                    alt
-                    url
-                  }
-                  productType {
-                    name
-                  }
-                  pricing {
-                    priceRangeUndiscounted {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                    priceRange {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                  }
-                }
+          sku
+          name
+          isAvailable
+          quantityAvailable(countryCode: IN)
+          weight {
+            unit
+            value
+          }
+          metadata {
+            key
+            value
+          }
+          pricing {
+            onSale
+            priceUndiscounted {
+              gross {
+                amount
+                currency
+              }
+              net {
+                amount
+                currency
+              }
+            }
+            price {
+              gross {
+                amount
+                currency
+              }
+              net {
+                amount
+                currency
+              }
+            }
+          }
+          attributes {
+            attribute {
+              id
+              name
+              slug
+              metadata {
+                key
+                value
+              }
+            }
+            values {
+              id
+              name
+              value: name
+            }
+          }
+        }
+        productType {
+          name
+        }
+        thumbnail {
+          url
+        }
+        pricing {
+          priceRangeUndiscounted {
+            start {
+              net {
+                amount
+                currency
+              }
+              gross {
+                amount
+                currency
+              }
+            }
+            stop {
+              net {
+                amount
+                currency
+              }
+              gross {
+                amount
+                currency
+              }
+            }
+          }
+          priceRange {
+            start {
+              net {
+                amount
+                currency
+              }
+              gross {
+                amount
+                currency
+              }
+            }
+            stop {
+              net {
+                amount
+                currency
+              }
+              gross {
+                amount
+                currency
               }
             }
           }
@@ -132,132 +124,126 @@ export const WishlistAddProduct = gql`
       }
     }
   }
+}
 `;
 export const WishlistRemoveProduct = gql`
   mutation wishlistRemoveProduct($productId: ID!) {
     WishlistRemoveProduct: wishlistRemoveProduct(productId: $productId) {
       wishlist {
         id
-        wishlist {
+        product {
           id
-          createdAt
-          items(first: 20) {
-            edges {
-              node {
+          name
+          slug
+          isAvailableForPurchase
+          isPublished
+          metadata {
+            key
+            value
+          }
+          defaultVariant {
+            profitMarginPercentage
+            id
+            sku
+            name
+            isAvailable
+            quantityAvailable(countryCode: IN)
+            weight {
+              unit
+              value
+            }
+            metadata {
+              key
+              value
+            }
+            pricing {
+              onSale
+              priceUndiscounted {
+                gross {
+                  amount
+                  currency
+                }
+                net {
+                  amount
+                  currency
+                }
+              }
+              price {
+                gross {
+                  amount
+                  currency
+                }
+                net {
+                  amount
+                  currency
+                }
+              }
+            }
+            attributes {
+              attribute {
                 id
-                product {
-                  id
-                  name
-                  isPublished
-                  slug
-                  isAvailableForPurchase
-                  metadata {
-                    key
-                    value
-                  }
-                  thumbnail {
-                    url
-                  }
-                  images {
-                    id
-                    alt
-                    url
-                  }
-                  defaultVariant {
-                    id
-                    sku
-                    name
-                    metadata {
-                      key
-                      value
-                    }
-                    attributes {
-                      attribute {
-                        name
-                      }
-                      values {
-                        name
-                      }
-                    }
-                    quantityAvailable(countryCode: IN)
-                    images {
-                      id
-                      url
-                      alt
-                    }
-                    pricing {
-                      onSale
-                      priceUndiscounted {
-                        gross {
-                          amount
-                          currency
-                        }
-                        net {
-                          amount
-                          currency
-                        }
-                      }
-                      price {
-                        gross {
-                          amount
-                          currency
-                        }
-                        net {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                  }
-                  productType {
-                    name
-                  }
-                  pricing {
-                    priceRangeUndiscounted {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                    priceRange {
-                      start {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                      stop {
-                        net {
-                          amount
-                          currency
-                        }
-                        gross {
-                          amount
-                          currency
-                        }
-                      }
-                    }
-                  }
+                name
+                slug
+                metadata {
+                  key
+                  value
+                }
+              }
+              values {
+                id
+                name
+                value: name
+              }
+            }
+          }
+          productType {
+            name
+          }
+          thumbnail {
+            url
+          }
+          pricing {
+            priceRangeUndiscounted {
+              start {
+                net {
+                  amount
+                  currency
+                }
+                gross {
+                  amount
+                  currency
+                }
+              }
+              stop {
+                net {
+                  amount
+                  currency
+                }
+                gross {
+                  amount
+                  currency
+                }
+              }
+            }
+            priceRange {
+              start {
+                net {
+                  amount
+                  currency
+                }
+                gross {
+                  amount
+                  currency
+                }
+              }
+              stop {
+                net {
+                  amount
+                  currency
+                }
+                gross {
+                  amount
+                  currency
                 }
               }
             }

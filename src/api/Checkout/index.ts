@@ -623,7 +623,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
       pending: false,
     };
   };
-
+  
   clearCheckout = async (
     input?: CompleteCheckoutInput
   ): CheckoutResponse => {
