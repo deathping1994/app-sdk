@@ -236,13 +236,16 @@ class CheckoutJobs extends JobsHandler<{}> {
   checkoutLineAdd = async ({
     checkoutId,
     lines,
+    sublines,
   }: {
     checkoutId: string;
     lines: any[];
+    sublines: any[];
   }) => {
     const { data, error } = await this.apolloClientManager.checkoutLineAdd(
       checkoutId,
-      lines
+      lines,
+      sublines
     );
 
     if (error) {
