@@ -279,13 +279,14 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  checkoutLineAdd = async (checkoutId, lines) => {
+  checkoutLineAdd = async (checkoutId, lines, sublines) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "checkoutLineAdd",
       {
         checkoutId,
         lines,
+        sublines
       }
     );
 

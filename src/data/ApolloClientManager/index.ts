@@ -1059,13 +1059,14 @@ export class ApolloClientManager {
     };
   };
 
-  checkoutLineAdd = async (checkoutId: string, lines: any[]) => {
+  checkoutLineAdd = async (checkoutId: string, lines: any[],sublines: any[]) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
       mutation: CheckoutMutations.addCheckoutLineMutation,
       variables: {
         checkoutId,
         lines,
+        sublines
       },
     });
     if (errors?.length) {
