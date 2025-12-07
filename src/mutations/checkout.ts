@@ -553,13 +553,15 @@ export const checkoutCustomDiscountAddMutation = gql`
 export const checkoutSublineUpdateMutation = gql`
   ${checkoutFragment}
   mutation CheckoutSublineUpdate(
-    $checkoutLineId: ID!
+    $checkoutId: ID!
+    $groupId: Int,
     $replace: Boolean
     $sublines: [CheckoutLineInput]!
   ) {
     checkoutSublinesUpdate(
-      checkoutLineId: $checkoutLineId
+      checkoutId: $checkoutId
       replace: $replace
+      groupId: $groupId,
       sublines: $sublines
     ) {
       checkout {

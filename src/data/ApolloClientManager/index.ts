@@ -2663,16 +2663,18 @@ export class ApolloClientManager {
   };
 
   checkoutSublineUpdate = async (
-    checkoutLineId: string,
+    checkoutId: string,
     sublines: any[],
+    groupId,
     replace: boolean = false
   ) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.checkoutSublineUpdateMutation,
         variables: {
-          checkoutLineId,
+          checkoutId,
           replace,
+          groupId,
           sublines,
         },
       });

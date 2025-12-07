@@ -311,13 +311,14 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  checkoutSublineUpdate = async (checkoutLineId, sublines, replace = false) => {
+  checkoutSublineUpdate = async (checkoutId, sublines, groupId, replace = false) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "checkoutSublineUpdate",
       {
-        checkoutLineId,
+        checkoutId,
         sublines,
+        groupId,
         replace,
       }
     );
