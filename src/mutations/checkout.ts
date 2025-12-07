@@ -800,9 +800,6 @@ export const confirmPackageOnOrderMutation = gql`
         id
         created
         balanceAmount
-        invoices {
-          url
-        }
         totalSaved
         totalUsage
         utilizedAmount

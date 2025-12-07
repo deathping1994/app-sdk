@@ -376,6 +376,10 @@ export const checkoutFragment = gql`
         name
         slug
       }
+      unit{
+        id
+        name
+      }
       id
       name
       serviceCode
