@@ -329,7 +329,7 @@ export const completeCheckoutMultipleMutation = gql`
 
 export const addCheckoutLineMutation = gql`
   ${checkoutFragment}
-  mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!, $sublines: [CheckoutLineInput]!) {
+  mutation AddCheckoutLine($checkoutId: ID!, $lines: [CheckoutLineInput]!, $sublines: [CheckoutLineInput]) {
     checkoutLinesAdd(
       checkoutId: $checkoutId
       lines: $lines
@@ -556,7 +556,7 @@ export const checkoutSublineUpdateMutation = gql`
     $checkoutId: ID!
     $groupId: Int,
     $replace: Boolean
-    $sublines: [CheckoutLineInput]!
+    $sublines: [CheckoutLineInput]
   ) {
     checkoutSublinesUpdate(
       checkoutId: $checkoutId
