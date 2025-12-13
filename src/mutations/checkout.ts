@@ -556,7 +556,7 @@ export const checkoutSublineUpdateMutation = gql`
     $checkoutId: ID!
     $groupId: Int,
     $replace: Boolean
-    $sublines: [CheckoutLineInput]
+    $sublines: [CheckoutLineInput]!
   ) {
     checkoutSublinesUpdate(
       checkoutId: $checkoutId
