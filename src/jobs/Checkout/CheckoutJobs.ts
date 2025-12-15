@@ -1080,16 +1080,19 @@ class CheckoutJobs extends JobsHandler<{}> {
     checkoutId,
     checkoutLineGroupId,
     input,
+    variantId,
   }: {
     checkoutId: string;
     checkoutLineGroupId: string;
     input: any;
+    variantId: string;
   }) => {
     const { data, error } =
       await this.apolloClientManager.checkoutLineUpdateData({
         checkoutId,
         checkoutLineGroupId,
         input,
+        variantId,
       });
 
     if (error) {

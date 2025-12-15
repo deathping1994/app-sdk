@@ -516,8 +516,9 @@ export const checkoutLineUpdateDataMutation = gql`
     $checkoutId : ID!
     $checkoutLineGroupId: Int!
     $input: CheckoutLinesUpdateDataInput!
+    $variantId: ID
   ) {
-    checkoutLineUpdateData(checkoutId:$checkoutId,checkoutLineGroupId: $checkoutLineGroupId, input: $input) {
+    checkoutLineUpdateData(checkoutId:$checkoutId,checkoutLineGroupId: $checkoutLineGroupId, input: $input, variantId:$variantId) {
       checkout {
         ...Checkout
       }

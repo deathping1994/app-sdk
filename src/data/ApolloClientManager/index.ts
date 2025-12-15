@@ -2439,10 +2439,12 @@ export class ApolloClientManager {
     checkoutId,
     checkoutLineGroupId,
     input,
+    variantId,
   }: {
     checkoutId: string;
     checkoutLineGroupId: string;
     input: any;
+    variantId:string;
   }) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
@@ -2451,6 +2453,7 @@ export class ApolloClientManager {
           checkoutId,
           checkoutLineGroupId,
           input,
+          variantId
         },
       });
 
