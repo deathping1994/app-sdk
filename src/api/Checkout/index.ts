@@ -1067,7 +1067,7 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-   checkoutLineUpdateData = async (checkoutId: string, checkoutLineGroupId: string, input: any, variantId:string) => {
+   checkoutLineUpdateData = async (checkoutId: string, checkoutLineGroupId: string, input: any, variantId?:string) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "checkoutLineUpdateData",
