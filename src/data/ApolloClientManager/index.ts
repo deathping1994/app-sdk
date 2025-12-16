@@ -2999,12 +2999,12 @@ export class ApolloClientManager {
     }
   };
 
-  checkoutLineImageAudioDelete = async (extraDataId: string) => {
+  checkoutLineImageAudioDelete = async (extraDataIds: string[]) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.checkoutLineImageAudioDeleteMutation,
         variables: {
-          extraDataId,
+          extraDataIds,
         },
       });
 

@@ -579,11 +579,11 @@ export const checkoutSublineUpdateMutation = gql`
 `;
 
 export const checkoutLineImageAudioDeleteMutation = gql`
-  ${checkoutLineWithAddOnFragment}
-  mutation CheckoutLineImageAudioDelete($extraDataId: ID!) {
-    checkoutLineImageAudioDelete(extraDataId: $extraDataId) {
-      checkoutLine {
-        ...CheckoutLineWithAddOn
+  ${checkoutFragment}
+ mutation CheckoutLineImageAudioDelete($extraDataIds: [ID]!) {
+    checkoutLineImageAudioDelete(extraDataIds: $extraDataIds) {
+      checkout{
+        ...Checkout
       }
       checkoutErrors {
         field

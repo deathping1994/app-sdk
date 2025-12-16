@@ -1034,9 +1034,9 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
-  checkoutLineImageAudioDelete = async ({ extraDataId }) => {
+  checkoutLineImageAudioDelete = async ({ extraDataIds }) => {
     const { data, error } =
-      await this.apolloClientManager.checkoutLineImageAudioDelete(extraDataId);
+      await this.apolloClientManager.checkoutLineImageAudioDelete(extraDataIds);
 
     if (error) {
       return {
