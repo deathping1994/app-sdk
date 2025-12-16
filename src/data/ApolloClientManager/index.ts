@@ -3019,9 +3019,9 @@ export class ApolloClientManager {
           error: data.checkoutLineImageAudioDelete.checkoutErrors,
         };
       }
-      if (data?.checkoutLineImageAudioDelete?.checkoutLine) {
+      if (data?.checkoutLineImageAudioDelete?.checkout) {
         return {
-          data: data.checkoutLineImageAudioDelete.checkoutLine,
+          data: data.checkoutLineImageAudioDelete.checkout,
         };
       }
     } catch (error) {
