@@ -36,5 +36,13 @@ export const userFragment = gql`
     addresses {
       ...Address
     }
+    membershipHistory {
+      id
+      membershipAmount
+      membershipPurchase
+      membershipCashbackDiscount
+      membershipFreeShipping
+      membershipExpiry
+    }
   }
 `;
