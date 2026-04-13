@@ -101,6 +101,8 @@ export async function axiosRequest(
 ) {
   let userSpecificHeaders = {};
   const tokenData = await AsyncStorage.getItem("token");
+  const ipAddress = await AsyncStorage.getItem("ip");
+  const userAgent = `${DeviceInfo.getBrand()}/${DeviceInfo.getModel()} (${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()}) AppVersion/${DeviceInfo.getVersion()}`;
   const userToken =
     tokenData && parseJson(tokenData) ? parseJson(tokenData)?.item : "";
   if (tokenData && userToken) {
@@ -112,6 +114,8 @@ export async function axiosRequest(
 
   const finalHeaders = {
     appplatform: Platform.OS,
+    "x-client-ip-address": ipAddress || "",
+    "x-client-user-agent": userAgent,
     ...userSpecificHeaders,
     ...(options?.headers || {}),
   };

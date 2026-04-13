@@ -5,6 +5,8 @@ import { extractFiles } from 'extract-files';
 import { createUploadLink } from 'apollo-upload-client';
 import { authLink, invalidTokenLinkWithTokenHandler } from "./auth";
 import { setContext } from "@apollo/client/link/context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DeviceInfo from "react-native-device-info";
 
 interface SaleorLinksConfig {
   /**
@@ -43,12 +45,16 @@ export const createSaleorLinks = ({
   );
 
   const appVersionAndPlatformLink = setContext(async (_, context) => {
+    const ipAddress = await AsyncStorage.getItem("ip");
+    const userAgent = `${DeviceInfo.getBrand()}/${DeviceInfo.getModel()} (${DeviceInfo.getSystemName()} ${DeviceInfo.getSystemVersion()}) AppVersion/${DeviceInfo.getVersion()}`;
     return {
       ...context,
       headers: {
         ...context.headers,
         appVersion: appversion,
-        appPlatform: appplatform
+        appPlatform: appplatform,
+        "x-client-ip-address": ipAddress || "",
+        "x-client-user-agent": userAgent,
       }
     }
   });
