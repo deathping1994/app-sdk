@@ -153,29 +153,6 @@ export const updateCheckoutShippingAddressMutation = gql`
   }
 `;
 
-export const updateCheckoutShippingMethodMutation = gql`
-  ${checkoutFragment}
-  ${checkoutErrorFragment}
-  mutation UpdateCheckoutShippingMethod(
-    $checkoutId: ID!
-    $shippingMethodId: ID!
-    $isRecalculate: Boolean
-  ) {
-    checkoutShippingMethodUpdate(
-      checkoutId: $checkoutId
-      shippingMethodId: $shippingMethodId
-      isRecalculate: $isRecalculate
-    ) {
-      checkout {
-        ...Checkout
-      }
-      errors: checkoutErrors {
-        ...CheckoutError
-      }
-    }
-  }
-`;
-
 export const updateCheckoutPaymentMethodMutation = gql`
   ${checkoutFragment}
   ${checkoutErrorFragment}
@@ -690,8 +667,8 @@ export const checkoutLineExpressRemoveMutation = gql`
 
 export const cartCreateMutation = gql`
   ${cartFragment}
-  mutation CartCreateMutationApp($customerId: ID!) {
-    cartCreate(customerId: $customerId) {
+  mutation CartCreateMutationApp($clientId: ID, $customerId: ID!) {
+    cartCreate(clientId: $clientId, customerId: $customerId) {
       cart {
         ...Cart
       }

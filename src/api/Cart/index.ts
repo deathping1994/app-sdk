@@ -356,7 +356,7 @@ export class SaleorCartAPI extends ErrorListener {
 
   removeItemRest = async (
     variantId: string,
-    updateShippingMethod = true,
+    // updateShippingMethod = true,
     isRecalculate = false,
     line_item?: any,
     checkoutMetadataInput?: any
@@ -370,7 +370,7 @@ export class SaleorCartAPI extends ErrorListener {
           "removeItemRest",
           {
             variantId,
-            updateShippingMethod,
+            // updateShippingMethod,
             isRecalculate,
             line_item,
             checkoutMetadataInput,

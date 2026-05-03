@@ -914,37 +914,6 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  setShippingMethod = async (
-    shippingMethodId: string,
-    checkoutId: string,
-    isRecalculate = true
-  ): CheckoutResponse => {
-    if (checkoutId) {
-      const { data, dataError } = await this.jobsManager.run(
-        "checkout",
-        "setShippingMethod",
-        {
-          checkoutId,
-          shippingMethodId,
-          isRecalculate,
-        }
-      );
-      return {
-        data,
-        dataError,
-        pending: false,
-      };
-    }
-    return {
-      functionError: {
-        error: new Error(
-          "You need to set shipping address before setting shipping method."
-        ),
-        type: FunctionErrorCheckoutTypes.SHIPPING_ADDRESS_NOT_SET,
-      },
-      pending: false,
-    };
-  };
 
   addPromoCode = async (
     promoCode: string,
@@ -1086,12 +1055,13 @@ export class SaleorCheckoutAPI extends ErrorListener {
     };
   };
 
-  createCart = async (customerId: string) => {
+  createCart = async (customerId: string, clientId: string) => {
     const { data, dataError } = await this.jobsManager.run(
       "checkout",
       "createCart",
       {
         customerId,
+        clientId,
       }
     );
 

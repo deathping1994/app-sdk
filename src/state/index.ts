@@ -314,20 +314,20 @@ export class SaleorState extends NamedObservable<StateItems> {
     checkout?: ICheckoutModel
   ): ISaleorStateSummeryPrices {
     const items = checkout?.lines;
-    const shippingMethod = checkout?.shippingMethod;
+    // const shippingMethod = checkout?.shippingMethod;
     const promoCodeDiscount = checkout?.promoCodeDiscount?.discount;
 
     if (items && items.length) {
       const firstItemTotalPrice = items[0].totalPrice;
 
       if (firstItemTotalPrice) {
-        const shippingPrice = {
-          ...shippingMethod?.price,
-          amount: shippingMethod?.price?.amount || 0,
-          currency:
-            shippingMethod?.price?.currency ||
-            firstItemTotalPrice.gross.currency,
-        };
+        // const shippingPrice = {
+        //   ...shippingMethod?.price,
+        //   amount: shippingMethod?.price?.amount || 0,
+        //   currency:
+        //     shippingMethod?.price?.currency ||
+        //     firstItemTotalPrice.gross.currency,
+        // };
 
         const itemsNetPrice = items.reduce(
           (accumulatorPrice, line) =>
@@ -364,14 +364,14 @@ export class SaleorState extends NamedObservable<StateItems> {
           gross: {
             ...subtotalPrice.gross,
             amount: round(
-              itemsGrossPrice + shippingPrice.amount - discount.amount,
+              itemsGrossPrice - discount.amount,
               2
             ),
           },
           net: {
             ...subtotalPrice.net,
             amount: round(
-              itemsNetPrice + shippingPrice.amount - discount.amount,
+              itemsNetPrice - discount.amount,
               2
             ),
           },
@@ -379,7 +379,6 @@ export class SaleorState extends NamedObservable<StateItems> {
 
         return {
           discount,
-          shippingPrice,
           subtotalPrice,
           totalPrice,
         };

@@ -765,7 +765,7 @@ class CheckoutJobs extends JobsHandler<{}> {
 
     await this.localStorageHandler.setCheckout({
       ...(checkout?._W ? checkout?._W : checkout),
-      availableShippingMethods: data?.availableShippingMethods,
+      // availableShippingMethods: data?.availableShippingMethods,
       billingAsShipping: false,
       email: data?.email,
       selectedShippingAddressId,
@@ -873,34 +873,6 @@ class CheckoutJobs extends JobsHandler<{}> {
     //   shippingMethod: data?.shippingMethod,
     //   availableShippingMethods: data?.availableShippingMethods,
     //   shippingAddress: data?.shippingAddress,
-    // });
-    return { data };
-  };
-
-  setShippingMethod = async ({
-    checkoutId,
-    shippingMethodId,
-    isRecalculate = true,
-  }: SetShippingMethodJobInput): PromiseCheckoutJobRunResponse => {
-    const { data, error } = await this.apolloClientManager.setShippingMethod(
-      shippingMethodId,
-      checkoutId,
-      isRecalculate
-    );
-
-    if (error) {
-      return {
-        dataError: {
-          error,
-          type: DataErrorCheckoutTypes.SET_SHIPPING_METHOD,
-        },
-      };
-    }
-
-    // await this.localStorageHandler.setCheckout({
-    //   ...data,
-    //   promoCodeDiscount: data?.promoCodeDiscount,
-    //   shippingMethod: data?.shippingMethod,
     // });
     return { data };
   };
@@ -1107,9 +1079,10 @@ class CheckoutJobs extends JobsHandler<{}> {
     return { data };
   };
 
-  createCart = async ({ customerId }: { customerId: string }) => {
+  createCart = async ({ customerId, clientId }: { customerId: string; clientId: string; }) => {
     const { data, error } = await this.apolloClientManager.createCart({
       customerId,
+      clientId
     });
     console.log("xxxxxxxcreateCart-checkoutjobs", data);
     // if (data) {
