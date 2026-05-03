@@ -1397,7 +1397,7 @@ export class ApolloClientManager {
     variantId: string,
     quantity: number,
     prevQuantity: number,
-    updateShippingMethod: boolean = true,
+    // updateShippingMethod: boolean = true,
     isRecalculate = false,
     line_item?: any,
     checkoutMetadataInput?: any,
@@ -1702,7 +1702,7 @@ export class ApolloClientManager {
 
   removeItemRest = async (
     variantId: string,
-    updateShippingMethod = true,
+    // updateShippingMethod = true,
     isRecalculate = false,
     line_item?: any,
     checkoutMetadataInput?: any,
@@ -2155,47 +2155,6 @@ export class ApolloClientManager {
     }
   };
 
-  setShippingMethod = async (
-    shippingMethodId: string,
-    checkoutId: string,
-    isRecalculate = true
-  ) => {
-    try {
-      const { data, errors } = await this.client.mutate<
-        UpdateCheckoutShippingMethod,
-        UpdateCheckoutShippingMethodVariables
-      >({
-        mutation: CheckoutMutations.updateCheckoutShippingMethodMutation,
-        variables: {
-          checkoutId,
-          shippingMethodId,
-          isRecalculate,
-        },
-      });
-
-      if (errors?.length) {
-        return {
-          error: errors,
-        };
-      }
-      if (data?.checkoutShippingMethodUpdate?.errors?.length) {
-        return {
-          error: data?.checkoutShippingMethodUpdate?.errors,
-        };
-      }
-      if (data?.checkoutShippingMethodUpdate?.checkout) {
-        return {
-          data: data.checkoutShippingMethodUpdate.checkout,
-        };
-      }
-      return {};
-    } catch (error) {
-      return {
-        error,
-      };
-    }
-  };
-
   addPromoCode = async (
     promoCode: string,
     checkoutId: string,
@@ -2523,12 +2482,13 @@ export class ApolloClientManager {
   };
 
   //Create Cart
-  createCart = async ({ customerId }: { customerId: string }) => {
+  createCart = async ({ customerId, clientId, }: { customerId: string; clientId: string; }) => {
     try {
       const { data, errors } = await this.client.mutate<any, any>({
         mutation: CheckoutMutations.cartCreateMutation,
         variables: {
           customerId,
+          clientId
         },
       });
 
@@ -3296,9 +3256,9 @@ export class ApolloClientManager {
     checkout: Checkout | AddCheckoutLine_checkoutLinesUpdate_checkout | any
   ): ICheckoutModel => ({
     ...checkout,
-    availableShippingMethods: checkout?.availableShippingMethods
-      ? checkout?.availableShippingMethods.filter(filterNotEmptyArrayItems)
-      : [],
+    // availableShippingMethods: checkout?.availableShippingMethods
+    //   ? checkout?.availableShippingMethods.filter(filterNotEmptyArrayItems)
+    //   : [],
     lines: checkout?.lines
       ?.filter(item => item?.quantity && item.variant.id)
       .map(item => {

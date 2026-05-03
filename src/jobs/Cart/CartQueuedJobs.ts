@@ -45,9 +45,9 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         let obj = {
           ...(checkout?._W ? checkout?._W : checkout),
           availablePaymentGateways: data.availablePaymentGateways,
-          availableShippingMethods: data.availableShippingMethods,
+          // availableShippingMethods: data.availableShippingMethods,
           promoCodeDiscount: data.promoCodeDiscount,
-          shippingMethod: data.shippingMethod,
+          // shippingMethod: data.shippingMethod,
           lines: data.lines,
         };
 
@@ -86,9 +86,9 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         let obj = {
           ...(checkout?._W ? checkout?._W : checkout),
           availablePaymentGateways: data.availablePaymentGateways,
-          availableShippingMethods: data.availableShippingMethods,
+          // availableShippingMethods: data.availableShippingMethods,
           promoCodeDiscount: data.promoCodeDiscount,
-          shippingMethod: data.shippingMethod,
+          // shippingMethod: data.shippingMethod,
           lines: data.lines,
         };
 
@@ -208,13 +208,13 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
 
   removeItemRest = async ({
     variantId,
-    updateShippingMethod,
+    // updateShippingMethod,
     isRecalculate,
     line_item,
     checkoutMetadataInput,
   }: {
     variantId: string;
-    updateShippingMethod?: boolean;
+    // updateShippingMethod?: boolean;
     isRecalculate?: boolean;
     line_item?: any;
     checkoutMetadataInput?: any;
@@ -223,7 +223,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
     if (checkout) {
       const { data, error } = await this.apolloClientManager.removeItemRest(
         variantId,
-        updateShippingMethod,
+        // updateShippingMethod,
         isRecalculate,
         line_item,
         checkoutMetadataInput,
@@ -278,9 +278,9 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
         let obj = {
           ...(checkout?._W ? checkout?._W : checkout),
           availablePaymentGateways: data.availablePaymentGateways,
-          availableShippingMethods: data.availableShippingMethods,
+          // availableShippingMethods: data.availableShippingMethods,
           promoCodeDiscount: data.promoCodeDiscount,
-          shippingMethod: data.shippingMethod,
+          // shippingMethod: data.shippingMethod,
           lines: data.lines,
         };
 

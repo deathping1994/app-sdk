@@ -107,16 +107,6 @@ export const checkoutProductVariantFragment = gql`
   }
 `;
 
-export const checkoutShippingMethodFragment = gql`
-  fragment ShippingMethod on ShippingMethod {
-    id
-    name
-    price {
-      currency
-      amount
-    }
-  }
-`;
 
 export const checkoutLineFragment = gql`
   ${checkoutPriceFragment}
@@ -284,16 +274,9 @@ export const discountLineFragment = gql`
 
 export const atcChecckoutFragment = gql`
   ${checkoutLineFragment}
-  ${checkoutShippingMethodFragment}
   ${paymentGatewayFragment}
   fragment Checkout on Checkout {
     id
-    availableShippingMethods {
-      ...ShippingMethod
-    }
-    shippingMethod {
-      ...ShippingMethod
-    }
     metadata {
       key
       value
@@ -311,18 +294,11 @@ export const checkoutFragment = gql`
   ${checkoutLineWithAddOnFragment}
   fragment Checkout on Checkout {
     id
-    shippingMethod {
-      id
-    }
     shippingAddress {
       id
     }
     billingAddress {
       id
-    }
-    availableShippingMethods {
-      id
-      name
     }
     discount {
       amount
@@ -359,6 +335,7 @@ export const checkoutFragment = gql`
     }
     token
     isExpress
+    version
     expressCharge {
       gross {
         amount
@@ -418,11 +395,6 @@ export const checkoutFragment = gql`
         amount
       }
     }
-    isShippingRequired
-    availableShippingMethods {
-      id
-      name
-    }
   }
 `;
 
@@ -432,6 +404,7 @@ export const cartFragment = gql`
     id
     orderCreated
     isExpress
+    version
     checkouts {
       ...Checkout
     }
