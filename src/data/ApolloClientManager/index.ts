@@ -516,6 +516,36 @@ export class ApolloClientManager {
     };
   };
 
+  createRunner = async (input: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: AuthMutations.runnerCreateMutation,
+      variables: {
+        input
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    }
+
+    if (data?.runnerCreate?.runnerErrors?.length) {
+      return {
+        error: data.runnerCreate.runnerErrors,
+      };
+    }
+
+    return {
+      data: {
+        runnerId: data?.runnerCreate?.runnerId,
+        userId: data?.runnerCreate?.userId,
+        fullName: data?.runnerCreate?.fullName
+      }
+    }
+  };
+
   attachStoreToCustomer = async (input: any) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",

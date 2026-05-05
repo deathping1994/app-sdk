@@ -39,6 +39,25 @@ export const runnerLoginMutation = gql`
   }
 `;
 
+export const runnerCreateMutation = gql`
+  mutation runnerCreateApp(
+    $input: RunnerInput!
+  ) {
+    runnerCreate(input: $input) {
+      runnerErrors {
+        message
+        code
+        field
+      }
+      runner {
+        runnerId
+        userId
+        fullName
+      }
+    }
+  }
+`;
+
 export const tokenVeryficationMutation = gql`
   ${accountErrorFragment}
   mutation VerifyToken($token: String!) {
