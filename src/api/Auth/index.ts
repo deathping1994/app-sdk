@@ -587,6 +587,36 @@ export class AuthAPI extends ErrorListener {
     }
   };
 
+  // Runner Create
+  runnerCreate = async(
+    input: any
+  ): PromiseRunResponse<DataErrorAuthTypes> => {
+    const { data, dataError } = await this.jobsManager.run(
+      "auth",
+      "createRunner",
+      {
+        input
+      }
+    );
+
+    if (dataError) {
+      return {
+        data,
+        dataError,
+        pending: false,
+      };
+    }
+
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+
+    return {
+      data: userData,
+      dataError: userDataError,
+      pending: false,
+    };
+  }
+
   // Pickup Create
   createPickup = async (isExpress = false, pickupSlot,source) => {
     const { data, dataError } = await this.jobsManager.run(

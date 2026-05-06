@@ -441,6 +441,27 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
       data,
     };
   };
+  
+  createRunner = async ({
+    input,
+  }: {
+    input: any;
+  }): PromiseAuthJobRunResponse => {
+    const { data, error } = await this.apolloClientManager.createRunner(input);
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.SIGN_IN,
+        },
+      };
+    }
+
+    return {
+      data,
+    };
+  };
 
   attachStoreToCustomer = async ({ input }) => {
     const { data, error } =
