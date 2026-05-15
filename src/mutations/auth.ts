@@ -45,7 +45,7 @@ export const runnerLoginMutation = gql`
 `;
 
 export const otpVerification = gql`
-  mutation runnerLoginOtp($id: ID!, otp: String!) {
+  mutation runnerLoginOtp($id: ID!, $otp: String!) {
     runnerTokenOnOtp(id: $id, otp: $otp) {
       accessToken
       csrfToken
