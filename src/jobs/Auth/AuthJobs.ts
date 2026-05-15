@@ -433,14 +433,37 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
       };
     }
 
-    this.localStorageHandler.setSignInToken(data?.token || null);
-    this.localStorageHandler.setCsrfToken(data?.csrfToken || null);
-    this.localStorageHandler.setRefreshToken(data?.refreshToken || null);
+    // this.localStorageHandler.setSignInToken(data?.token || null);
+    // this.localStorageHandler.setCsrfToken(data?.csrfToken || null);
+    // this.localStorageHandler.setRefreshToken(data?.refreshToken || null);
 
     return {
       data,
     };
   };
+
+  verifyOtp = async ({ id, otp }: { id: any, otp: any }) => {
+    const { data, error } = await this.apolloClientManager.verifyOtp(
+      id, otp
+    );
+
+    if (error) {
+      return {
+        dataError: {
+          error,
+          type: DataErrorAuthTypes.SIGN_IN
+        }
+      }
+    }
+
+    this.localStorageHandler.setSignInToken(data?.token || null);
+    this.localStorageHandler.setCsrfToken(data?.csrfToken || null);
+    this.localStorageHandler.setRefreshToken(data?.refreshToken || null);
+
+    return {
+      data
+    };
+  }
   
   createRunner = async ({
     input,
@@ -453,7 +476,7 @@ export class AuthJobs extends JobsHandler<AuthJobsEventsValues> {
       return {
         dataError: {
           error,
-          type: DataErrorAuthTypes.SIGN_IN,
+          type: DataErrorAuthTypes.REGISTER_ACCOUNT,
         },
       };
     }

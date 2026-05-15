@@ -508,13 +508,46 @@ export class ApolloClientManager {
     }
     return {
       data: {
-        csrfToken: data?.runnerLogin?.csrfToken,
-        token: data?.runnerLogin?.accessToken,
-        refreshToken: data?.runnerLogin?.refreshToken,
-        // user: data?.runnerLogin?.user,
+        // csrfToken: data?.runnerLogin?.csrfToken,
+        // token: data?.runnerLogin?.accessToken,
+        // refreshToken: data?.runnerLogin?.refreshToken,
+        user: data?.runnerLogin?.user,
+        message: data?.runnerLogin?.message
       },
     };
   };
+
+  verifyOtp = async (id: any, otp: any) => {
+    const { data, errors } = await this.client.mutate<any, any>({
+      fetchPolicy: "no-cache",
+      mutation: AuthMutations.otpVerification,
+      variables: {
+        id,
+        otp
+      },
+    });
+
+    if (errors?.length) {
+      return {
+        error: errors,
+      };
+    };
+
+    if (data?.runnerTokenOnOtp?.runnerErrors?.length) {
+      return {
+        error: data.runnerTokenOnOtp.runnerErrors,
+      };
+    };
+
+    return {
+      data: {
+        csrfToken: data?.runnerTokenOnOtp?.csrfToken,
+        token: data?.runnerTokenOnOtp?.accessToken,
+        refreshToken: data?.runnerTokenOnOtp?.refreshToken,
+        user: data?.runnerTokenOnOtp?.runner,
+      },
+    };
+  }
 
   createRunner = async (input: any) => {
     const { data, errors } = await this.client.mutate<any, any>({

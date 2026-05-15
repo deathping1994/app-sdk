@@ -32,9 +32,35 @@ export const runnerLoginMutation = gql`
         code
         field
       }
+      user {
+        id
+        email
+        firstName
+        lastName
+      }
+      message
+      refreshToken
+    }
+  }
+`;
+
+export const otpVerification = gql`
+  mutation runnerLoginOtp($id: ID!, otp: String!) {
+    runnerTokenOnOtp(id: $id, otp: $otp) {
       accessToken
       csrfToken
       refreshToken
+      runnerErrors {
+        field
+        message
+        code
+      }
+      runner {
+        id
+        email
+        firstName
+        lastName
+      }
     }
   }
 `;
