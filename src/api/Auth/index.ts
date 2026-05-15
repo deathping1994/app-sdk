@@ -638,9 +638,12 @@ export class AuthAPI extends ErrorListener {
       };
     }
 
+    const { data: userData, dataError: userDataError } =
+      await this.jobsManager.run("auth", "provideUser", undefined);
+
     return {
-      data: data,
-      dataError: dataError,
+      data: userData,
+      dataError: userDataError,
       pending: false,
     };
   }
