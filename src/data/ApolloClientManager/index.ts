@@ -569,7 +569,8 @@ export class ApolloClientManager {
         error: data.runnerCreate.runnerErrors,
       };
     }
-
+    // rs: returning runnerId and userId in data for future use in app
+    //  instead of making another query to get those details
     return {
       data: {
         runnerId: data?.runnerCreate?.runner?.runnerId,
