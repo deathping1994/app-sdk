@@ -572,9 +572,9 @@ export class ApolloClientManager {
 
     return {
       data: {
-        runnerId: data?.runnerCreate?.runnerId,
-        userId: data?.runnerCreate?.userId,
-        fullName: data?.runnerCreate?.fullName
+        runnerId: data?.runnerCreate?.runner?.runnerId,
+        userId: data?.runnerCreate?.runner?.userId,
+        fullName: data?.runnerCreate?.runner?.fullName
       }
     }
   };
