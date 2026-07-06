@@ -746,6 +746,11 @@ export class ApolloClientManager {
         key: input.key,
         value: input.value,
       },
+      refetchQueries: [
+        {
+          query: UserQueries.getUserDetailsQuery,
+        },
+      ],
     });
 
     if (errors?.length) {
