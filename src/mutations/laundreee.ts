@@ -71,17 +71,45 @@ export const createUserExtraDataMutation = gql`
   }
 `;
 
-export const updateUserExtraDataMutation = gql`
-  mutation UserExtraDataUpdateApp($id: ID!, $input: UserExtraDataInput!) {
-    userExtraDataUpdate(id: $id, input: $input) {
+// export const updateUserExtraDataMutation = gql`
+  // mutation UserExtraDataUpdateApp($id: ID!, $input: UserExtraDataInput!) {
+//     userExtraDataUpdate(id: $id, input: $input) {
+//       userExtraData {
+//      
+//         key
+//         value
+//       }
+//       UserExtraDataErrors {
+//         field
+//         message
+//       }
+//     }
+//   }
+// `;
+
+export const createUpdateUserExtraDataMutation = gql`
+  mutation CreateUpdateUserExtraData(
+    $store: ID!
+    $user: ID!
+    $key: String!
+    $value: String!
+  ) {
+    userExtraDataCreateUpdate(
+      store: $store
+      user: $user
+      key: $key
+      value: $value
+    ) {
       userExtraData {
         id
+        user {
+          id
+        }
         key
         value
-      }
-      UserExtraDataErrors {
-        field
-        message
+        client {
+          id
+        }
       }
     }
   }
