@@ -738,11 +738,19 @@ export class ApolloClientManager {
   userExtraDataUpdate = async (id: string, input: any) => {
     const { data, errors } = await this.client.mutate<any, any>({
       fetchPolicy: "no-cache",
-      mutation: LaundreeeMutations.updateUserExtraDataMutation,
+      // mutation: LaundreeeMutations.updateUserExtraDataMutation,
+      mutation: LaundreeeMutations.createUpdateUserExtraDataMutation,
       variables: {
-        id,
-        input,
+        store: input.store,
+        user: input.user,
+        key: input.key,
+        value: input.value,
       },
+      refetchQueries: [
+        {
+          query: UserQueries.getUserDetailsQuery,
+        },
+      ],
     });
 
     if (errors?.length) {
@@ -750,13 +758,13 @@ export class ApolloClientManager {
         error: errors,
       };
     }
-    if (data?.userExtraDataUpdate?.UserExtraDataErrors.length) {
+    if (data?.userExtraDataCreateUpdate?.UserExtraDataErrors.length) {
       return {
-        error: data.userExtraDataUpdate.UserExtraDataErrors,
+        error: data.userExtraDataCreateUpdate.UserExtraDataErrors,
       };
     }
     return {
-      data: data?.userExtraDataUpdate?.userExtraData,
+      data: data?.userExtraDataCreateUpdate?.userExtraData,
     };
   };
 
