@@ -37,6 +37,8 @@ export class SaleorManager {
 
   private tokenRefreshing: boolean = false;
 
+  private refreshPromise?: Promise<boolean>;
+
   private apiChangeListener?: (api?: SaleorAPI) => any;
 
   private appversion?: string;
@@ -84,7 +86,7 @@ export class SaleorManager {
   private static createApi = async (
     config: ConfigInput,
     apolloConfig: ApolloConfigInput,
-    tokenExpirationCallback: () => void,
+    tokenExpirationCallback: () => Promise<boolean>,
     onSaleorApiChange: () => void,
     appplatform?: string,
     appversion?: string
@@ -120,16 +122,29 @@ export class SaleorManager {
     return { api, apiProxy, apolloClient };
   };
 
-  private tokenExpirationCallback = async () => {
-    if (!this.tokenRefreshing) {
-      this.tokenRefreshing = true;
+  private tokenExpirationCallback = (): Promise<boolean> => {
+    if (this.refreshPromise) return this.refreshPromise;
 
-      const tokenRefreshResult = await this.api?.auth.refreshSignInToken();
-      if (!tokenRefreshResult?.data?.token || tokenRefreshResult?.dataError) {
+    this.refreshPromise = this._doTokenRefresh().finally(() => {
+      Promise.resolve().then(() => { this.refreshPromise = null; });
+    });
+
+    return this.refreshPromise;
+  };
+
+  private _doTokenRefresh = async (): Promise<boolean> => {
+    try {
+      const result = await this.api?.auth.refreshSignInToken();
+      const succeeded = !!result?.data?.token && !result?.dataError;
+
+      if (!succeeded) {
         await this.api?.auth.signOut();
+        return false;
       }
-
-      this.tokenRefreshing = false;
+      return true;
+    } catch {
+      await this.api?.auth.signOut();
+      return false;
     }
   };
 
