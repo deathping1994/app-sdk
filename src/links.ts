@@ -16,7 +16,7 @@ interface SaleorLinksConfig {
   /**
    * Callback called when token expiration error occured in Saleor API response.
    */
-  tokenExpirationCallback: () => void;
+  tokenExpirationCallback: () => Promise<boolean>
   appversion?: string;
   appplatform?: string;
 }
