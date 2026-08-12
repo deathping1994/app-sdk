@@ -1,6 +1,7 @@
 import { getAuthToken } from "../../auth";
 import { ApolloClientManager } from "../../data/ApolloClientManager";
 import { LocalStorageHandler } from "../../helpers/LocalStorageHandler";
+import { Platform } from "react-native";
 
 import { QueuedJobsHandler } from "../QueuedJobsHandler";
 
@@ -250,6 +251,7 @@ export class CartQueuedJobs extends QueuedJobsHandler<ErrorCartTypes> {
       console.log("setCartItem job in if", checkoutId)
       let header:any = {
         "Content-Type": "application/json",
+        "appplatform": Platform.OS,
       };
       const token = await getAuthToken();
       if(token) header={

@@ -22,6 +22,7 @@ import {
 import { JobsHandler } from "../JobsHandler";
 import { AddressTypes } from "src";
 import { getAuthToken } from "../../auth";
+import { Platform } from "react-native";
 
 export type PromiseCheckoutJobRunResponse = Promise<
   JobRunResponse<DataErrorCheckoutTypes, FunctionErrorCheckoutTypes>
@@ -756,6 +757,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     const checkout = await LocalStorageHandler.getCheckout();
     let header:any = {
       "Content-Type": "application/json",
+      "appplatform": Platform.OS,
     };
     const token = await getAuthToken();
     if(token) header={
