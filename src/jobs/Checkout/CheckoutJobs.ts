@@ -143,6 +143,7 @@ class CheckoutJobs extends JobsHandler<{}> {
       console.log('in chekcoutJob',checkoutMetadataInput);
       let header:any = {
         "Content-Type": "application/json",
+        "appplatform": Platform.OS,
       };
       const token = await getAuthToken();
       if(token) header={
@@ -688,6 +689,7 @@ class CheckoutJobs extends JobsHandler<{}> {
     const checkout = await LocalStorageHandler.getCheckout();
     let header:any = {
       "Content-Type": "application/json",
+      "appplatform": Platform.OS,
     };
     const token = await getAuthToken();
     if(token) header={
